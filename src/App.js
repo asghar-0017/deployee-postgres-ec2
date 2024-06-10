@@ -5,6 +5,7 @@ const dataSource = require("./infrastructure/psql");
 const { logger } = require("../logger");
 
 const contactRoute = require("./routes/contactRoutes");
+const basicPlainRoute= require('./routes/PlainsRoute')
 
 const StartServer = async () => {
   const app = fastify();
@@ -25,6 +26,7 @@ const StartServer = async () => {
     res.send(result);
   });
   app.register(contactRoute);
+  app.register(basicPlainRoute);
 
   try {
     app.listen(process.env.PORT || 4000);

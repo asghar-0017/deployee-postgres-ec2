@@ -26,8 +26,8 @@ module.exports = new EntitySchema({
     },
     serviceType: {
       type: "enum",
-      enum: ["Web Development", "App Development", "Digital Marketing", "Search Engine Optimization"],
-      enumName: "contact_services_enum" // Add this line
+      enum: ["Web Development", "App Development", "Digital Marketing", "Search Engine Optimization", "Mobile App Development"],
+      enumName: "contact_services_enum"
     },
   },
 });
