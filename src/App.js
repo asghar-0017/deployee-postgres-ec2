@@ -1,39 +1,47 @@
-const fastify = require("fastify");
-const dotenv = require("dotenv");
+// src/app.js
+const fastify = require('fastify')({ logger: true });
+const dotenv = require('dotenv');
 dotenv.config();
-const dataSource = require("./infrastructure/psql");
-const { logger } = require("../logger");
-
-const contactRoute = require("./routes/contactRoutes");
+const dataSource = require('./infrastructure/psql');
+const { logger } = require('../logger');
+const contactRoute = require('./routes/contactRoutes');
 const basicPlainRoute = require('./routes/PlainsRoute');
 
-const StartServer = async () => {
-  const app = fastify();
+fastify.register(require('@fastify/cors'), {
+  origin: 'http://localhost:3000',
+  methods: ['GET', 'POST'],
+  credentials: true,
+});
 
-  // Enable CORS
-  app.register(require('@fastify/cors'), {
-    origin: 'http://localhost:3000', // Replace with your frontend origin
-    methods: ['GET', 'POST'], // Specify allowed methods
-    credentials: true, // Include cookies in CORS requests if needed
-  });
+fastify.register(require('fastify-multipart'), {
+  limits: {
+    fieldNameSize: 100,
+    fieldSize: 1000000,
+    fields: 10,
+    fileSize: 1000000,
+    files: 10,
+    headerPairs: 2000,
+  },
+});
 
-  app.get("/", async (req, res) => {
-    const result = {
-      code: 200,
-      status: "OK",
-      message: "Fastify server is running",
-    };
-    res.send(result);
-  });
+fastify.get('/', async (req, res) => {
+  const result = {
+    code: 200,
+    status: 'OK',
+    message: 'Fastify server is running',
+  };
+  res.send(result);
+});
 
-  app.register(contactRoute);
-  app.register(basicPlainRoute);
+fastify.register(contactRoute);
+fastify.register(basicPlainRoute);
 
+const startServer = async () => {
   try {
     await dataSource.initialize();
-    logger.info("Database connection has been established");
+    logger.info('Database connection has been established');
 
-    app.listen(process.env.PORT || 4000, (err, address) => {
+    fastify.listen(process.env.PORT || 4000, (err, address) => {
       if (err) {
         logger.error(err);
         process.exit(1);
@@ -46,4 +54,4 @@ const StartServer = async () => {
   }
 };
 
-module.exports = StartServer;
+module.exports=startServer

@@ -1,8 +1,8 @@
 const dataSource = require("../infrastructure/psql");
 const { logger } = require("../../logger");
-const basicPlainRepository = dataSource.getRepository("basicPlain");
-const standardPlainRepository = dataSource.getRepository("standardPlain");
-const premiumPlainRepository = dataSource.getRepository("premiumPlain");
+const basicPlainRepository = dataSource.getRepository("basic_plane");
+const standardPlainRepository = dataSource.getRepository("standard_plane");
+const premiumPlainRepository = dataSource.getRepository("premium_plane");
 
 
 

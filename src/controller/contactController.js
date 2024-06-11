@@ -19,17 +19,6 @@ const getDataFromUser = async (request, reply) => {
             return reply.code(400).send({ error: error.details[0].message });
         }
 
-        // Transform serviceType to match enum values
-        const serviceTypeMapping = {
-            "web": "Web Development",
-            "app": "App Development",
-            "digital_marketing": "Digital Marketing",
-            "seo": "Search Engine Optimization",
-            "mobile_app": "Mobile App Development"
-        };
-
-        clientData.serviceType = serviceTypeMapping[clientData.serviceType] || clientData.serviceType;
-
         const data = await contactUsService(clientData);
         reply.code(200).send({ success: "success", data: data });
 

@@ -1,8 +1,8 @@
 const { EntitySchema } = require("typeorm");
 
 module.exports = new EntitySchema({
-  name: "standardPlain",
-  tableName: "standardPlain",
+  name: "standardPlane",
+  tableName: "standard_plane",
   columns: {
     id: {
         type: "int",
@@ -35,6 +35,16 @@ module.exports = new EntitySchema({
       },
       domain:{
         type:"varchar"
-      }
+      },
+      created_at: {
+        type: "timestamp",
+        default: () => "CURRENT_TIMESTAMP",
+      },
+      updated_at: {
+        type: "timestamp",
+        default: () => "CURRENT_TIMESTAMP",
+        onUpdate: "CURRENT_TIMESTAMP",
+      },
+ 
   },
 });

@@ -1,7 +1,8 @@
+// contactService.js
 const nodemailer = require('nodemailer');
 const contactUsRepo = require('../repository/contactRepository');
 const { logger } = require('../../logger');
-const dotenv = require('dotenv');
+const dotenv = require("dotenv");
 dotenv.config();
 
 const getDataFromUser = async (clientData) => {
@@ -10,13 +11,14 @@ const getDataFromUser = async (clientData) => {
 
         // Save data to repository
         const contactDataInService = await contactUsRepo(clientData);
+        console.log("Data in service",contactDataInService)
 
         // Set up Nodemailer transporter
         let transporter = nodemailer.createTransport({
-            service: 'gmail', // Replace with your email service
+            service: 'gmail',
             auth: {
-                user: process.env.Email,
-                pass: process.env.Email_Pass
+                user: process.env.EMAIL,
+                pass: process.env.EMAIL_PASS
             }
         });
 
@@ -40,7 +42,6 @@ const getDataFromUser = async (clientData) => {
 
         return { success: true, message: 'Email sent successfully', contactDataInService };
     } catch (error) {
-        logger.error('Error in getDataFromUser:', error);
         throw error;
     }
 };

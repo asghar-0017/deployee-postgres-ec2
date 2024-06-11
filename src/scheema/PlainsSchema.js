@@ -5,7 +5,7 @@ const ValidateBasicPlains = Joi.object({
   email: Joi.string().email().required(),
   company: Joi.string().optional(),
   reference_sites: Joi.string().optional(),
-  Link_to_Graphics:Joi.string().optional(),
+  Link_to_Graphics:Joi.array().optional(),
   description:Joi.string().required()
 });
 
@@ -30,7 +30,7 @@ const ValidatePremiumPlains = Joi.object({
   Link_to_Graphics:Joi.array().optional(),
   domain:Joi.string().optional(),
   animation:Joi.string().optional(),
-  functionalities: Joi.array().items(Joi.string()).required() // Update to array
+  functionalities: Joi.array().items(Joi.string()).optional() // Update to array
   
 });
 

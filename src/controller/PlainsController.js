@@ -1,93 +1,64 @@
-const {basicPlainsService,standardPlainsService,premiumPlainsService} = require('../service/PlainsService');
-const { logger } = require('../../logger');
-const { ValidateBasicPlains, ValidateStandardPlains , ValidatePremiumPlains } = require('../scheema/PlainsSchema');
+// src/controller/PlainsController.js
+const {
+    ValidateBasicPlains,
+    ValidateStandardPlains,
+    ValidatePremiumPlains
+  } = require('../scheema/PlainsSchema');
+  const {
+    basicPlainsService,
+    standardPlainsService,
+    premiumPlainsService
+  } = require('../service/PlainsService');
+  const { logger } = require('../../logger');
 const { err } = require('pino-std-serializers');
-
-const basicPlains = async (request, reply) => {
+  
+  const handlePlain = async (request, reply, validateFunction, serviceFunction) => {
     try {
-        logger.info("src > controller > PlainController > basicPlains");
-        const basicPlain = request.body;
-        console.log("BasicPlains Data in Controller", basicPlain);
-
-        if (!basicPlain) {
-            logger.error("basicPlain is undefined");
-            return reply.code(400).send({ error: "Invalid input" });
-        }
-
-        const { error } = ValidateBasicPlains.validate(basicPlain);
-        console.log("Validate Error ", error);
-        if (error) {
-            return reply.code(400).send({ error: error.details[0].message });
-        }
-
-        const data = await basicPlainsService(basicPlain);
-        reply.code(200).send({ success: "success", data: data });
-
+      const data = request.body;
+      if (request.files) {
+        data.Link_to_Graphics = request.files.map(file => file.path);
+      }
+  
+      logger.info('Received Data:', data);
+      
+      if (typeof data.functionalities === 'string') {
+        data.functionalities = JSON.parse(data.functionalities);
+      }
+  
+      if (!data) {
+        logger.error('Data is undefined');
+        return reply.code(400).send({ error: 'Invalid input' });
+      }
+  
+      const { error } = validateFunction.validate(data);
+      if (error) {
+        return reply.code(400).send({ error: error.details[0].message });
+      }
+  
+      const result = await serviceFunction(data);
+      reply.code(200).send({ success: 'success', data: result });
+  
     } catch (error) {
-        logger.error("Error occurred during basicPlain form submission:", error);
-        reply.code(500).send({ error: "Internal Server Error" });
+      logger.error('Error occurred during form submission:', error);
+      throw error
     }
-};
-
-
-const standardPlains = async (request, reply) => {
-    try {
-        logger.info("src > controller > PlainController > standardPlains");
-        const standardPlain = request.body;
-        console.log("standardPlains Data in Controller", standardPlain);
-
-        if (!standardPlain) {
-            logger.error("standardPlains is undefined");
-            return reply.code(400).send({ error: "Invalid input" });
-        }
-
-        const { error } = ValidateStandardPlains.validate(standardPlain);
-        console.log("Validate Error ", error);
-        if (error) {
-            return reply.code(400).send({ error: error.details[0].message });
-        }
-
-        const data = await standardPlainsService(standardPlain);
-        console.log("After Data in Controller", data)
-        reply.code(200).send({ success: "success", data: data });
-
-    } catch (error) {
-        logger.error("Error occurred during standardPlainsService form submission:", error);
-        throw error;
-    }
-}
-
-const premiumPlains=async(request,reply)=>{
-    try {
-        logger.info("src > controller > PlainController > premiumPlains");
-        const premiumPlain = request.body;
-        console.log("premiumPlain Data in Controller", premiumPlain);
-
-        if (!premiumPlain) {
-            logger.error("premiumPlain is undefined");
-            return reply.code(400).send({ error: "Invalid input" });
-        }
-
-        const { error } = ValidatePremiumPlains.validate(premiumPlain);
-        console.log("Validate Error ", error);
-        if (error) {
-            return reply.code(400).send({ error: error.details[0].message });
-        }
-        premiumPlain.functionalities = JSON.stringify(premiumPlain.functionalities);
-
-        const data = await premiumPlainsService(premiumPlain);
-        console.log("After Data in Controller", data)
-        reply.code(200).send({ success: "success", data: data });
-
-    } catch (error) {
-        logger.error("Error occurred during premiumPlainsService form submission:", error);
-        throw error;
-    }
-
-}
-module.exports = {
+  };
+  
+  const basicPlains = async (request, reply) => {
+    await handlePlain(request, reply, ValidateBasicPlains, basicPlainsService);
+  };
+  
+  const standardPlains = async (request, reply) => {
+    await handlePlain(request, reply, ValidateStandardPlains, standardPlainsService);
+  };
+  
+  const premiumPlains = async (request, reply) => {
+    await handlePlain(request, reply, ValidatePremiumPlains, premiumPlainsService);
+  };
+  
+  module.exports = {
     basicPlains,
     standardPlains,
-    premiumPlains
-
-}
+    premiumPlains,
+  };
+  

@@ -1,8 +1,8 @@
 const { EntitySchema } = require("typeorm");
 
 module.exports = new EntitySchema({
-  name: "premiumPlain",
-  tableName: "premiumPlain",
+  name: "premiumPlane",
+  tableName: "premium_plane",
   columns: {
     id: {
         type: "int",
@@ -36,9 +36,19 @@ module.exports = new EntitySchema({
       domain:{
         type:"varchar"
       },
-      functionalities:{
-        type:"json"
-      }
+      functionalities: {
+        type: "json",
+        nullable: true,
+      },
+      created_at: {
+        type: "timestamp",
+        default: () => "CURRENT_TIMESTAMP",
+      },
+      updated_at: {
+        type: "timestamp",
+        default: () => "CURRENT_TIMESTAMP",
+        onUpdate: "CURRENT_TIMESTAMP",
+      },
  
   },
 });
