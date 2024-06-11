@@ -1,6 +1,8 @@
 const nodemailer = require('nodemailer');
 const contactUsRepo = require('../repository/contactRepository');
 const { logger } = require('../../logger');
+const dotenv = require('dotenv');
+dotenv.config();
 
 const getDataFromUser = async (clientData) => {
     try {
@@ -13,14 +15,14 @@ const getDataFromUser = async (clientData) => {
         let transporter = nodemailer.createTransport({
             service: 'gmail', // Replace with your email service
             auth: {
-                user: 'fa21bscs0017@maju.edu.pk',
-                pass: 'cxan vcqf dikr aqob'
+                user: process.env.Email,
+                pass: process.env.Email_Pass
             }
         });
 
         // Email options
         let mailOptions = {
-            from: 'fa21bscs0017@maju.edu.pk',
+            from: process.env.Email,
             to: clientData.email,
             subject: `New Contact Form Submission from ${clientData.name}`,
             text: `
