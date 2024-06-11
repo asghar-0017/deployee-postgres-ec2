@@ -5,7 +5,7 @@ const dataSource = require("./infrastructure/psql");
 const { logger } = require("../logger");
 
 const contactRoute = require("./routes/contactRoutes");
-const basicPlainRoute= require('./routes/PlainsRoute')
+const basicPlainRoute = require('./routes/PlainsRoute');
 
 const StartServer = async () => {
   const app = fastify();
@@ -21,20 +21,25 @@ const StartServer = async () => {
     const result = {
       code: 200,
       status: "OK",
-      message: "Fastify server is running ",
+      message: "Fastify server is running",
     };
     res.send(result);
   });
+
   app.register(contactRoute);
   app.register(basicPlainRoute);
 
   try {
-    app.listen(process.env.PORT || 4000);
-
     await dataSource.initialize();
     logger.info("Database connection has been established");
 
-    logger.info(`Server is listening on ${process.env.PORT || 4000}`);
+    app.listen(process.env.PORT || 4000, (err, address) => {
+      if (err) {
+        logger.error(err);
+        process.exit(1);
+      }
+      logger.info(`Server is listening on ${address}`);
+    });
   } catch (error) {
     logger.error(error.message);
     process.exit(1);
