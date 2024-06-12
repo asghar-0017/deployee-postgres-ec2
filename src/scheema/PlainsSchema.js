@@ -16,6 +16,7 @@ const ValidateStandardPlains = Joi.object({
   description: Joi.string().required(),
   reference_sites: Joi.string().optional(),
   Link_to_Graphics:Joi.array().optional(),
+  drive_link:Joi.string().optional(),
   animation:Joi.string().optional(),
   domain:Joi.string().optional()
 });
@@ -27,6 +28,7 @@ const ValidatePremiumPlains = Joi.object({
   company: Joi.string().optional(),
   description: Joi.string().required(),
   reference_sites: Joi.string().optional(),
+  drive_link:Joi.string().optional(),
   Link_to_Graphics:Joi.array().optional(),
   domain:Joi.string().optional(),
   animation:Joi.string().optional(),

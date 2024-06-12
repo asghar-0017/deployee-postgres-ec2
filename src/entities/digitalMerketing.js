@@ -1,8 +1,8 @@
 const { EntitySchema } = require("typeorm");
 
 module.exports = new EntitySchema({
-  name: "basicPlane",
-  tableName: "web_basic_plane",
+  name: "digitalMerketing",
+  tableName: "digital_marketing",
   columns: {
     id: {
         type: "int",
@@ -19,13 +19,16 @@ module.exports = new EntitySchema({
         type: "varchar",
         nullable: true,
       },
-      reference_sites: {
+      links_to_soial_media:{
         type: "varchar",
         nullable: true,
       },
-      Link_to_Graphics: {
+      target_audiance: {
         type: "varchar",
         nullable: true,
+      },
+      access_and_permissions: {
+        type: "varchar",
       },
       description: {
         type: "varchar",

@@ -1,4 +1,3 @@
-// src/utils/uploadConfig.js
 const multer = require('fastify-multer');
 const path = require('path');
 const fs = require('fs');
@@ -24,7 +23,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({
   storage: storage,
-  limits: { fileSize: 1000000 },
+  limits: { fileSize: 1000000 }, // 1 MB
   fileFilter: function (req, file, cb) {
     checkFileType(file, cb);
   },

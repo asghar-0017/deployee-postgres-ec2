@@ -23,6 +23,10 @@ module.exports = new EntitySchema({
         type: "varchar",
         nullable: true,
       },
+      drive_link:{
+        type:"varchar",
+        nullable: true,
+      },
       Link_to_Graphics: {
         type: "varchar",
         nullable: true,
