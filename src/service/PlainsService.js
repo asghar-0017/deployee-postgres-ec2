@@ -1,5 +1,5 @@
 const nodemailer = require('nodemailer');
-const { basicPlainRepo, standardPlainRepo, premiumPlainRepo } = require('../repository/PlainsRepository');
+const { webBasicPlaneRepo, webStandardPlaneRepo, webpremiumPlaneRepo } = require('../repository/PlainsRepository');
 const { logger } = require('../../logger');
 const dotenv = require("dotenv");
 dotenv.config();
@@ -47,12 +47,12 @@ const sendEmails = async (plan, planData) => {
   await transporter.sendMail(adminMailOptions);
 };
 
-const basicPlainsService = async (basicPlain) => {
+const webBasicPlaneService = async (webBasicPlane) => {
   try {
-    logger.info('src > Service > PlainService > basicPlainsService');
-    const data = await basicPlainRepo(basicPlain);
+    logger.info('src > Service > PlainService > webBasicPlaneService');
+    const data = await webBasicPlaneRepo(webBasicPlane);
     console.log("Plain Data in service",data)
-    await sendEmails('Basic Plains', basicPlain);
+    await sendEmails('Web Basic Plains', webBasicPlane);
     return { success: true, message: 'Email sent successfully', data: data };
   } catch (error) {
     logger.error('Error in basicPlainsService', error);
@@ -60,13 +60,13 @@ const basicPlainsService = async (basicPlain) => {
   }
 };
 
-const standardPlainsService = async (standardPlain) => {
+const webStandardPlaneService = async (webStandardPlane) => {
   try {
-    logger.info('src > Service > PlainService > standardPlainsService');
-    const data = await standardPlainRepo(standardPlain);
+    logger.info('src > Service > PlainService > webStandardPlaneService');
+    const data = await webStandardPlaneRepo(webStandardPlane);
     console.log("Plain Data in service",data)
 
-    await sendEmails('Standard Plains', standardPlain);
+    await sendEmails('Web Standard Plains', webStandardPlane);
     return { success: true, message: 'Email sent successfully', data: data };
   } catch (error) {
     logger.error('Error in standardPlainsService', error);
@@ -74,13 +74,13 @@ const standardPlainsService = async (standardPlain) => {
   }
 };
 
-const premiumPlainsService = async (premiumPlain) => {
+const webPremiumPlaneService = async (webpremiumPlane) => {
   try {
-    logger.info('src > Service > PlainService > premiumPlainsService');
-    const data = await premiumPlainRepo(premiumPlain);
+    logger.info('src > Service > PlainService > webPremiumPlaneService');
+    const data = await webpremiumPlaneRepo(webpremiumPlane);
     console.log("Plain Data in service",data)
 
-    await sendEmails('Premium Plains', premiumPlain);
+    await sendEmails('Web Premium Plane', webpremiumPlane);
     return { success: true, message: 'Email sent successfully', data: data };
   } catch (error) {
     logger.error('Error in premiumPlainsService', error);
@@ -89,7 +89,7 @@ const premiumPlainsService = async (premiumPlain) => {
 };
 
 module.exports = {
-  basicPlainsService,
-  standardPlainsService,
-  premiumPlainsService,
+  webBasicPlaneService,
+  webStandardPlaneService,
+  webPremiumPlaneService,
 };

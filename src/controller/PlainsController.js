@@ -1,14 +1,5 @@
-// src/controller/PlainsController.js
-const {
-    ValidateBasicPlains,
-    ValidateStandardPlains,
-    ValidatePremiumPlains
-  } = require('../scheema/PlainsSchema');
-  const {
-    basicPlainsService,
-    standardPlainsService,
-    premiumPlainsService
-  } = require('../service/PlainsService');
+const {ValidateBasicPlains,ValidateStandardPlains,ValidatePremiumPlains } = require('../scheema/PlainsSchema');
+  const {webBasicPlaneService,webStandardPlaneService,webPremiumPlaneService} = require('../service/PlainsService');
   const { logger } = require('../../logger');
 const { err } = require('pino-std-serializers');
   
@@ -20,7 +11,7 @@ const { err } = require('pino-std-serializers');
       }
   
       logger.info('Received Data:', data);
-      
+
       if (typeof data.functionalities === 'string') {
         data.functionalities = JSON.parse(data.functionalities);
       }
@@ -44,21 +35,21 @@ const { err } = require('pino-std-serializers');
     }
   };
   
-  const basicPlains = async (request, reply) => {
-    await handlePlain(request, reply, ValidateBasicPlains, basicPlainsService);
+  const webBasicPlane = async (request, reply) => {
+    await handlePlain(request, reply, ValidateBasicPlains, webBasicPlaneService);
   };
   
-  const standardPlains = async (request, reply) => {
-    await handlePlain(request, reply, ValidateStandardPlains, standardPlainsService);
+  const webStandardPlane = async (request, reply) => {
+    await handlePlain(request, reply, ValidateStandardPlains, webStandardPlaneService);
   };
   
-  const premiumPlains = async (request, reply) => {
-    await handlePlain(request, reply, ValidatePremiumPlains, premiumPlainsService);
+  const webPremiumPlane = async (request, reply) => {
+    await handlePlain(request, reply, ValidatePremiumPlains, webPremiumPlaneService);
   };
   
   module.exports = {
-    basicPlains,
-    standardPlains,
-    premiumPlains,
+    webBasicPlane,
+    webStandardPlane,
+    webPremiumPlane,
   };
   

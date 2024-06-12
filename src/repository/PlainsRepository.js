@@ -1,12 +1,10 @@
 const dataSource = require("../infrastructure/psql");
 const { logger } = require("../../logger");
-const basicPlainRepository = dataSource.getRepository("basic_plane");
-const standardPlainRepository = dataSource.getRepository("standard_plane");
-const premiumPlainRepository = dataSource.getRepository("premium_plane");
+const basicPlainRepository = dataSource.getRepository("Web_basic_plane");
+const standardPlainRepository = dataSource.getRepository("Web_standard_plane");
+const premiumPlainRepository = dataSource.getRepository("Web-premium_plane");
 
-
-
-const basicPlainRepo = async (basicPlain) => {
+const webBasicPlaneRepo = async (basicPlain) => {
     try {
         const data = basicPlainRepository.create(basicPlain);
         logger.info("src > repository > PlainRepository > basicPlainRepo", data);
@@ -18,7 +16,7 @@ const basicPlainRepo = async (basicPlain) => {
     }
 };
 
-const standardPlainRepo=async(standardPlain)=>{
+const webStandardPlaneRepo=async(standardPlain)=>{
     try {
         const data = standardPlainRepository.create(standardPlain);
         logger.info("src > repository > PlainRepository > standardPlainRepo", data);
@@ -31,7 +29,7 @@ const standardPlainRepo=async(standardPlain)=>{
 
 }
 
-const premiumPlainRepo=async(premiumPlain)=>{
+const webpremiumPlaneRepo=async(premiumPlain)=>{
     try {
         const data = premiumPlainRepository.create(premiumPlain);
         logger.info("src > repository > PlainRepository > premiumPlainRepo", data);
@@ -43,4 +41,4 @@ const premiumPlainRepo=async(premiumPlain)=>{
     }
 }
 
-module.exports = {basicPlainRepo,standardPlainRepo,premiumPlainRepo}
+module.exports = {webBasicPlaneRepo,webStandardPlaneRepo,webpremiumPlaneRepo}
