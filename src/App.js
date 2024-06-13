@@ -8,6 +8,8 @@ const { logger } = require('../logger');
 const contactRoute = require('./routes/contactRoutes');
 const webPlaneRoute = require('./routes/webPlanesRoute');
 const digitalMarketingRoute=require('./routes/digitalMarketingRoute')
+const appPlaneRoute=require('./routes/appPlaneRoutes')
+const seoRoute=require('./routes/seoRoute')
 
 fastify.register(require('@fastify/cors'), {
   origin: 'http://localhost:3000',
@@ -38,6 +40,8 @@ fastify.get('/', async (req, res) => {
 fastify.register(contactRoute);
 fastify.register(webPlaneRoute);
 fastify.register(digitalMarketingRoute)
+fastify.register(appPlaneRoute)
+fastify.register(seoRoute)
 
 const startServer = async () => {
   try {
