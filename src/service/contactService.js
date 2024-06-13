@@ -5,7 +5,7 @@ const { logger } = require('../../logger');
 const dotenv = require("dotenv");
 dotenv.config();
 
-const getDataFromUser = async (clientData) => {
+const contactUsService = async (clientData) => {
     try {
         logger.info('src > Service > contactService > getDataFromUser');
 
@@ -46,4 +46,4 @@ const getDataFromUser = async (clientData) => {
     }
 };
 
-module.exports = getDataFromUser;
+module.exports = contactUsService

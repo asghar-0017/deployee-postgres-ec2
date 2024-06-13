@@ -4,8 +4,10 @@ const dotenv = require('dotenv');
 dotenv.config();
 const dataSource = require('./infrastructure/psql');
 const { logger } = require('../logger');
+
 const contactRoute = require('./routes/contactRoutes');
-const basicPlainRoute = require('./routes/PlainsRoute');
+const webPlaneRoute = require('./routes/webPlanesRoute');
+const digitalMarketingRoute=require('./routes/digitalMarketingRoute')
 
 fastify.register(require('@fastify/cors'), {
   origin: 'http://localhost:3000',
@@ -34,24 +36,22 @@ fastify.get('/', async (req, res) => {
 });
 
 fastify.register(contactRoute);
-fastify.register(basicPlainRoute);
+fastify.register(webPlaneRoute);
+fastify.register(digitalMarketingRoute)
 
 const startServer = async () => {
   try {
-    await dataSource.initialize();
-    logger.info('Database connection has been established');
+    fastify.listen(process.env.PORT || 4000);
 
-    fastify.listen(process.env.PORT || 4000, (err, address) => {
-      if (err) {
-        logger.error(err);
-        process.exit(1);
-      }
-      logger.info(`Server is listening on ${address}`);
-    });
+    await dataSource.initialize();
+    logger.info("Database connection has been established");
+
+    logger.info(`Server is listening on ${process.env.PORT || 4000}`);
   } catch (error) {
     logger.error(error.message);
     process.exit(1);
   }
+
 };
 
 module.exports = startServer;

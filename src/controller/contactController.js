@@ -2,7 +2,7 @@ const contactUsService = require('../service/contactService');
 const { logger } = require('../../logger');
 const { ValidateContact } = require('../scheema/contactUsSchema');
 
-const getDataFromUser = async (request, reply) => {
+const contactUs = async (request, reply) => {
     try {
         logger.info("src > controller > contactController > getDataFromUser");
         const clientData = request.body;
@@ -28,4 +28,4 @@ const getDataFromUser = async (request, reply) => {
     }
 };
 
-module.exports = getDataFromUser;
+module.exports = contactUs;

@@ -1,16 +1,10 @@
-const redis = require('redis');
+const Redis = require("ioredis");
+const dotenv = require("dotenv");
+dotenv.config();
 
-const redisConfig = {
-    host: 'localhost',
-    port: 6379,
-};
-
-const redisClient = redis.createClient(redisConfig)
-
-redisClient.on('error', (err) => {
-    console.log('Redis Client Error', err);
+const redis = new Redis({
+  host: process.env.REDIS_HOST, // Update to use environment variable
+  port: process.env.REDIS_PORT || 6379,
 });
 
-redisClient.connect();
-
-module.exports = {redisClient};
+module.exports = redis;
