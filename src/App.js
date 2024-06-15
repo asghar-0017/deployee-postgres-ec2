@@ -10,9 +10,10 @@ const webPlaneRoute = require('./routes/webPlanesRoute');
 const digitalMarketingRoute=require('./routes/digitalMarketingRoute')
 const appPlaneRoute=require('./routes/appPlaneRoutes')
 const seoRoute=require('./routes/seoRoute')
+const logoPlaneRoute=require('./routes/logoPlaneRoutes')
 
 fastify.register(require('@fastify/cors'), {
-  origin: 'http://localhost:3000',
+  origin: ['http://localhost:3000', 'https://softmarksolutions.netlify.app'], // Allow multiple origins
   methods: ['GET', 'POST'],
   credentials: true,
 });
@@ -42,6 +43,7 @@ fastify.register(webPlaneRoute);
 fastify.register(digitalMarketingRoute)
 fastify.register(appPlaneRoute)
 fastify.register(seoRoute)
+fastify.register(logoPlaneRoute)
 
 const startServer = async () => {
   try {

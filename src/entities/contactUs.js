@@ -1,5 +1,5 @@
 const { EntitySchema } = require("typeorm");
-const serviceTypes = require("../entities/serviceTypes");
+const contactServiceTypes = require("./contactUsRerviceTypes");
 
 module.exports = new EntitySchema({
   name: "contactUs",
@@ -36,7 +36,7 @@ module.exports = new EntitySchema({
     },
     serviceType: {
       type: "enum",
-      enum: serviceTypes,
+      enum: contactServiceTypes,
       enumName: "contact_services_enum",
       nullable: false,
     },
