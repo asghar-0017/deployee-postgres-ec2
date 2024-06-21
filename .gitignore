@@ -1,2 +1,5 @@
 node_modules/
 .env
+echo "db/pg_stat_tmp/global.stat" >> .gitignore
+git rm --cached db/pg_stat_tmp/global.stat
+git commit -m "Ignore db/pg_stat_tmp/global.stat"
