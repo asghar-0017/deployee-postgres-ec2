@@ -26,6 +26,7 @@ module.exports = new EntitySchema({
     reference_template: {
       type: "varchar",
       nullable: true,
+
     },
  
 
