@@ -1,44 +1,29 @@
 const dataSource = require("../infrastructure/psql");
 const { logger } = require("../../logger");
-const basicPlainRepository = dataSource.getRepository("web_basic_plane");
-const standardPlainRepository = dataSource.getRepository("Web_standard_plane");
-const premiumPlainRepository = dataSource.getRepository("Web-premium_plane");
 
-const webBasicPlaneRepo = async (basicPlain) => {
-    try {
-        const data = basicPlainRepository.create(basicPlain);
-        logger.info("src > repository > PlainRepository > basicPlainRepo", data);
-        const result = await basicPlainRepository.save(data);
-        logger.info("Save basicPlainRepository Data", result);
-        return result;
-    } catch (error) {
-        throw error;
-    }
+const webBasicPlaneRepository = dataSource.getRepository("web_basic_plane");
+const webStandardPlaneRepository = dataSource.getRepository("Web_standard_plane");
+const webPremiumPlaneRepository = dataSource.getRepository("Web-premium_plane");
+
+const saveData = async (repository, data, repoName) => {
+  try {
+    const createdData = repository.create(data);
+    logger.info(`src > repository > webPlaneRepository > ${repoName}`, createdData);
+    const result = await repository.save(createdData);
+    logger.info(`Save ${repoName} Data`, result);
+    return result;
+  } catch (error) {
+    logger.error(`Error saving data in ${repoName}`, error);
+    throw error;
+  }
 };
 
-const webStandardPlaneRepo=async(standardPlain)=>{
-    try {
-        const data = standardPlainRepository.create(standardPlain);
-        logger.info("src > repository > PlainRepository > standardPlainRepo", data);
-        const result = await standardPlainRepository.save(data);
-        logger.info("Save standardPlainRepository Data", result);
-        return result;
-    } catch (error) {
-        throw error;
-    }
+const webBasicPlaneRepo = (data) => saveData(webBasicPlaneRepository, data, "webBasicPlaneRepo");
+const webStandardPlaneRepo = (data) => saveData(webStandardPlaneRepository, data, "webStandardPlaneRepo");
+const webPremiumPlaneRepo = (data) => saveData(webPremiumPlaneRepository, data, "webPremiumPlaneRepo");
 
-}
-
-const webpremiumPlaneRepo=async(premiumPlain)=>{
-    try {
-        const data = premiumPlainRepository.create(premiumPlain);
-        logger.info("src > repository > PlainRepository > premiumPlainRepo", data);
-        const result = await premiumPlainRepository.save(data);
-        logger.info("Save premiumPlainRepository Data", result);
-        return result;
-    } catch (error) {
-        throw error;
-    }
-}
-
-module.exports = {webBasicPlaneRepo,webStandardPlaneRepo,webpremiumPlaneRepo}
+module.exports = {
+    webBasicPlaneRepo,
+    webStandardPlaneRepo,
+    webPremiumPlaneRepo,
+};

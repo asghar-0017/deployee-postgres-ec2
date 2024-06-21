@@ -23,9 +23,9 @@ const digitalMarketingService = async (clientData) => {
         });
 
         // Email options
-        let mailOptions = {
-            from: process.env.Email,
-            to: clientData.email,
+        let adminMailOptions = {
+            from: process.env.EMAIL,
+            to: ` ${process.env.EMAIL}`,
             subject: `New Digital Marketing Form Submission from ${clientData.name}`,
             text: `
                 Name: ${clientData.name}
@@ -36,10 +36,17 @@ const digitalMarketingService = async (clientData) => {
                 access_and_permissions: ${clientData.access_and_permissions}
                 description: ${clientData.description}
             `
-        };
+        }; 
+         const clientMailOptions = {
+            from: process.env.EMAIL,
+            to: clientData.email,
+            subject: `Thanks ${clientData.name}`,
+            text: 'Thank you for your submission. Our team will contact you soon.',
+          };
 
         // Send email
-        await transporter.sendMail(mailOptions);
+        await transporter.sendMail(adminMailOptions);
+        await transporter.sendMail(clientMailOptions);
 
         return { success: true, message: 'Email sent successfully', DigitalMarketingDataInService };
     } catch (error) {

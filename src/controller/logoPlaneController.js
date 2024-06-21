@@ -1,8 +1,7 @@
-const { ValidateLogoBasicPlane, ValidateLogoStandardPlane, ValidateLogoPremiumPlane, ValidateLogoBusinessPlane } = require('../scheema/logoPlaneSchema');
 const { logoBasicPlaneService, logoStandardPlaneService, logoPremiumPlaneService, logoBusinessPlaneService } = require('../service/logoPlaneService');
 const { logger } = require('../../logger');
 
-const handlePlain = async (request, reply, validateFunction, serviceFunction) => {
+const handlePlain = async (request, reply, serviceFunction) => {
   try {
     const data = request.body;
     if (request.files && Array.isArray(request.files)) {
@@ -20,10 +19,10 @@ const handlePlain = async (request, reply, validateFunction, serviceFunction) =>
 
 
 
-    const { error } = validateFunction.validate(data);
-    if (error) {
-      return reply.code(400).send({ error: error.details[0].message });
-    }
+    // const { error } = validateFunction.validate(data);
+    // if (error) {
+    //   return reply.code(400).send({ error: error.details[0].message });
+    // }
 
     const result = await serviceFunction(data);
     reply.code(201).send({ success: 'success', data: result });
@@ -35,19 +34,19 @@ const handlePlain = async (request, reply, validateFunction, serviceFunction) =>
 };
 
 const logoBasicPlane = async (request, reply) => {
-  await handlePlain(request, reply, ValidateLogoBasicPlane, logoBasicPlaneService);
+  await handlePlain(request, reply,  logoBasicPlaneService);
 };
 
 const logoStandardPlane = async (request, reply) => {
-  await handlePlain(request, reply, ValidateLogoStandardPlane, logoStandardPlaneService);
+  await handlePlain(request, reply, logoStandardPlaneService);
 };
 
 const logoPremiumPlane = async (request, reply) => {
-  await handlePlain(request, reply, ValidateLogoPremiumPlane, logoPremiumPlaneService);
+  await handlePlain(request, reply, logoPremiumPlaneService);
 };
 
 const logoBusinessPlane = async (request, reply) => {
-  await handlePlain(request, reply, ValidateLogoBusinessPlane, logoBusinessPlaneService);
+  await handlePlain(request, reply, logoBusinessPlaneService);
 };
 
 module.exports = {

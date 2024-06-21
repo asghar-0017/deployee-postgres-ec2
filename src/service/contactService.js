@@ -23,9 +23,9 @@ const contactUsService = async (clientData) => {
         });
 
         // Email options
-        let mailOptions = {
-            from: process.env.Email,
-            to: `${clientData.email} ${process.env.ADMIN_EMAIL}`,
+        let adminMailOptions = {
+            from: process.env.EMAIL,
+            to: `${process.env.EMAIL}`,
             subject: `New Contact Form Submission from ${clientData.name}`,
             text: `
                 Name: ${clientData.name}
@@ -36,9 +36,16 @@ const contactUsService = async (clientData) => {
                 Message: ${clientData.message}
             `
         };
+         const clientMailOptions = {
+            from: process.env.EMAIL,
+            to: clientData.email,
+            subject: `Thanks ${clientData.name}`,
+            text: 'Thank you for your submission. Our team will contact you soon.',
+          };
 
         // Send email
-        await transporter.sendMail(mailOptions);
+        await transporter.sendMail(adminMailOptions);
+        await transporter.sendMail(clientMailOptions);
 
         return { success: true, message: 'Email sent successfully', contactDataInService };
     } catch (error) {

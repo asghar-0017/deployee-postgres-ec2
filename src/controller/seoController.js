@@ -1,31 +1,43 @@
-const SEOService = require('../service/seoService');
+const { seoBasicPlaneService, seoStandardPlaneService, seoPremiumPlaneService } = require('../service/seoService');
 const { logger } = require('../../logger');
-const { ValidateSEO } = require('../scheema/seoSchema'); // Make sure this path is correct
 
-const seoController = async (request, reply) => {
+const handlePlain = async (request, reply, serviceFunction) => {
     try {
-        logger.info("src > controller > seoController > seoController");
         const clientData = request.body;
-        console.log("Client in Controller", clientData);
+        console.log("Received Data in Controller", clientData);
 
         if (!clientData) {
-            logger.error("ClientData is undefined");
-            return reply.code(400).send({ error: "Invalid input" });
+            console.log("Client Data Not Found");
+            return reply.code(400).send({ error: "Client Data Not Found" });
         }
 
-        const { error } = ValidateSEO.validate(clientData);
-        console.log("Validate Error ", error);
-        if (error) {
-            return reply.code(400).send({ error: error.details[0].message });
+
+        const result = await serviceFunction(clientData);
+        if (result) {
+            reply.send({
+                code: 200,
+                success: "success",
+                data: result
+            });
+        } else {
+            reply.code(500).send({ error: "Internal Server Error" });
         }
-
-        const data = await SEOService(clientData);
-        reply.code(200).send({ success: "success", data: data });
-
     } catch (error) {
-        logger.error("Error occurred during SEO Controller form submission:", error);
-        throw error;
+        logger.error(error);
+        reply.code(500).send({ error: "Internal Server Error" });
     }
 };
 
-module.exports = seoController;
+const seoBasicPlaneController = async (request, reply) => {
+    await handlePlain(request, reply, seoBasicPlaneService);
+};
+
+const seoStandardPlaneController = async (request, reply) => {
+    await handlePlain(request, reply, seoStandardPlaneService);
+};
+
+const seoPremiumPlaneController = async (request, reply) => {
+    await handlePlain(request, reply, seoPremiumPlaneService);
+};
+
+module.exports = { seoBasicPlaneController, seoStandardPlaneController, seoPremiumPlaneController };

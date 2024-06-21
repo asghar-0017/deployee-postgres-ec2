@@ -1,26 +1,38 @@
 const nodemailer = require('nodemailer');
-const { webBasicPlaneRepo, webStandardPlaneRepo, webpremiumPlaneRepo } = require('../repository/webPlaneRepository');
+const { webBasicPlaneRepo, webStandardPlaneRepo, webPremiumPlaneRepo } = require('../repository/webPlaneRepository');
 const { logger } = require('../../logger');
 const dotenv = require("dotenv");
 dotenv.config();
 
-const sendEmails = async (plan, planData) => {
-  let transporter = nodemailer.createTransport({
-    service: 'gmail', // Replace with your email service
-    auth: {
+const createTransporter = () => nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
       user: process.env.EMAIL,
       pass: process.env.EMAIL_PASS
-    },
-  });
+  },
+});
+
+const sendEmail = async (transporter, mailOptions) => {
+  try {
+      await transporter.sendMail(mailOptions);
+  } catch (error) {
+      logger.error('Error sending email', error);
+      throw error;
+  }
+};
+
+
+const sendEmails = async (plan, planData) => {
+  const transporter = createTransporter();
+
 
   let adminMailOptions = {
     from: process.env.EMAIL,
-    to: process.env.ADMIN_EMAIL,
+    to: process.env.EMAIL,
     subject: `New ${plan} Form Submission from ${planData.name}`,
     text: `
       Name: ${planData.name}
       Email: ${planData.email}
-      Phone: ${planData.phone}
       Company: ${planData.company}
       Description: ${planData.description}
       Reference_sites: ${planData.reference_sites}
@@ -43,53 +55,42 @@ const sendEmails = async (plan, planData) => {
     text: 'Thank you for your submission. Our team will contact you soon.',
   };
 
-  await transporter.sendMail(clientMailOptions);
-  await transporter.sendMail(adminMailOptions);
+    await sendEmail(transporter, adminMailOptions);
+    await sendEmail(transporter, clientMailOptions);
 };
 
-const webBasicPlaneService = async (webBasicPlane) => {
+const processService = async (planeName, planData, repoFunction) => {
   try {
-    logger.info('src > Service > PlainService > webBasicPlaneService');
-    const data = await webBasicPlaneRepo(webBasicPlane);
-    console.log("Plain Data in service",data)
-    await sendEmails('Web Basic Plains', webBasicPlane);
-    return { success: true, message: 'Email sent successfully', data: data };
+      logger.info(`seo > service > webService > ${planeName}Service`);
+      const data = await repoFunction(planData);
+      await sendEmails(planeName, planData);
+      return {
+          success: true,
+          message: "Message sent successfully",
+          data: data
+      };
   } catch (error) {
-    logger.error('Error in basicPlainsService', error);
-    throw error;
+      logger.error(`Error processing ${planeName} service`, error);
+      throw error;
   }
 };
 
-const webStandardPlaneService = async (webStandardPlane) => {
-  try {
-    logger.info('src > Service > PlainService > webStandardPlaneService');
-    const data = await webStandardPlaneRepo(webStandardPlane);
-    console.log("Plain Data in service",data)
-
-    await sendEmails('Web Standard Plains', webStandardPlane);
-    return { success: true, message: 'Email sent successfully', data: data };
-  } catch (error) {
-    logger.error('Error in standardPlainsService', error);
-    throw error;
-  }
+const webBasicPlaneService = async (planData) => {
+  return await processService('WEB Basic Plane', planData, webBasicPlaneRepo);
 };
 
-const webPremiumPlaneService = async (webpremiumPlane) => {
-  try {
-    logger.info('src > Service > PlainService > webPremiumPlaneService');
-    const data = await webpremiumPlaneRepo(webpremiumPlane);
-    console.log("Plain Data in service",data)
-
-    await sendEmails('Web Premium Plane', webpremiumPlane);
-    return { success: true, message: 'Email sent successfully', data: data };
-  } catch (error) {
-    logger.error('Error in premiumPlainsService', error);
-    throw error;
-  }
+const webStandardPlaneService = async (planData) => {
+  return await processService('WEB Standard Plane', planData, webStandardPlaneRepo);
 };
 
-module.exports = {
-  webBasicPlaneService,
-  webStandardPlaneService,
-  webPremiumPlaneService,
+const webPremiumPlaneService = async (planData) => {
+  return await processService('WEB Premium Plane', planData, webPremiumPlaneRepo);
 };
+
+module.exports = { webBasicPlaneService, webStandardPlaneService, webPremiumPlaneService };
+
+
+
+
+
+

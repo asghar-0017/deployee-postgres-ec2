@@ -1,8 +1,7 @@
-const { ValidateWebBasicPlains, ValidateWebStandardPlains, ValidateWebPremiumPlains } = require('../scheema/webPlanesSchema');
 const { webBasicPlaneService, webStandardPlaneService, webPremiumPlaneService } = require('../service/webPlainsService');
 const { logger } = require('../../logger');
 
-const handlePlain = async (request, reply, validateFunction, serviceFunction) => {
+const handlePlain = async (request, reply, serviceFunction) => {
   try {
     const data = request.body;
     if (request.files && Array.isArray(request.files)) {
@@ -22,11 +21,6 @@ const handlePlain = async (request, reply, validateFunction, serviceFunction) =>
       return reply.code(400).send({ error: 'Invalid input' });
     }
 
-    const { error } = validateFunction.validate(data);
-    if (error) {
-      return reply.code(400).send({ error: error.details[0].message });
-    }
-
     const result = await serviceFunction(data);
     reply.code(201).send({ success: 'success', data: result });
 
@@ -38,15 +32,15 @@ const handlePlain = async (request, reply, validateFunction, serviceFunction) =>
 
 
 const webBasicPlane = async (request, reply) => {
-  await handlePlain(request, reply, ValidateWebBasicPlains, webBasicPlaneService);
+  await handlePlain(request, reply, webBasicPlaneService);
 };
 
 const webStandardPlane = async (request, reply) => {
-  await handlePlain(request, reply, ValidateWebStandardPlains, webStandardPlaneService);
+  await handlePlain(request, reply, webStandardPlaneService);
 };
 
 const webPremiumPlane = async (request, reply) => {
-  await handlePlain(request, reply, ValidateWebPremiumPlains, webPremiumPlaneService);
+  await handlePlain(request, reply, webPremiumPlaneService);
 };
 
 module.exports = {

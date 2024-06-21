@@ -1,17 +1,28 @@
 const nodemailer = require('nodemailer');
-const { appBasicPlaneRepo, appStandardPlaneRepo, apppremiumPlaneRepo } = require('../repository/appPlanesRepository');
+const { appBasicPlaneRepo, appStandardPlaneRepo, appPremiumPlaneRepo } = require('../repository/appPlanesRepository');
 const { logger } = require('../../logger');
 const dotenv = require("dotenv");
 dotenv.config();
 
-const sendEmails = async (plan, planData) => {
-  let transporter = nodemailer.createTransport({
-    service: 'gmail', // Replace with your email service
-    auth: {
+const createTransporter = () => nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
       user: process.env.EMAIL,
       pass: process.env.EMAIL_PASS
-    },
-  });
+  },
+});
+
+const sendEmail = async (transporter, mailOptions) => {
+  try {
+      await transporter.sendMail(mailOptions);
+  } catch (error) {
+      logger.error('Error sending email', error);
+      throw error;
+  }
+};
+
+const sendEmails = async (plan, planData) => {
+  const transporter=createTransporter()
 
   let adminMailOptions = {
     from: process.env.EMAIL,
@@ -39,50 +50,27 @@ const sendEmails = async (plan, planData) => {
     text: 'Thank you for your submission. Our team will contact you soon.',
   };
 
-  await transporter.sendMail(clientMailOptions);
-  await transporter.sendMail(adminMailOptions);
+  await sendEmail(transporter,clientMailOptions);
+  await sendEmail(transporter,adminMailOptions);
 };
 
-const appBasicPlaneService = async (appBasicPlane) => {
+
+const processService = async (planName, planData, repoFunction) => {
   try {
-    logger.info('src > Service > appPlainService > appBasicPlaneService');
-    const data = await appBasicPlaneRepo(appBasicPlane);
-    console.log("Plain Data in service",data)
-    await sendEmails('App Basic Plains', appBasicPlane);
-    return { success: true, message: 'Email sent successfully', data: data };
+    logger.info(`src > Service > appPlaneService > ${planName}Service`);
+    const data = await repoFunction(planData);
+    await sendEmails(planName, planData);
+    return { success: true, message: 'Email sent successfully', data };
   } catch (error) {
-    logger.error('Error in appBasicPlaneService', error);
+    logger.error(`Error in ${planName}Service`, error);
     throw error;
   }
 };
 
-const appStandardPlaneService = async (appStandardPlane) => {
-  try {
-    logger.info('src > Service > appPlainService > appStandardPlaneService');
-    const data = await appStandardPlaneRepo(appStandardPlane);
-    console.log("Plain Data in service",data)
+const appBasicPlaneService = (data) => processService('App Basic Plane', data, appBasicPlaneRepo);
+const appStandardPlaneService = (data) => processService('App Standard Plane', data, appStandardPlaneRepo);
+const appPremiumPlaneService = (data) => processService('App Premium Plane', data, appPremiumPlaneRepo);
 
-    await sendEmails('App Standard Plains', appStandardPlane);
-    return { success: true, message: 'Email sent successfully', data: data };
-  } catch (error) {
-    logger.error('Error in standardPlainsService', error);
-    throw error;
-  }
-};
-
-const appPremiumPlaneService = async (appPremiumPlane) => {
-  try {
-    logger.info('src > Service > appPlainService > appPremiumPlaneService');
-    const data = await apppremiumPlaneRepo(appPremiumPlane);
-    console.log("Plain Data in service",data)
-
-    await sendEmails('App Premium Plane', appPremiumPlane);
-    return { success: true, message: 'Email sent successfully', data: data };
-  } catch (error) {
-    logger.error('Error in premiumPlainsService', error);
-    throw error;
-  }
-};
 
 module.exports = {
   appBasicPlaneService,

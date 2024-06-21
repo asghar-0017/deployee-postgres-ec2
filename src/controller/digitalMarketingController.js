@@ -1,6 +1,5 @@
 const digitalMarketingService = require('../service/digitalMarketingService');
 const { logger } = require('../../logger');
-const { ValidateDigitalMarketing } = require('../scheema/digitalMarketingSchema');
 
 const digitalMarketing = async (request, reply) => {
     try {
@@ -11,12 +10,6 @@ const digitalMarketing = async (request, reply) => {
         if (!clientData) {
             logger.error("ClientData is undefined");
             return reply.code(400).send({ error: "Invalid input" });
-        }
-
-        const { error } = ValidateDigitalMarketing.validate(clientData);
-        console.log("Validate Error ", error);
-        if (error) {
-            return reply.code(400).send({ error: error.details[0].message });
         }
 
         const data = await digitalMarketingService(clientData);
