@@ -25,7 +25,7 @@ const digitalMarketingService = async (clientData) => {
         // Email options
         let adminMailOptions = {
             from: process.env.EMAIL,
-            to: ` ${process.env.EMAIL}`,
+            to: ` ${process.env.ADMIN_EMAIL}`,
             subject: `New Digital Marketing Form Submission from ${clientData.name}`,
             text: `
                 Name: ${clientData.name}

@@ -25,7 +25,7 @@ const contactUsService = async (clientData) => {
         // Email options
         let adminMailOptions = {
             from: process.env.EMAIL,
-            to: `${process.env.EMAIL}`,
+            to: `${process.env.ADMIN_EMAIL}`,
             subject: `New Contact Form Submission from ${clientData.name}`,
             text: `
                 Name: ${clientData.name}
