@@ -21,7 +21,6 @@ const handlePlain = async (request, reply, serviceFunction) => {
       return reply.code(400).send({ error: 'Invalid input' });
     }
 
-
     const result = await serviceFunction(data);
     reply.code(201).send({ success: 'success', data: result });
 
@@ -30,7 +29,6 @@ const handlePlain = async (request, reply, serviceFunction) => {
     throw error
   }
 };
-
 
 const appBasicPlane = async (request, reply) => {
   await handlePlain(request, reply, appBasicPlaneService);

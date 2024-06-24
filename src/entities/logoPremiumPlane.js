@@ -26,10 +26,8 @@ module.exports = new EntitySchema({
     reference_template: {
       type: "varchar",
       nullable: true,
-
     },
  
-
     Link_to_Graphics: {
       type: "varchar",
       nullable: true,

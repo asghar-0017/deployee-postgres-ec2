@@ -1,37 +1,31 @@
 const contactUsService = require('../service/contactService');
 const { logger } = require('../../logger');
+// const { ValidateContact } = require('../scheema/contactUsSchema');
 
-
-
-const handlePlain = async (request, reply, serviceFunction) => {
+const contactUs = async (request, reply) => {
     try {
+        logger.info("src > controller > contactController > getDataFromUser");
         const clientData = request.body;
-        console.log("Received Data in Controller", clientData);
+        console.log("Client in Controller", clientData);
 
         if (!clientData) {
-            console.log("Client Data Not Found");
-            return reply.code(400).send({ error: "Client Data Not Found" });
+            logger.error("ClientData is undefined");
+            return reply.code(400).send({ error: "Invalid input" });
         }
 
+        // const { error } = ValidateContact.validate(clientData);
+        // console.log("Validate Error ", error);
+        // if (error) {
+        //     return reply.code(400).send({ error: error.details[0].message });
+        // }
 
-        const result = await serviceFunction(clientData);
-        if (result) {
-            reply.send({
-                code: 200,
-                success: "success",
-                data: result
-            });
-        } else {
-            reply.code(500).send({ error: "Internal Server Error" });
-        }
+        const data = await contactUsService(clientData);
+        reply.code(200).send({ success: "success", data: data });
+
     } catch (error) {
-        logger.error(error);
+        logger.error("Error occurred during contact form submission:", error);
         reply.code(500).send({ error: "Internal Server Error" });
     }
 };
 
-const contactUs = async (request, reply) => {
-    await handlePlain(request, reply,contactUsService );
-};
-
-module.exports=contactUs
+module.exports = contactUs;

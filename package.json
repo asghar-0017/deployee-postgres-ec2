@@ -5,7 +5,6 @@
   "engines": {
     "node": "v20.13.1"
   },
-  
   "scripts": {
     "start": "nodemon server.js"
   },
@@ -27,6 +26,7 @@
     "avvio": "^8.3.2",
     "balanced-match": "^1.0.2",
     "base64-js": "^1.5.1",
+    "bcrypt": "^5.1.1",
     "binary-extensions": "^2.3.0",
     "brace-expansion": "^2.0.1",
     "braces": "^3.0.3",
@@ -61,6 +61,8 @@
     "fast-safe-stringify": "^2.1.1",
     "fast-uri": "^2.3.1",
     "fastify": "^4.27.0",
+    "fastify-multer": "^2.0.3",
+    "fastify-multipart": "^5.4.0",
     "fastify-plugin": "^4.5.1",
     "fastq": "^1.17.1",
     "fill-range": "^7.1.1",
@@ -78,6 +80,7 @@
     "ignore-by-default": "^1.0.1",
     "inflight": "^1.0.6",
     "inherits": "^2.0.4",
+    "ioredis": "^5.4.1",
     "ipaddr.js": "^1.9.1",
     "is-binary-path": "^2.1.0",
     "is-extglob": "^2.1.1",
