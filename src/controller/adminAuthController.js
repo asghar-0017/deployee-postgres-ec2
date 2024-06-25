@@ -22,7 +22,7 @@ const adminAuth = {
   
   logout: async (request, reply) => {
     try {
-      const { token } = request.body; // Include userName in the body
+      const token = request.headers.authorization.split(' ')[1];
       const isValidToken = await adminService.validateAdminToken(token);
       if (isValidToken) {
         await adminService.logout(token);
@@ -74,6 +74,22 @@ const adminAuth = {
         reply.code(200).send({ message: 'Password reset successfully.' });
       } else {
         reply.code(400).send({ message: 'Invalid or expired code.' });
+      }
+    } catch (error) {
+      reply.code(500).send({ message: 'Internal Server Error', error: error.message });
+    }
+  },
+  authenticate: async (request, reply) => {
+    try {
+      const authHeader = request.headers.authorization;
+      if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        return reply.code(401).send({ message: 'No token provided' });
+      }
+
+      const token = authHeader.split(' ')[1];
+      const isValidToken = await adminService.validateAdminToken(token);
+      if (!isValidToken) {
+        return reply.code(401).send({ message: 'Invalid token' });
       }
     } catch (error) {
       reply.code(500).send({ message: 'Internal Server Error', error: error.message });

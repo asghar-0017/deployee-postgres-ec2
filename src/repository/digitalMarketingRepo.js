@@ -43,5 +43,23 @@ const allDigitalMarketingDataInRepo=async()=>{
     
     }
     }
+const updateDigitalDataInRepo=async(id,clientData)=>{
+    try{
+        const data=await digitalMarketingRepository.find({where:{id}})
+        if(!data){
+            return "Data Not Found"
+        }
+        if(data){
+            const UpdateResult=await digitalMarketingRepository.update({id},clientData)
+            if(UpdateResult){
+               const  UpdateData=await digitalMarketingRepository.find({where:{id}})
+               return UpdateData
+            }
+        }
 
-module.exports = {digitalMarketingRepo,allDigitalMarketingDataInRepo,findDigitalMarketingByIdRepo};
+    }catch(error){
+
+    }
+}
+
+module.exports = {digitalMarketingRepo,allDigitalMarketingDataInRepo,findDigitalMarketingByIdRepo,updateDigitalDataInRepo};

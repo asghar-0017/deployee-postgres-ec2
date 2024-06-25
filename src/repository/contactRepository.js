@@ -54,7 +54,7 @@ const updateDataInRepo=async(id,clientData)=>{
         }
         if(data){
           const UpdatedResult=  await contactRepository.update({id},clientData)
-          if(UpdatedResult.affected>0){
+          if(UpdatedResult){
             const UpdatedData=await contactRepository.find({where:{id}})
             return UpdatedData
 
