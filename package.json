@@ -2,9 +2,7 @@
   "name": "softmark-backend",
   "version": "1.0.0",
   "main": "server.js",
-  "engines": {
-    "node": "v20.13.1"
-  },
+ 
   "scripts": {
     "start": "nodemon server.js"
   },
