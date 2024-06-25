@@ -70,7 +70,6 @@ const allDigitalMarketingData=async(request,reply)=>{
             const data=await upDateDigitalInService(id,clientData)
             if(data){
                 reply.send({
-                    massege:`Client Data of ${id} Updated Successfully`,
                     data:data
                 })
             }if(!data){

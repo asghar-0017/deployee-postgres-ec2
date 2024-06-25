@@ -45,21 +45,25 @@ const allDigitalMarketingDataInRepo=async()=>{
     }
 const updateDigitalDataInRepo=async(id,clientData)=>{
     try{
-        const data=await digitalMarketingRepository.find({where:{id}})
-        if(!data){
-            return "Data Not Found"
-        }
-        if(data){
-            const UpdateResult=await digitalMarketingRepository.update({id},clientData)
-            if(UpdateResult){
-               const  UpdateData=await digitalMarketingRepository.find({where:{id}})
-               return UpdateData
-            }
-        }
-
-    }catch(error){
-
+        const data=await digitalMarketingRepository.findOne({where:{id}})
+    if(!data){
+        return "Data Not Found"
     }
+    if(data){
+      const UpdatedResult=  await digitalMarketingRepository.update({id},clientData)
+      if(UpdatedResult){
+        const UpdatedData=await digitalMarketingRepository.find({where:{id}})
+        return UpdatedData
+
+      }
+
+      
+    }
+
+}catch(error){
+    throw error
+}
+
 }
 
 module.exports = {digitalMarketingRepo,allDigitalMarketingDataInRepo,findDigitalMarketingByIdRepo,updateDigitalDataInRepo};
