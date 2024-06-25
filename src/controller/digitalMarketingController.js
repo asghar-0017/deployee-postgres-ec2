@@ -1,4 +1,4 @@
-const digitalMarketingService = require('../service/digitalMarketingService');
+const {digitalMarketingService,digitalMarketingdataInService,digitalMDataInService} = require('../service/digitalMarketingService');
 const { logger } = require('../../logger');
 
 const digitalMarketing = async (request, reply) => {
@@ -21,4 +21,45 @@ const digitalMarketing = async (request, reply) => {
     }
 };
 
-module.exports = digitalMarketing;
+const allDigitalMarketingData=async(request,reply)=>{
+    try{
+        const data=await digitalMarketingdataInService();
+    
+        if(data){
+            reply.code(200).send({
+                success:"success",
+                data:data   
+                 })
+        }else if(!data){
+            reply.code(201).send({
+                message:"Digital Marketing Data Not Found"
+            })
+        }
+    
+    }catch(error){
+    throw error
+    }
+    }
+    
+    const delDigitalMarketingById=async(request,reply)=>{
+    try{
+        const id=request.params.id
+        const digitalMarketingData=await digitalMDataInService(id)
+        if(digitalMarketingData){
+            reply.code(200).send({
+              status:"succcess" ,
+              data:digitalMarketingData 
+            })
+        }else if(!digitalMarketingData){
+            reply.code(200).send({
+                message:`Client Data not Found With ID ${id}`
+            })
+        }
+    
+    }catch(error){
+        throw error
+    }
+    }
+    
+
+module.exports = {digitalMarketing,allDigitalMarketingData,delDigitalMarketingById};

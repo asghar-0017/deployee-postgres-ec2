@@ -1,6 +1,7 @@
 const dataSource = require("../infrastructure/psql");
 const { logger } = require("../../logger");
 const { err } = require("pino-std-serializers");
+const { error } = require("ajv/dist/vocabularies/applicator/dependencies");
 const contactRepository = dataSource.getRepository("contactUs");
 
 const contactUsRepo = async (ClientData) => {
@@ -44,4 +45,27 @@ try{
 
 }
 }
-module.exports = {contactUsRepo,allContactUsDataInRepo,findContactByIdRepo};
+
+const updateDataInRepo=async(id,clientData)=>{
+    try{
+        const data=await contactRepository.find({where:{id}})
+        if(!data){
+            return "Data Not Found"
+        }
+        if(data){
+          const UpdatedResult=  await contactRepository.update({id},clientData)
+          if(UpdatedResult.affected>0){
+            const UpdatedData=await contactRepository.find({where:{id}})
+            return UpdatedData
+
+          }
+
+          
+        }
+
+    }catch(error){
+        throw error
+    }
+
+}
+module.exports = {contactUsRepo,allContactUsDataInRepo,findContactByIdRepo,updateDataInRepo};

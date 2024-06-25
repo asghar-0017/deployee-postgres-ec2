@@ -3,7 +3,12 @@ const {
   logoBasicPlaneRepo,
   logoStandardPlaneRepo,
   logoPremiumPlaneRepo,
-  logoBusinessPlaneRepo
+  logoBusinessPlaneRepo,
+
+  getBasicLogoPlaneDataInRepo,
+  getStandardLogoPlaneDataInRepo,
+  getPremiumLogoPlaneDataInRepo,
+  getBusinnessLogoPlaneDataInRepo
 } = require('../repository/logoRepository');
 const { logger } = require('../../logger');
 const dotenv = require("dotenv");
@@ -76,9 +81,37 @@ const logoStandardPlaneService = (data) => processService('Logo Standard Plane',
 const logoPremiumPlaneService = (data) => processService('Logo Premium Plane', data, logoPremiumPlaneRepo);
 const logoBusinessPlaneService = (data) => processService('Logo Business Plane', data, logoBusinessPlaneRepo);
 
+
+
+
+
+const getLogoPlaneprocessService = async (planName, repoFunction) => {
+  try {
+    logger.info(`src > Service > getLogoPlaneprocessService > ${planName}Service`);
+    const data = await repoFunction();
+    return { success: true,  data };
+  } catch (error) {
+    logger.error(`Error in ${planName}Service`, error);
+    throw error;
+  }
+};
+
+const getAllBasicLogoPlanesData = () => getLogoPlaneprocessService('Get Logo Basic Plane Data', getBasicLogoPlaneDataInRepo);
+const getAllStandardLogoPlanesData = () => getLogoPlaneprocessService('Get Logo Standard Plane Data', getStandardLogoPlaneDataInRepo);
+const getAllpremiumLogoPlanesData = () => getLogoPlaneprocessService('Get Logo Premium Plane Data', getPremiumLogoPlaneDataInRepo);
+const getAllBusinessLogoPlanesData = () => getLogoPlaneprocessService('Get Logo Business Plane Data', getBusinnessLogoPlaneDataInRepo);
+
+
+
+
 module.exports = {
   logoBasicPlaneService,
   logoStandardPlaneService,
   logoPremiumPlaneService,
-  logoBusinessPlaneService
+  logoBusinessPlaneService,
+
+  getAllBasicLogoPlanesData,
+  getAllStandardLogoPlanesData,
+  getAllpremiumLogoPlanesData,
+  getAllBusinessLogoPlanesData
 };

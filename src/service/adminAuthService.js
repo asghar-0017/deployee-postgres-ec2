@@ -34,9 +34,9 @@ const adminService = {
     }
   },
   
-  storeAdminToken: async (token, userName) => {
+  storeAdminToken: async (token) => {
     try {
-      const storeAdminToken= await redis.set(`admin:${userName}`, token, 'EX', 3600); // Token expires in 1 hour
+      const storeAdminToken= await redis.set(`admin:${token}`,token, 'EX', 3600); // Token expires in 1 hour
       console.log("Store Admin Token",storeAdminToken)
     } catch (error) {
       logger.error('Error saving admin token to Redis', error);
@@ -44,9 +44,9 @@ const adminService = {
     }
   },
   
-  validateAdminToken: async (token, userName) => {
+  validateAdminToken: async (token) => {
     try {
-      const storedToken = await redis.get(`admin:${userName}`);
+      const storedToken = await redis.get(`admin:${token}`);
       console.log("Store Token",storedToken)
       return storedToken === token;
     } catch (error) {
@@ -55,9 +55,9 @@ const adminService = {
     }
   },
 
-  logout: async (userName) => {
+  logout: async (token) => {
     try {
-      const result = await redis.del(`admin:${userName}`);
+      const result = await redis.del(`admin:${token}`);
       logger.info('Admin Logout Success');
       return result === 1;
     } catch (error) {

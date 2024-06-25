@@ -1,5 +1,8 @@
 const nodemailer = require('nodemailer');
-const { webBasicPlaneRepo, webStandardPlaneRepo, webPremiumPlaneRepo } = require('../repository/webPlaneRepository');
+const { webBasicPlaneRepo, webStandardPlaneRepo, webPremiumPlaneRepo,
+  getBasicWebPlaneDataInRepo,getStandardWebPlaneDataInRepo,getPremiumWebPlaneDataInRepo
+
+ } = require('../repository/webPlaneRepository');
 const { logger } = require('../../logger');
 const dotenv = require("dotenv");
 dotenv.config();
@@ -87,7 +90,31 @@ const webPremiumPlaneService = async (planData) => {
   return await processService('WEB Premium Plane', planData, webPremiumPlaneRepo);
 };
 
-module.exports = { webBasicPlaneService, webStandardPlaneService, webPremiumPlaneService };
+
+
+
+
+const getWebPlaneprocessService = async (planName, repoFunction) => {
+  try {
+    logger.info(`src > Service > getAppPlaneprocessService > ${planName}Service`);
+    const data = await repoFunction();
+    return { success: true,  data };
+  } catch (error) {
+    logger.error(`Error in ${planName}Service`, error);
+    throw error;
+  }
+};
+
+const getAllBasicWebPlanesData = () => getWebPlaneprocessService('Get App Basic Plane Data', getBasicWebPlaneDataInRepo);
+const getAllStandardWebPlanesData = () => getWebPlaneprocessService('Get App Standard Plane Data', getStandardWebPlaneDataInRepo);
+const getAllpremiumWebPlanesData = () => getWebPlaneprocessService('Get App Premium Plane Data', getPremiumWebPlaneDataInRepo);
+
+
+
+module.exports = { webBasicPlaneService, webStandardPlaneService, webPremiumPlaneService,
+  getAllBasicWebPlanesData,getAllStandardWebPlanesData,getAllpremiumWebPlanesData
+
+ };
 
 
 

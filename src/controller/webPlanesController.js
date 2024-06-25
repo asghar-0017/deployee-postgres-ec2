@@ -1,4 +1,7 @@
-const { webBasicPlaneService, webStandardPlaneService, webPremiumPlaneService } = require('../service/webPlainsService');
+const { webBasicPlaneService, webStandardPlaneService, webPremiumPlaneService,
+  getAllBasicWebPlanesData,getAllStandardWebPlanesData,getAllpremiumWebPlanesData
+
+ } = require('../service/webPlainsService');
 const { logger } = require('../../logger');
 
 const handlePlain = async (request, reply, serviceFunction) => {
@@ -43,8 +46,54 @@ const webPremiumPlane = async (request, reply) => {
   await handlePlain(request, reply, webPremiumPlaneService);
 };
 
+
+
+
+
+
+const getWebPlanesData = async (request, reply, serviceFunction) => {
+  try {
+
+    const result = await serviceFunction();
+    console.log("Result",result)
+    if(result){
+    reply.code(201).send({
+       success: 'success', data: result });
+    }else{
+      reply.send({
+        message:`${serviceFunction} Data Not Found`
+      })
+    }
+  } catch (error) {
+    console.error('Error occurred in getLogoPlanesData Function', error);
+    throw error
+  }
+};
+
+const allWebBasicPlanesData = async (request, reply) => {
+  await getWebPlanesData(request, reply, getAllBasicWebPlanesData);
+};
+
+const allWebStandardPlaneData = async (request, reply) => {
+  await getWebPlanesData(request, reply, getAllStandardWebPlanesData);
+};
+
+const allWebPremiumPlaneData = async (request, reply) => {
+  await getWebPlanesData(request, reply, getAllpremiumWebPlanesData);
+};
+
+
+
+
+
 module.exports = {
   webBasicPlane,
   webStandardPlane,
   webPremiumPlane,
+
+  allWebBasicPlanesData,
+  allWebStandardPlaneData,
+  allWebPremiumPlaneData
+
+
 };

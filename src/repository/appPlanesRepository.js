@@ -22,8 +22,36 @@ const appBasicPlaneRepo = (data) => saveData(appBasicPlaneRepository, data, "app
 const appStandardPlaneRepo = (data) => saveData(appStandardPlaneRepository, data, "appStandardPlaneRepo");
 const appPremiumPlaneRepo = (data) => saveData(appPremiumPlaneRepository, data, "appPremiumPlaneRepo");
 
+// const getBasicPlaneDataInRepo=async()=>{
+//   try{
+//     const data=await Ba
+//   }catch(error){
+
+//   }
+
+// }
+
+const getPlanesRepo = async (repository, repoName) => {
+  try {
+    const getData = repository.find();
+    logger.info(`src > repository > getPlanesRepo > ${repoName}`, getData);
+    return getData;
+  } catch (error) {
+    logger.error(`Error Getting data in ${repoName}`, error);
+    throw error;
+  }
+};
+
+const getBasicPlaneDataInRepo = () => getPlanesRepo(appBasicPlaneRepository, "getBasicPlaneDataInRepo");
+const getStandardPlaneDataInRepo = () => getPlanesRepo(appStandardPlaneRepository, "getStandardPlaneDataInRepo");
+const getPremiumPlaneDataInRepo = () => getPlanesRepo(appPremiumPlaneRepository, "getPremiumPlaneDataInRepo");
+
 module.exports = {
     appBasicPlaneRepo,
     appStandardPlaneRepo,
     appPremiumPlaneRepo,
+    
+    getBasicPlaneDataInRepo,
+    getStandardPlaneDataInRepo,
+    getPremiumPlaneDataInRepo
 };

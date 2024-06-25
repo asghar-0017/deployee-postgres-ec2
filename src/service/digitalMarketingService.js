@@ -1,6 +1,6 @@
 // contactService.js
 const nodemailer = require('nodemailer');
-const digitalMarketingRepo = require('../repository/digitalMarketingRepo');
+const {digitalMarketingRepo,allDigitalMarketingDataInRepo,findDigitalMarketingByIdRepo} = require('../repository/digitalMarketingRepo');
 const { logger } = require('../../logger');
 const dotenv = require("dotenv");
 dotenv.config();
@@ -54,4 +54,23 @@ const digitalMarketingService = async (clientData) => {
     }
 };
 
-module.exports = digitalMarketingService
+const digitalMarketingdataInService=async()=>{
+    try{
+        const data=await allDigitalMarketingDataInRepo();
+        return data
+    }catch(error){
+        throw error
+    }
+    }
+    
+    const digitalMDataInService=async(id)=>{
+        try{
+        const data=await findDigitalMarketingByIdRepo(id)
+        return data
+    
+        }catch(error){
+            throw error
+        }
+    }
+
+module.exports = {digitalMarketingService,digitalMarketingdataInService,digitalMDataInService}

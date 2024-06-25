@@ -1,4 +1,7 @@
-const { seoBasicPlaneService, seoStandardPlaneService, seoPremiumPlaneService } = require('../service/seoService');
+const { seoBasicPlaneService, seoStandardPlaneService, seoPremiumPlaneService,
+    getAllBasicSeoPlanesData,getAllStandardSeoPlanesData,getAllpremiumSeoPlanesData
+
+ } = require('../service/seoService');
 const { logger } = require('../../logger');
 
 const handlePlain = async (request, reply, serviceFunction) => {
@@ -40,4 +43,45 @@ const seoPremiumPlaneController = async (request, reply) => {
     await handlePlain(request, reply, seoPremiumPlaneService);
 };
 
-module.exports = { seoBasicPlaneController, seoStandardPlaneController, seoPremiumPlaneController };
+
+
+
+const getSeoPlanesData = async (request, reply, serviceFunction) => {
+    try {
+  
+      const result = await serviceFunction();
+      console.log("Result",result)
+      if(result){
+      reply.code(201).send({
+         success: 'success', data: result });
+      }else{
+        reply.send({
+          message:`${serviceFunction} Data Not Found`
+        })
+      }
+    } catch (error) {
+      console.error('Error occurred in getLogoPlanesData Function', error);
+      throw error
+    }
+  };
+  
+  const allSeoBasicPlanesData = async (request, reply) => {
+    await getSeoPlanesData(request, reply, getAllBasicSeoPlanesData);
+  };
+  
+  const allSeoStandardPlaneData = async (request, reply) => {
+    await getSeoPlanesData(request, reply, getAllStandardSeoPlanesData);
+  };
+  
+  const allSeoPremiumPlaneData = async (request, reply) => {
+    await getSeoPlanesData(request, reply, getAllpremiumSeoPlanesData);
+  };
+  
+  
+
+
+
+module.exports = { seoBasicPlaneController, seoStandardPlaneController, seoPremiumPlaneController,
+    allSeoBasicPlanesData,allSeoStandardPlaneData,allSeoPremiumPlaneData
+
+ };

@@ -1,4 +1,6 @@
-const {contactUsService,dataInService,contactDataInService} = require('../service/contactService');
+const {contactUsService,dataInService,contactDataInService,updateContactInService
+
+} = require('../service/contactService');
 const { logger } = require('../../logger');
 // const { ValidateContact } = require('../scheema/contactUsSchema');
 
@@ -68,4 +70,25 @@ try{
 }
 }
 
-module.exports = {contactUs,allContactUsData,delContactUsById};
+const updateContactUsById=async(request,reply)=>{
+try{
+    const id=request.params.id
+    const clientData=request.body
+    const data=await updateContactInService(id,clientData)
+    if(data){
+        reply.send({
+            massege:`Client Data of ${id} Updated Successfully`,
+            data:data
+        })
+    }else if(!data){
+        reply.send({
+            message:`Client data Not Found With ID ${id}`
+        })
+    }
+
+}catch(error){
+    throw error
+}
+}
+
+module.exports = {contactUs,allContactUsData,delContactUsById,updateContactUsById};

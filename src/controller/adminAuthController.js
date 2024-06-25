@@ -10,7 +10,7 @@ const adminAuth = {
       if (data) {
         const token = generateResetCode(data.userName);
 
-        await adminService.storeAdminToken(token, data.userName);
+        await adminService.storeAdminToken(token);
         reply.code(200).send({ message: 'Login Success', token, data });
       } else {
         reply.code(401).send({ message: 'Failed to Login' });
@@ -22,10 +22,10 @@ const adminAuth = {
   
   logout: async (request, reply) => {
     try {
-      const { token, userName } = request.body; // Include userName in the body
-      const isValidToken = await adminService.validateAdminToken(token, userName);
+      const { token } = request.body; // Include userName in the body
+      const isValidToken = await adminService.validateAdminToken(token);
       if (isValidToken) {
-        await adminService.logout(userName);
+        await adminService.logout(token);
         reply.code(200).send({ message: 'Logout Success' });
       } else {
         reply.code(400).send({ message: 'Failed to Logout: Invalid token or user.' });

@@ -1,6 +1,6 @@
 // contactService.js
 const nodemailer = require('nodemailer');
-const {contactUsRepo,allContactUsDataInRepo,findContactByIdRepo} = require('../repository/contactRepository');
+const {contactUsRepo,allContactUsDataInRepo,findContactByIdRepo,updateDataInRepo} = require('../repository/contactRepository');
 const { logger } = require('../../logger');
 const dotenv = require("dotenv");
 dotenv.config();
@@ -71,4 +71,15 @@ const contactDataInService=async(id)=>{
         throw error
     }
 }
-module.exports = {contactUsService,dataInService,contactDataInService}
+
+const updateContactInService=async(id,clientData)=>{
+    try{
+        const data=await updateDataInRepo(id,clientData)
+        return data
+
+    }catch(error){
+        throw error
+    }
+
+}
+module.exports = {contactUsService,dataInService,contactDataInService,updateContactInService}

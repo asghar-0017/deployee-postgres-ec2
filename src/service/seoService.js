@@ -2,7 +2,11 @@ const nodemailer = require('nodemailer');
 const {
     seoBasicPlaneRepo,
     seoStandardPlaneRepo,
-    seoPremiumPlaneRepo
+    seoPremiumPlaneRepo,
+
+    getBasicSeoPlaneDataInRepo,
+    getStandardSeoPlaneDataInRepo,
+    getPremiumSeoPlaneDataInRepo
 } = require('../repository/seoRepository');
 const { logger } = require('../../logger');
 const dotenv = require("dotenv");
@@ -84,4 +88,25 @@ const seoPremiumPlaneService = async (planData) => {
     return await processService('SEO Premium Plane', planData, seoPremiumPlaneRepo);
 };
 
-module.exports = { seoBasicPlaneService, seoStandardPlaneService, seoPremiumPlaneService };
+
+
+
+const getSeoPlaneprocessService = async (planName, repoFunction) => {
+    try {
+      logger.info(`src > Service > getAppPlaneprocessService > ${planName}Service`);
+      const data = await repoFunction();
+      return { success: true,  data };
+    } catch (error) {
+      logger.error(`Error in ${planName}Service`, error);
+      throw error;
+    }
+  };
+  
+  const getAllBasicSeoPlanesData = () => getSeoPlaneprocessService('Get SEO Basic Plane Data', getBasicSeoPlaneDataInRepo);
+  const getAllStandardSeoPlanesData = () => getSeoPlaneprocessService('Get SEO Standard Plane Data', getStandardSeoPlaneDataInRepo);
+  const getAllpremiumSeoPlanesData = () => getSeoPlaneprocessService('Get SEO Premium Plane Data', getPremiumSeoPlaneDataInRepo);
+  
+
+module.exports = { seoBasicPlaneService, seoStandardPlaneService, seoPremiumPlaneService,
+    getAllBasicSeoPlanesData,getAllStandardSeoPlanesData,getAllpremiumSeoPlanesData
+ };

@@ -24,9 +24,33 @@ const logoStandardPlaneRepo = (data) => saveData(logoStandardPlaneRepository, da
 const logoPremiumPlaneRepo = (data) => saveData(logoPremiumPlaneRepository, data, "logoPremiumPlaneRepo");
 const logoBusinessPlaneRepo = (data) => saveData(logoBusinessPlaneRepository, data, "logoBusinessPlaneRepo");
 
+
+const getLogoPlanesRepo = async (repository, repoName) => {
+  try {
+    const getData = repository.find();
+    logger.info(`src > repository > getLogoPlanesRepo > ${repoName}`, getData);
+    return getData;
+  } catch (error) {
+    logger.error(`Error Getting data in ${repoName}`, error);
+    throw error;
+  }
+};
+
+const getBasicLogoPlaneDataInRepo = () => getLogoPlanesRepo(logoBasicPlaneRepository, "getLogoBasicPlaneDataInRepo");
+const getStandardLogoPlaneDataInRepo = () => getLogoPlanesRepo(logoStandardPlaneRepository, "getLogoStandardPlaneDataInRepo");
+const getPremiumLogoPlaneDataInRepo = () => getLogoPlanesRepo(logoPremiumPlaneRepository, "getLogoPremiumPlaneDataInRepo");
+const getBusinnessLogoPlaneDataInRepo = () => getLogoPlanesRepo(logoBusinessPlaneRepository, "getLogoBusinessPlaneDataInRepo");
+
+
+
 module.exports = {
   logoBasicPlaneRepo,
   logoStandardPlaneRepo,
   logoPremiumPlaneRepo,
-  logoBusinessPlaneRepo
+  logoBusinessPlaneRepo,
+
+  getBasicLogoPlaneDataInRepo,
+  getStandardLogoPlaneDataInRepo,
+  getPremiumLogoPlaneDataInRepo,
+  getBusinnessLogoPlaneDataInRepo
 };

@@ -1,4 +1,4 @@
-const { adminAuth, forgotPassword, verifyResetCode, resetPassword, logout } = require('../controller/adminAuthController');
+const {adminAuth} = require('../controller/adminAuthController');
 
 const AdminAuthRoute = async (fastify) => {
     fastify.post('/admin-auth', adminAuth.login);
@@ -7,5 +7,6 @@ const AdminAuthRoute = async (fastify) => {
     fastify.post('/reset-password', adminAuth.resetPassword);
     fastify.post('/logout', adminAuth.logout); 
 };
+
 
 module.exports = AdminAuthRoute;

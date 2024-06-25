@@ -1,4 +1,6 @@
-const { appBasicPlaneService, appStandardPlaneService, appPremiumPlaneService } = require('../service/appPlaneService');
+const { appBasicPlaneService, appStandardPlaneService, appPremiumPlaneService,
+  getAllBasicAppPlanesData,getAllStandardAppPlanesData ,getAllpremiumAppPlanesData
+} = require('../service/appPlaneService');
 const { logger } = require('../../logger');
 
 const handlePlain = async (request, reply, serviceFunction) => {
@@ -42,8 +44,50 @@ const appPremiumPlane = async (request, reply) => {
   await handlePlain(request, reply, appPremiumPlaneService);
 };
 
+
+
+
+const getPlanesData = async (request, reply, serviceFunction) => {
+  try {
+
+    const result = await serviceFunction();
+    console.log("Result",result)
+    if(result){
+    reply.code(201).send({
+       success: 'success', data: result });
+    }else{
+      reply.send({
+        message:`${serviceFunction} Data Not Found`
+      })
+    }
+  } catch (error) {
+    console.error('Error occurred in getDataPlanes Function', error);
+    throw error
+  }
+};
+
+const allAppBasicPlanesData = async (request, reply) => {
+  await getPlanesData(request, reply, getAllBasicAppPlanesData);
+};
+
+const allAppStandardPlaneData = async (request, reply) => {
+  await getPlanesData(request, reply, getAllStandardAppPlanesData);
+};
+
+const allAppPremiumPlaneData = async (request, reply) => {
+  await getPlanesData(request, reply, getAllpremiumAppPlanesData);
+};
+
+
+
+
+
 module.exports = {
 appBasicPlane,
   appStandardPlane,
   appPremiumPlane,
+
+  allAppBasicPlanesData,
+  allAppStandardPlaneData,
+  allAppPremiumPlaneData
 };

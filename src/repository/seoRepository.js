@@ -22,8 +22,33 @@ const seoBasicPlaneRepo = (data) => saveData(seoBasicPlaneRepository, data, "SEO
 const seoStandardPlaneRepo = (data) => saveData(seoStandardPlaneRepository, data, "SEOStandardPlaneRepo");
 const seoPremiumPlaneRepo = (data) => saveData(seoPremiumPlaneRepository, data, "SEOPremiumPlaneRepo");
 
+
+const getSeoPlanesRepo = async (repository, repoName) => {
+  try {
+    const getData = repository.find();
+    logger.info(`src > repository > getWebPlanesRepo > ${repoName}`, getData);
+    return getData;
+  } catch (error) {
+    logger.error(`Error Getting data in ${repoName}`, error);
+    throw error;
+  }
+};
+
+const getBasicSeoPlaneDataInRepo = () => getSeoPlanesRepo(seoBasicPlaneRepository, "getSeoBasicPlaneDataInRepo");
+const getStandardSeoPlaneDataInRepo = () => getSeoPlanesRepo(seoStandardPlaneRepository, "getSeoStandardPlaneDataInRepo");
+const getPremiumSeoPlaneDataInRepo = () => getSeoPlanesRepo(seoPremiumPlaneRepository, "getSeoPremiumPlaneDataInRepo");
+
+
+
+
+
 module.exports = {
     seoBasicPlaneRepo,
     seoStandardPlaneRepo,
     seoPremiumPlaneRepo,
+
+    getBasicSeoPlaneDataInRepo,
+    getStandardSeoPlaneDataInRepo,
+    getPremiumSeoPlaneDataInRepo
+
 };

@@ -1,4 +1,7 @@
-const { logoBasicPlaneService, logoStandardPlaneService, logoPremiumPlaneService, logoBusinessPlaneService } = require('../service/logoPlaneService');
+const { logoBasicPlaneService, logoStandardPlaneService, logoPremiumPlaneService, logoBusinessPlaneService,
+  getAllBasicLogoPlanesData,getAllStandardLogoPlanesData,getAllpremiumLogoPlanesData,getAllBusinessLogoPlanesData
+
+ } = require('../service/logoPlaneService');
 const { logger } = require('../../logger');
 
 const handlePlain = async (request, reply, serviceFunction) => {
@@ -49,9 +52,58 @@ const logoBusinessPlane = async (request, reply) => {
   await handlePlain(request, reply, logoBusinessPlaneService);
 };
 
+
+
+
+const getLogoPlanesData = async (request, reply, serviceFunction) => {
+  try {
+
+    const result = await serviceFunction();
+    console.log("Result",result)
+    if(result){
+    reply.code(201).send({
+       success: 'success', data: result });
+    }else{
+      reply.send({
+        message:`${serviceFunction} Data Not Found`
+      })
+    }
+  } catch (error) {
+    console.error('Error occurred in getLogoPlanesData Function', error);
+    throw error
+  }
+};
+
+const allLogoBasicPlanesData = async (request, reply) => {
+  await getLogoPlanesData(request, reply, getAllBasicLogoPlanesData);
+};
+
+const allLogoStandardPlaneData = async (request, reply) => {
+  await getLogoPlanesData(request, reply, getAllStandardLogoPlanesData);
+};
+
+const allLogoPremiumPlaneData = async (request, reply) => {
+  await getLogoPlanesData(request, reply, getAllpremiumLogoPlanesData);
+};
+
+const allLogoBusinessPlaneData = async (request, reply) => {
+  await getLogoPlanesData(request, reply, getAllBusinessLogoPlanesData);
+};
+
+
+
+
+
+
 module.exports = {
   logoBasicPlane,
   logoStandardPlane,
   logoPremiumPlane,
-  logoBusinessPlane
+  logoBusinessPlane,
+
+  allLogoBasicPlanesData,
+  allLogoStandardPlaneData,
+  allLogoPremiumPlaneData,
+  allLogoBusinessPlaneData
+
 };
