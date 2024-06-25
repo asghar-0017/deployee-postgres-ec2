@@ -1,5 +1,6 @@
 const dataSource = require("../infrastructure/psql");
 const { logger } = require("../../logger");
+const { err } = require("pino-std-serializers");
 const contactRepository = dataSource.getRepository("contactUs");
 
 const contactUsRepo = async (ClientData) => {
@@ -14,4 +15,33 @@ const contactUsRepo = async (ClientData) => {
     }
 };
 
-module.exports = contactUsRepo;
+const allContactUsDataInRepo=async()=>{
+try{
+    const data=contactRepository.find()
+    if(data){
+        return data
+    }else{
+        return null
+    }
+
+}catch(error){
+throw error
+}
+}
+
+const findContactByIdRepo=async(id)=>{
+try{
+    const data=await contactRepository.findOne({where:{id}})
+    if(data){
+        const deletedata=await contactRepository.remove(data)
+        if(deletedata){
+            return `client is Deleted Successfully with id ${id}`
+        } 
+    }
+
+}catch(error){
+    throw error
+
+}
+}
+module.exports = {contactUsRepo,allContactUsDataInRepo,findContactByIdRepo};
