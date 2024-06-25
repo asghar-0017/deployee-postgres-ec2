@@ -5,20 +5,20 @@ dotenv.config();
 const dataSource = require('./infrastructure/psql');
 const { logger } = require('../logger');
 
-// const contactRoute = require('./routes/contactRoutes');
-// const webPlaneRoute = require('./routes/webPlanesRoute');
-// const digitalMarketingRoute=require('./routes/digitalMarketingRoute')
-// const appPlaneRoute=require('./routes/appPlaneRoutes')
-// const seoRoute=require('./routes/seoRoute')
-// const logoPlaneRoute=require('./routes/logoPlaneRoutes')
+const contactRoute = require('./routes/contactRoutes');
+const webPlaneRoute = require('./routes/webPlanesRoute');
+const digitalMarketingRoute=require('./routes/digitalMarketingRoute')
+const appPlaneRoute=require('./routes/appPlaneRoutes')
+const seoRoute=require('./routes/seoRoute')
+const logoPlaneRoute=require('./routes/logoPlaneRoutes')
 
-// const AdminAuthRoute=require('./routes/adminAuth')
+const AdminAuthRoute=require('./routes/adminAuth')
 
-// fastify.register(require('@fastify/cors'), {
-//   origin: ['http://localhost:3000', 'https://backend-softmark.vercel.app'], // Allow multiple origins
-//   methods: ['GET', 'POST'],
-//   credentials: true,
-// });
+fastify.register(require('@fastify/cors'), {
+  origin: ['http://localhost:3000', 'https://softmarksolutions.netlify.app'], // Allow multiple origins
+  methods: ['GET', 'POST'],
+  credentials: true,
+});
 
 fastify.register(require('fastify-multipart'), {
   limits: {
@@ -40,13 +40,13 @@ fastify.get('/', async (req, res) => {
   res.send(result);
 });
 
-// fastify.register(contactRoute);
-// fastify.register(webPlaneRoute);
-// fastify.register(digitalMarketingRoute)
-// fastify.register(appPlaneRoute)
-// fastify.register(seoRoute)
-// fastify.register(logoPlaneRoute)
-// fastify.register(AdminAuthRoute);
+fastify.register(contactRoute);
+fastify.register(webPlaneRoute);
+fastify.register(digitalMarketingRoute)
+fastify.register(appPlaneRoute)
+fastify.register(seoRoute)
+fastify.register(logoPlaneRoute)
+fastify.register(AdminAuthRoute);
 
 const startServer = async () => {
   try {
