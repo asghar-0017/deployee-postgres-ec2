@@ -1,11 +1,10 @@
+const Redis = require("ioredis");
 const dotenv = require("dotenv");
 dotenv.config();
 
-const Redis = require("ioredis");
-
 const redis = new Redis({
-  host: process.env.REDIS_HOST || 'redis', // Use the Redis service name defined in docker-compose.yml
-  port: process.env.REDIS_PORT || 6379, // Default Redis port
+  host: process.env.REDIS_HOST || 'redis',
+  port: process.env.REDIS_PORT || 6379,
 });
 
 redis.on('connect', () => {
