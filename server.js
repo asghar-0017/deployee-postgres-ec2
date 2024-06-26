@@ -6,12 +6,12 @@ const { logger } = require('./logger');
 
 // Register routes and plugins
 const contactRoute = require('./src/routes/contactRoutes');
-const webPlaneRoute = require('./src/routes/webPlanesRoute');
-const digitalMarketingRoute = require('./src/routes/digitalMarketingRoute');
-const appPlaneRoute = require('./src/routes/appPlaneRoutes');
-const seoRoute = require('./src/routes/seoRoute');
-const logoPlaneRoute = require('./src/routes/logoPlaneRoutes');
-const AdminAuthRoute = require('./src/routes/adminAuth');
+// const webPlaneRoute = require('./src/routes/webPlanesRoute');
+// const digitalMarketingRoute = require('./src/routes/digitalMarketingRoute');
+// const appPlaneRoute = require('./src/routes/appPlaneRoutes');
+// const seoRoute = require('./src/routes/seoRoute');
+// const logoPlaneRoute = require('./src/routes/logoPlaneRoutes');
+// const AdminAuthRoute = require('./src/routes/adminAuth');
 
 fastify.register(require('@fastify/cors'), {
   origin: ['http://localhost:3000', 'https://softmarksolutions.netlify.app'],
@@ -40,17 +40,14 @@ fastify.get('/', async (req, res) => {
 });
 
 fastify.register(contactRoute);
-fastify.register(webPlaneRoute);
-fastify.register(digitalMarketingRoute);
-fastify.register(appPlaneRoute);
-fastify.register(seoRoute);
-fastify.register(logoPlaneRoute);
-fastify.register(AdminAuthRoute);
+// fastify.register(webPlaneRoute);
+// fastify.register(digitalMarketingRoute);
+// fastify.register(appPlaneRoute);
+// fastify.register(seoRoute);
+// fastify.register(logoPlaneRoute);
+// fastify.register(AdminAuthRoute);
 
-fastify.setErrorHandler((error, request, reply) => {
-  request.log.error(error);
-  reply.status(500).send({ error: 'Internal Server Error' });
-});
+
 
 const startServer = async () => {
   try {
