@@ -1,26 +1,26 @@
-// src/server.js
+// src/app.js
 const fastify = require('fastify')({ logger: true });
 const dotenv = require('dotenv');
 dotenv.config();
 const dataSource = require('./infrastructure/psql');
 const { logger } = require('../logger');
 
-// Register routes and plugins
 const contactRoute = require('./routes/contactRoutes');
 const webPlaneRoute = require('./routes/webPlanesRoute');
-const digitalMarketingRoute = require('./routes/digitalMarketingRoute');
-const appPlaneRoute = require('./routes/appPlaneRoutes');
-const seoRoute = require('./routes/seoRoute');
-const logoPlaneRoute = require('./routes/logoPlaneRoutes');
-const AdminAuthRoute = require('./routes/adminAuth');
+const digitalMarketingRoute=require('./routes/digitalMarketingRoute')
+const appPlaneRoute=require('./routes/appPlaneRoutes')
+const seoRoute=require('./routes/seoRoute')
+const logoPlaneRoute=require('./routes/logoPlaneRoutes')
+
+const AdminAuthRoute=require('./routes/adminAuth')
 
 fastify.register(require('@fastify/cors'), {
-  origin: ['http://localhost:3000', 'https://softmarksolutions.netlify.app'],
+  origin: ['http://localhost:3000', 'https://softmarksolutions.netlify.app'], // Allow multiple origins
   methods: ['GET', 'POST'],
   credentials: true,
 });
 
-fastify.register(require('@fastify/multipart'), {
+fastify.register(require('fastify-multipart'), {
   limits: {
     fieldNameSize: 100,
     fieldSize: 1000000,
@@ -42,37 +42,25 @@ fastify.get('/', async (req, res) => {
 
 fastify.register(contactRoute);
 fastify.register(webPlaneRoute);
-fastify.register(digitalMarketingRoute);
-fastify.register(appPlaneRoute);
-fastify.register(seoRoute);
-fastify.register(logoPlaneRoute);
+fastify.register(digitalMarketingRoute)
+fastify.register(appPlaneRoute)
+fastify.register(seoRoute)
+fastify.register(logoPlaneRoute)
 fastify.register(AdminAuthRoute);
-
-fastify.setErrorHandler((error, request, reply) => {
-  request.log.error(error);
-  reply.status(500).send({ error: 'Internal Server Error' });
-});
 
 const startServer = async () => {
   try {
+    fastify.listen(process.env.PORT || 4000);
+
     await dataSource.initialize();
     logger.info("Database connection has been established");
 
-    const port = process.env.PORT || 4000;
-    fastify.listen(port, (err, address) => {
-      if (err) {
-        logger.error(err.message);
-        process.exit(1);
-      }
-      logger.info(`Server is listening on ${address}`);
-    });
-
+    logger.info(`Server is listening on ${process.env.PORT || 4000}`);
   } catch (error) {
     logger.error(error.message);
     process.exit(1);
   }
+
 };
 
 module.exports = startServer;
-
-

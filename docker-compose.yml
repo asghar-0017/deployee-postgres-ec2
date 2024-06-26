@@ -1,4 +1,4 @@
-version: '3.7'
+version: '3.8'
 
 services:
   pgsql:
@@ -28,6 +28,30 @@ services:
       - "8090:8080"
     networks:
       - dev-network
+
+  nodejs-app:
+    image: node:14
+    volumes:
+      - .:/usr/src/app
+    working_dir: /usr/src/app
+    command: npm start
+    networks:
+      - dev-network
+    depends_on:
+      - pgsql
+      - redis
+    environment:
+      DB_HOST: pgsql
+      DB_PORT: 5432
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      PORT: 4000
+      Email: fa21bscs0017@maju.edu.pk
+      Email_PASS: cxan vcqf dikr aqob
+      ADMIN_EMAIL: info@softmarksolutions.com
 
 networks:
   dev-network:
