@@ -1,7 +1,7 @@
 const fastify = require('fastify')({ logger: true });
 const dataSource = require('./src/infrastructure/psql');
 
-const contactRoute = require('./src/routes/contactRoutes');
+// const contactRoute = require('./src/routes/contactRoutes');
 
 
 
@@ -9,7 +9,7 @@ fastify.get('/', async (request, reply) => {
   reply.send({ hello: 'world' });
 });
 
-fastify.register(contactRoute);
+// fastify.register(contactRoute);
 
 
 const start = async () => {
