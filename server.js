@@ -1,74 +1,21 @@
 const fastify = require('fastify')({ logger: true });
-const dotenv = require('dotenv');
-dotenv.config();
 const dataSource = require('./src/infrastructure/psql');
-const { logger } = require('./logger');
 
-// Register routes and plugins
-const contactRoute = require('./src/routes/contactRoutes');
-// const webPlaneRoute = require('./src/routes/webPlanesRoute');
-// const digitalMarketingRoute = require('./src/routes/digitalMarketingRoute');
-// const appPlaneRoute = require('./src/routes/appPlaneRoutes');
-// const seoRoute = require('./src/routes/seoRoute');
-// const logoPlaneRoute = require('./src/routes/logoPlaneRoutes');
-// const AdminAuthRoute = require('./src/routes/adminAuth');
 
-fastify.register(require('@fastify/cors'), {
-  origin: ['http://localhost:3000', 'https://softmarksolutions.netlify.app'],
-  methods: ['GET', 'POST'],
-  credentials: true,
+fastify.get('/', async (request, reply) => {
+  reply.send({ hello: 'world' });
 });
 
-fastify.register(require('fastify-multipart'), {
-  limits: {
-    fieldNameSize: 100,
-    fieldSize: 1000000,
-    fields: 10,
-    fileSize: 1000000,
-    files: 10,
-    headerPairs: 2000,
-  },
-});
 
-fastify.get('/', async (req, res) => {
-  const result = {
-    code: 200,
-    status: 'OK',
-    message: 'Fastify server is running',
-  };
-  res.send(result);
-});
-
-fastify.register(contactRoute);
-// fastify.register(webPlaneRoute);
-// fastify.register(digitalMarketingRoute);
-// fastify.register(appPlaneRoute);
-// fastify.register(seoRoute);
-// fastify.register(logoPlaneRoute);
-// fastify.register(AdminAuthRoute);
-
-
-
-const startServer = async () => {
+const start = async () => {
   try {
     await dataSource.initialize();
-    logger.info("Database connection has been established");
-
-    const port = process.env.PORT || 4000;
-    fastify.listen(port, '0.0.0.0', (err, address) => {
-      if (err) {
-        logger.error(err.message);
-        process.exit(1);
-      }
-      logger.info(`Server is listening on ${address}`);
-    });
-
-  } catch (error) {
-    logger.error(error.message);
+    console.log("Database connection has been established");
+    await fastify.listen(4000, '0.0.0.0');
+    fastify.log.info(`Server is running at http://localhost:4000`);
+  } catch (err) {
+    fastify.log.error(err);
     process.exit(1);
   }
 };
-
-startServer();
-
-module.exports = fastify;
+start();
