@@ -5,6 +5,14 @@
   "scripts": {
     "start": "nodemon server.js"
   },
+  "nodemonConfig": {
+    "ignore": [
+      "db/pg_stat_tmp/*",
+      "public/*",
+      "logs/*",
+      "node_modules/*"
+    ]
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
