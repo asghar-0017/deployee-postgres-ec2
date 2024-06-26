@@ -2,6 +2,7 @@ const dataSource = require("../infrastructure/psql");
 const { logger } = require("../../logger");
 
 const logoBasicPlaneRepository = dataSource.getRepository("logo_basic_plane");
+console.log("Logo Basic Plane Data",logoBasicPlaneRepository)
 const logoStandardPlaneRepository = dataSource.getRepository("logo_standard_plane");
 const logoPremiumPlaneRepository = dataSource.getRepository("logo_premium_plane");
 const logoBusinessPlaneRepository = dataSource.getRepository("logo_business_plane");

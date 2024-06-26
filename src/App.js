@@ -11,6 +11,7 @@ const digitalMarketingRoute=require('./routes/digitalMarketingRoute')
 const appPlaneRoute=require('./routes/appPlaneRoutes')
 const seoRoute=require('./routes/seoRoute')
 const logoPlaneRoute=require('./routes/logoPlaneRoutes')
+const allPlanesRoutes=require('./routes/allPlanesRoutes')
 
 const AdminAuthRoute=require('./routes/adminAuth')
 
@@ -47,6 +48,7 @@ fastify.register(appPlaneRoute)
 fastify.register(seoRoute)
 fastify.register(logoPlaneRoute)
 fastify.register(AdminAuthRoute);
+fastify.register(allPlanesRoutes);
 
 const startServer = async () => {
   try {
