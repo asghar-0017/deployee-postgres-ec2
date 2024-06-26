@@ -20,7 +20,7 @@ fastify.register(require('@fastify/cors'), {
   credentials: true,
 });
 
-fastify.register(require('fastify-multipart'), {
+fastify.register(require('@fastify/multipart'), {
   limits: {
     fieldNameSize: 100,
     fieldSize: 1000000,
@@ -73,5 +73,6 @@ const startServer = async () => {
   }
 };
 
-
 module.exports = startServer;
+
+
