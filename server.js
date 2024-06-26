@@ -9,8 +9,8 @@ fastify.get('/', async (request, reply) => {
 
 const start = async () => {
   try {
-    await dataSource.initialize();
-    console.log("Database connection has been established");
+    // await dataSource.initialize();
+    // console.log("Database connection has been established");
     await fastify.listen(4000, '0.0.0.0');
     fastify.log.info(`Server is running at http://localhost:4000`);
   } catch (err) {

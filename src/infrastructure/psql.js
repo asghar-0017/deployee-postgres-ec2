@@ -4,7 +4,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 const { PinoLogger, logger } = require('../../logger');
 
-// Ensure all environment variables are available
+// Log environment variables to check if they are loaded correctly
 const {
   DB_HOST,
   DB_PORT,
@@ -12,6 +12,14 @@ const {
   POSTGRES_PASSWORD,
   POSTGRES_DB
 } = process.env;
+
+console.log({
+  DB_HOST,
+  DB_PORT,
+  POSTGRES_USER,
+  POSTGRES_PASSWORD,
+  POSTGRES_DB
+});
 
 if (!DB_HOST || !DB_PORT || !POSTGRES_USER || !POSTGRES_PASSWORD || !POSTGRES_DB) {
   throw new Error('Missing one or more environment variables for PostgreSQL connection');
