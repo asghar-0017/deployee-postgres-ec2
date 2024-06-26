@@ -16,8 +16,7 @@ const allPlanesRoutes=require('./routes/allPlanesRoutes')
 const AdminAuthRoute=require('./routes/adminAuth')
 
 fastify.register(require('@fastify/cors'), {
-  origin: ['http://localhost:3000', 'https://softmarksolutions.netlify.app'], // Allow multiple origins
-  methods: ['GET', 'POST'],
+  origin: ['http://localhost:3000', 'https://www.softmarksolutions.com', 'http://localhost:5173', 'http://localhost:5174'],  methods: ['GET', 'POST'],
   credentials: true,
 });
 

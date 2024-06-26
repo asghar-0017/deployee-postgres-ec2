@@ -55,6 +55,10 @@ module.exports = new EntitySchema({
       enumName: "logo_products_enum", // Ensure this matches your PostgreSQL enum type name
       nullable: true,
     },
+    plane:{
+      type:"varchar",
+      default: "Logo Business plane",
+      },
     created_at: {
       type: "timestamp",
       default: () => "CURRENT_TIMESTAMP",

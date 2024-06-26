@@ -27,6 +27,10 @@ module.exports = new EntitySchema({
         type: "varchar",
         nullable: true,
       },
+      plane:{
+        type:"varchar",
+        default: "Logo Standard plane",
+        },
       description: {
         type: "varchar",
       },

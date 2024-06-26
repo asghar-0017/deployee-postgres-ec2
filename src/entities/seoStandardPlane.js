@@ -1,8 +1,8 @@
 const { EntitySchema } = require("typeorm");
 
 module.exports = new EntitySchema({
-  name: "seoPremiumPlane",
-  tableName: "seo-premium-plane",  // Fixed typo here
+  name: "seoStandardPlane",
+  tableName: "seo-standard-plane",  // Fixed typo here
   columns: {
     id: {
       type: "int",
@@ -45,6 +45,10 @@ module.exports = new EntitySchema({
       type: "varchar",
       nullable: false,
     },
+    plane:{
+      type:"varchar",
+      default: "SEO Standard plane",
+      },
     created_at: {
       type: "timestamp",
       default: () => "CURRENT_TIMESTAMP",

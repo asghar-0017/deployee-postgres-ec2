@@ -40,6 +40,10 @@ module.exports = new EntitySchema({
       domain:{
         type:"varchar"
       },
+      plane:{
+        type:"varchar",
+        default: "Web Standard Plane",
+        },
       created_at: {
         type: "timestamp",
         default: () => "CURRENT_TIMESTAMP",

@@ -37,6 +37,10 @@ module.exports = new EntitySchema({
       type: "varchar",
       nullable: false,
     },
+    plane:{
+      type:"varchar",
+      default: "Digital Marketing",
+      },
     created_at: {
       type: "timestamp",
       default: () => "CURRENT_TIMESTAMP",

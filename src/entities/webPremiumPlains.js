@@ -44,6 +44,10 @@ module.exports = new EntitySchema({
         type: "json",
         nullable: true,
       },
+      plane:{
+        type:"varchar",
+        default: "Web Premium plane",
+        },
       created_at: {
         type: "timestamp",
         default: () => "CURRENT_TIMESTAMP",

@@ -41,6 +41,10 @@ module.exports = new EntitySchema({
       type: "varchar",
       nullable: false,  // This should be nullable: false if it's required
     },
+    plane:{
+      type:"varchar",
+      default: "SEO Basic plane",
+      },
     description: {
       type: "varchar",
       nullable: false,
