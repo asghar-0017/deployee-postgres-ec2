@@ -1,18 +1,28 @@
-const Redis = require("ioredis");
-const dotenv = require("dotenv");
-dotenv.config();
-
-const redis = new Redis({
-  host: process.env.REDIS_HOST,
-  port: process.env.REDIS_PORT,
+// Redis Configuration
+const redis = require('redis');
+const redisClient = redis.createClient({
+  host: '127.0.0.1',
+  port: 6379
 });
 
-redis.on('connect', () => {
-  console.log('Connected to Redis');
-});
-
-redis.on('error', (err) => {
+redisClient.on('error', (err) => {
   console.error('Redis connection error:', err);
 });
 
-module.exports = redis;
+// PostgreSQL Configuration
+const { Client } = require('pg');
+const pgClient = new Client({
+  host: '172.20.192.1',
+  port: 5432,
+  user: 'postgres',
+  password: 'postgres',
+  database: 'postgres'
+});
+
+pgClient.connect(err => {
+  if (err) {
+    console.error('PostgreSQL connection error:', err);
+  } else {
+    console.log('Connected to PostgreSQL');
+  }
+});
