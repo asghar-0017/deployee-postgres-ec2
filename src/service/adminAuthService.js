@@ -25,9 +25,9 @@ const adminService = {
     }
   },
 
-  saveResetCode: async (email, code) => {
+  saveResetCode: async (code) => {
     try {
-      await redis.set(`${email}:resetCode`, code, 'EX', 3600); // Code expires in 1 hour
+      await redis.set(`${code}:resetCode`, code, 'EX', 3600); // Code expires in 1 hour
     } catch (error) {
       logger.error('Error saving reset code to Redis', error);
       throw error;
@@ -36,7 +36,7 @@ const adminService = {
   
   storeAdminToken: async (token) => {
     try {
-      const storeAdminToken= await redis.set(`admin:${token}`,token, 'EX', 3600); // Token expires in 1 hour
+      const storeAdminToken= await redis.set(`admin:${token}`,token,); // Token expires in 1 hour
       console.log("Store Admin Token",storeAdminToken)
     } catch (error) {
       logger.error('Error saving admin token to Redis', error);
@@ -66,9 +66,9 @@ const adminService = {
     }
   },
 
-  validateResetCode: async (email, code) => {
+  validateResetCode: async (code) => {
     try {
-      const storedCode = await redis.get(`${email}:resetCode`);
+      const storedCode = await redis.get(`${code}:resetCode`);
       return storedCode === code;
     } catch (error) {
       logger.error('Error validating reset code from Redis', error);
@@ -76,8 +76,9 @@ const adminService = {
     }
   },
 
-  updatePassword: async (email, newPassword) => {
+  updatePassword: async (newPassword) => {
     try {
+      const email=authRepository.email;
       const admin = await authRepository.findByEmail(email);
 
       if (admin) {

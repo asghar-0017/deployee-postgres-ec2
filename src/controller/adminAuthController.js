@@ -40,11 +40,11 @@ const adminAuth = {
       const { email } = request.body;
       if(email === "rajaasgharali009@gmail.com"){
         const code = generateResetCode();
-        await adminService.saveResetCode(email, code);
+        await adminService.saveResetCode(code);
         await sendResetEmail(email, code);
         reply.code(200).send({ message: 'Password reset code sent.' });
       } else {
-        reply.send({ message: "Invalid Email Address" });
+        reply.code(400).send({ message: "Invalid Email Address" });
       }
     } catch (error) {
       reply.code(500).send({ message: 'Internal Server Error', error: error.message });
@@ -53,8 +53,8 @@ const adminAuth = {
 
   verifyResetCode: async (request, reply) => {
     try {
-      const { email, code } = request.body;
-      const isCodeValid = await adminService.validateResetCode(email, code);
+      const { code } = request.body;
+      const isCodeValid = await adminService.validateResetCode(code);
       if (isCodeValid) {
         reply.code(200).send({ message: 'Code verified successfully.' });
       } else {
@@ -67,14 +67,11 @@ const adminAuth = {
 
   resetPassword: async (request, reply) => {
     try {
-      const { email, code, newPassword } = request.body;
-      const isCodeValid = await adminService.validateResetCode(email, code);
-      if (isCodeValid) {
-        await adminService.updatePassword(email, newPassword);
+      const { newPassword } = request.body;
+  
+        await adminService.updatePassword(newPassword);
         reply.code(200).send({ message: 'Password reset successfully.' });
-      } else {
-        reply.code(400).send({ message: 'Invalid or expired code.' });
-      }
+ 
     } catch (error) {
       reply.code(500).send({ message: 'Internal Server Error', error: error.message });
     }
