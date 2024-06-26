@@ -4,17 +4,36 @@ const dotenv = require("dotenv");
 dotenv.config();
 const { PinoLogger, logger } = require('../../logger');
 
+// Ensure all environment variables are available
+const {
+  DB_HOST,
+  DB_PORT,
+  POSTGRES_USER,
+  POSTGRES_PASSWORD,
+  POSTGRES_DB
+} = process.env;
+
+if (!DB_HOST || !DB_PORT || !POSTGRES_USER || !POSTGRES_PASSWORD || !POSTGRES_DB) {
+  throw new Error('Missing one or more environment variables for PostgreSQL connection');
+}
+
 const dataSource = new DataSource({
   type: "postgres",
-  host: "localhost",
-  port: process.env.DB_PORT || 5432, 
-  username: process.env.POSTGRES_USER || "postgres",
-  password: process.env.POSTGRES_PASSWORD || "postgres",
-  database: process.env.POSTGRES_DB || "postgres",
+  host: DB_HOST,
+  port: parseInt(DB_PORT, 10),
+  username: POSTGRES_USER,
+  password: POSTGRES_PASSWORD,
+  database: POSTGRES_DB,
   synchronize: true,
   logging: true,
   logger: new PinoLogger(),
   entities: [path.join(__dirname, "../entities/**/*.js")],
+});
+
+dataSource.initialize().then(() => {
+  logger.info("Database connection has been established");
+}).catch((error) => {
+  logger.error("Error during Data Source initialization:", error);
 });
 
 module.exports = dataSource;
