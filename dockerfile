@@ -1,20 +1,24 @@
-# Use the official Node.js image from the Docker Hub
-FROM node:20
+FROM node:18.16.1
 
-# Set the working directory in the container
+# Install build dependencies
+RUN apt-get update && apt-get install -y python3 build-essential
+
+# Create app directory
 WORKDIR /usr/src/app
 
-# Copy package.json and package-lock.json files
+# Copy package files
 COPY package*.json ./
 
-# Install dependencies
+# Remove node_modules if exists and install dependencies
+RUN rm -rf node_modules
 RUN npm install
+RUN npm audit fix
 
-# Copy the rest of the application code to the container
+# Rebuild bcrypt for the correct environment
+RUN npm rebuild bcrypt --build-from-source
+
+# Bundle app source
 COPY . .
 
-# Expose the port the app runs on
-EXPOSE 4000
-
-# Command to run your application
+EXPOSE 8080
 CMD ["node", "server.js"]

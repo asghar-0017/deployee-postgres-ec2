@@ -1,5 +1,7 @@
 const {digitalMarketingService,digitalMarketingdataInService,digitalMDataInService,upDateDigitalInService} = require('../service/digitalMarketingService');
 const { logger } = require('../../logger');
+const {GenerateClientId}  = require('../utils/token');
+
 
 const digitalMarketing = async (request, reply) => {
     try {
@@ -11,6 +13,7 @@ const digitalMarketing = async (request, reply) => {
             logger.error("ClientData is undefined");
             return reply.code(400).send({ error: "Invalid input" });
         }
+        clientData.clientId=GenerateClientId()
 
         const data = await digitalMarketingService(clientData);
         reply.code(200).send({ success: "success", data: data });

@@ -6,7 +6,7 @@ const generateResetCode = () => {
 };
 
 const GenerateClientId=()=>{
-    return uuidv4();
+    return Math.floor(1000 + Math.random() * 9000).toString(); // Generate a 4-digit code
 }
 
 module.exports = { generateResetCode,GenerateClientId };
