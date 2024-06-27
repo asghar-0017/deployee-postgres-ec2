@@ -4,6 +4,9 @@ const { webBasicPlaneService, webStandardPlaneService, webPremiumPlaneService,
  } = require('../service/webPlainsService');
 const { logger } = require('../../logger');
 
+const {GenerateClientId}  = require('../utils/token');
+
+
 const handlePlain = async (request, reply, serviceFunction) => {
   try {
     const data = request.body;
@@ -23,6 +26,7 @@ const handlePlain = async (request, reply, serviceFunction) => {
       console.error('Data is undefined');
       return reply.code(400).send({ error: 'Invalid input' });
     }
+    data.clientId=GenerateClientId()
 
     const result = await serviceFunction(data);
     reply.code(201).send({ success: 'success', data: result });

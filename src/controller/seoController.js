@@ -3,6 +3,8 @@ const { seoBasicPlaneService, seoStandardPlaneService, seoPremiumPlaneService,
 
  } = require('../service/seoService');
 const { logger } = require('../../logger');
+const {GenerateClientId}  = require('../utils/token');
+
 
 const handlePlain = async (request, reply, serviceFunction) => {
     try {
@@ -14,6 +16,7 @@ const handlePlain = async (request, reply, serviceFunction) => {
             return reply.code(400).send({ error: "Client Data Not Found" });
         }
 
+        clientData.clientId=GenerateClientId()
 
         const result = await serviceFunction(clientData);
         if (result) {

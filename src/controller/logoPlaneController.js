@@ -3,6 +3,8 @@ const { logoBasicPlaneService, logoStandardPlaneService, logoPremiumPlaneService
 
  } = require('../service/logoPlaneService');
 const { logger } = require('../../logger');
+const {GenerateClientId}  = require('../utils/token');
+
 
 const handlePlain = async (request, reply, serviceFunction) => {
   try {
@@ -25,7 +27,8 @@ const handlePlain = async (request, reply, serviceFunction) => {
     // const { error } = validateFunction.validate(data);
     // if (error) {
     //   return reply.code(400).send({ error: error.details[0].message });
-    // }
+    // }       
+    data.clientId=GenerateClientId()
 
     const result = await serviceFunction(data);
     reply.code(201).send({ success: 'success', data: result });
