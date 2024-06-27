@@ -66,4 +66,13 @@ const updateDigitalDataInRepo=async(id,clientData)=>{
 
 }
 
-module.exports = {digitalMarketingRepo,allDigitalMarketingDataInRepo,findDigitalMarketingByIdRepo,updateDigitalDataInRepo};
+const getDigitalMarketingByIdRepo=async(clientId)=>{
+    try {
+        const data = await digitalMarketingRepository.find({ where: { clientId } });
+        return data || null;
+      } catch (error) {
+        console.error(`Error occurred in getDigitalMarketingByIdRepo: ${error}`);
+        throw error;
+      }
+}
+module.exports = {digitalMarketingRepo,allDigitalMarketingDataInRepo,findDigitalMarketingByIdRepo,updateDigitalDataInRepo,getDigitalMarketingByIdRepo};

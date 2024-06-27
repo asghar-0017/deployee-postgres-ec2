@@ -1,9 +1,10 @@
 const { logoBasicPlaneService, logoStandardPlaneService, logoPremiumPlaneService, logoBusinessPlaneService,
-  getAllBasicLogoPlanesData,getAllStandardLogoPlanesData,getAllpremiumLogoPlanesData,getAllBusinessLogoPlanesData
+  getAllBasicLogoPlanesData,getAllStandardLogoPlanesData,getAllpremiumLogoPlanesData,getAllBusinessLogoPlanesData,
+  getLogoBasicPlanesDataByID,getLogoStandardPlanesDataByID,getLogopremiumPlanesDataByID,getLogoBusinessPlanesDataByID
 
  } = require('../service/logoPlaneService');
 const { logger } = require('../../logger');
-const {GenerateClientId}  = require('../utils/token');
+const { getClientId } = require("../service/clientService");
 
 
 const handlePlain = async (request, reply, serviceFunction) => {
@@ -28,7 +29,7 @@ const handlePlain = async (request, reply, serviceFunction) => {
     // if (error) {
     //   return reply.code(400).send({ error: error.details[0].message });
     // }       
-    data.clientId=GenerateClientId()
+    data.clientId = await getClientId(data.email, data.name);
 
     const result = await serviceFunction(data);
     reply.code(201).send({ success: 'success', data: result });
@@ -97,6 +98,44 @@ const allLogoBusinessPlaneData = async (request, reply) => {
 
 
 
+const getPlanesDataById = async (request, reply, serviceFunction) => {
+  try {
+    const clientId=request.params.id
+    const result = await serviceFunction(clientId);
+    console.log("Result",result)
+    if(result){
+    reply.code(201).send({
+       success: 'success', data: result });
+    }else{
+      reply.send({
+        message:`${serviceFunction} Data Not Found`
+      })
+    }
+  } catch (error) {
+    console.error('Error occurred in getDataPlanes Function', error);
+    throw error
+  }
+};
+
+const allLogoBasicPlanesDataByID = async (request, reply) => {
+  await getPlanesDataById(request, reply, getLogoBasicPlanesDataByID);
+};
+
+const allLogoStandardPlaneDataByID = async (request, reply) => {
+  await getPlanesDataById(request, reply, getLogoStandardPlanesDataByID);
+};
+
+const allLogoPremiumPlaneDataById = async (request, reply) => {
+  await getPlanesDataById(request, reply, getLogopremiumPlanesDataByID);
+};
+const allLogoBusinessPlaneDataById = async (request, reply) => {
+  await getPlanesDataById(request, reply, getLogoBusinessPlanesDataByID);
+};
+
+
+
+
+
 
 module.exports = {
   logoBasicPlane,
@@ -107,6 +146,11 @@ module.exports = {
   allLogoBasicPlanesData,
   allLogoStandardPlaneData,
   allLogoPremiumPlaneData,
-  allLogoBusinessPlaneData
+  allLogoBusinessPlaneData,
+
+  allLogoBasicPlanesDataByID,
+  allLogoStandardPlaneDataByID,
+  allLogoPremiumPlaneDataById,
+  allLogoBusinessPlaneDataById
 
 };

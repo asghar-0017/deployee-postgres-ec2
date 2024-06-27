@@ -1,9 +1,10 @@
 const { seoBasicPlaneService, seoStandardPlaneService, seoPremiumPlaneService,
-    getAllBasicSeoPlanesData,getAllStandardSeoPlanesData,getAllpremiumSeoPlanesData
+    getAllBasicSeoPlanesData,getAllStandardSeoPlanesData,getAllpremiumSeoPlanesData,
+    getSeoBasicPlanesDataByID,getSeoStandardPlanesDataByID,getSeopremiumPlanesDataByID
 
  } = require('../service/seoService');
 const { logger } = require('../../logger');
-const {GenerateClientId}  = require('../utils/token');
+const { getClientId } = require("../service/clientService");
 
 
 const handlePlain = async (request, reply, serviceFunction) => {
@@ -16,7 +17,7 @@ const handlePlain = async (request, reply, serviceFunction) => {
             return reply.code(400).send({ error: "Client Data Not Found" });
         }
 
-        clientData.clientId=GenerateClientId()
+        data.clientId = await getClientId(data.email, data.name);
 
         const result = await serviceFunction(clientData);
         if (result) {
@@ -80,11 +81,45 @@ const getSeoPlanesData = async (request, reply, serviceFunction) => {
     await getSeoPlanesData(request, reply, getAllpremiumSeoPlanesData);
   };
   
+
+  
+const getPlanesDataById = async (request, reply, serviceFunction) => {
+  try {
+    const clientId=request.params.id
+    const result = await serviceFunction(clientId);
+    console.log("Result",result)
+    if(result){
+    reply.code(201).send({
+       success: 'success', data: result });
+    }else{
+      reply.send({
+        message:`${serviceFunction} Data Not Found`
+      })
+    }
+  } catch (error) {
+    console.error('Error occurred in getDataPlanes Function', error);
+    throw error
+  }
+};
+
+const SeoBasicPlanesDataById = async (request, reply) => {
+  await getPlanesDataById(request, reply, getSeoBasicPlanesDataByID);
+};
+
+const SeoStandardPlaneDataById = async (request, reply) => {
+  await getPlanesDataById(request, reply, getSeoStandardPlanesDataByID);
+};
+
+const SeoPremiumPlaneDataById = async (request, reply) => {
+  await getPlanesDataById(request, reply, getSeopremiumPlanesDataByID);
+};
   
 
 
 
-module.exports = { seoBasicPlaneController, seoStandardPlaneController, seoPremiumPlaneController,
-    allSeoBasicPlanesData,allSeoStandardPlaneData,allSeoPremiumPlaneData
+module.exports = {
+   seoBasicPlaneController, seoStandardPlaneController, seoPremiumPlaneController,
+    allSeoBasicPlanesData,allSeoStandardPlaneData,allSeoPremiumPlaneData,
+    SeoBasicPlanesDataById,SeoStandardPlaneDataById,SeoPremiumPlaneDataById
 
  };

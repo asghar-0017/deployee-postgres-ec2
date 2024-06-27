@@ -8,7 +8,13 @@ const {
   getBasicLogoPlaneDataInRepo,
   getStandardLogoPlaneDataInRepo,
   getPremiumLogoPlaneDataInRepo,
-  getBusinnessLogoPlaneDataInRepo
+  getBusinnessLogoPlaneDataInRepo,
+
+  getBasicLogoPlaneDataByIDInRepo,
+  getStandardLogoPlaneDataByIDInRepo,
+  getPremiumLogoPlaneDataInByIDRepo,
+  getBusinessLogoPlaneDataInByIDRepo
+
 } = require('../repository/logoRepository');
 const { logger } = require('../../logger');
 const dotenv = require("dotenv");
@@ -37,7 +43,7 @@ const sendEmails = async (plan, planData) => {
   const adminMailOptions = {
     from: process.env.EMAIL,
     to: process.env.ADMIN_EMAIL,
-    subject: `New ${plan} Form Submission from ${planData.name}`,
+    subject: `New ${plan} Form Submission from ${planData.name} clientId ${planData.clientId}`,
     text: `
       Name: ${planData.name}
       Email: ${planData.email}
@@ -57,7 +63,7 @@ const sendEmails = async (plan, planData) => {
     from: process.env.EMAIL,
     to: planData.email,
     subject: `Thanks ${planData.name}`,
-    text: 'Thank you for your submission. Our team will contact you soon.',
+    html: `Thank you for your submission. <b> Your Order Id Number: ${planData.clientId} </b>. Our team will contact you soon.`,
   };
 
   await sendEmail(transporter, adminMailOptions);
@@ -103,6 +109,25 @@ const getAllBusinessLogoPlanesData = () => getLogoPlaneprocessService('Get Logo 
 
 
 
+ const getPlaneprocessServiceByID = async (planName, clientId, repoFunction) => {
+    try {
+      logger.info(`src > Service > getAppPlaneprocessService > ${planName}Service`);
+      const data = await repoFunction(clientId);
+      return { success: true,  data };
+    } catch (error) {
+      logger.error(`Error in ${planName}Service`, error);
+      throw error;
+    }
+  };
+  
+  const getLogoBasicPlanesDataByID = (clientId) => getPlaneprocessServiceByID('Get Logo Basic Plane Data',clientId, getBasicLogoPlaneDataByIDInRepo);
+  const getLogoStandardPlanesDataByID = (clientId) => getPlaneprocessServiceByID('Get Logo Standard Plane Data',clientId, getStandardLogoPlaneDataByIDInRepo);
+  const getLogopremiumPlanesDataByID = (clientId) => getPlaneprocessServiceByID('Get Logo Premium Plane Data',clientId, getPremiumLogoPlaneDataInByIDRepo);
+  const getLogoBusinessPlanesDataByID = (clientId) => getPlaneprocessServiceByID('Get Logo Premium Plane Data',clientId, getBusinessLogoPlaneDataInByIDRepo);
+
+
+
+
 
 module.exports = {
   logoBasicPlaneService,
@@ -113,5 +138,10 @@ module.exports = {
   getAllBasicLogoPlanesData,
   getAllStandardLogoPlanesData,
   getAllpremiumLogoPlanesData,
-  getAllBusinessLogoPlanesData
+  getAllBusinessLogoPlanesData,
+
+  getLogoBasicPlanesDataByID,
+  getLogoStandardPlanesDataByID,
+  getLogopremiumPlanesDataByID,
+  getLogoBusinessPlanesDataByID
 };

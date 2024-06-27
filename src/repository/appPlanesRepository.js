@@ -22,14 +22,7 @@ const appBasicPlaneRepo = (data) => saveData(appBasicPlaneRepository, data, "app
 const appStandardPlaneRepo = (data) => saveData(appStandardPlaneRepository, data, "appStandardPlaneRepo");
 const appPremiumPlaneRepo = (data) => saveData(appPremiumPlaneRepository, data, "appPremiumPlaneRepo");
 
-// const getBasicPlaneDataInRepo=async()=>{
-//   try{
-//     const data=await Ba
-//   }catch(error){
 
-//   }
-
-// }
 
 const getPlanesRepo = async (repository, repoName) => {
   try {
@@ -46,6 +39,24 @@ const getBasicPlaneDataInRepo = () => getPlanesRepo(appBasicPlaneRepository, "ge
 const getStandardPlaneDataInRepo = () => getPlanesRepo(appStandardPlaneRepository, "getStandardPlaneDataInRepo");
 const getPremiumPlaneDataInRepo = () => getPlanesRepo(appPremiumPlaneRepository, "getPremiumPlaneDataInRepo");
 
+
+const getPlanesRepoByID = async (repository, repoName,clientId) => {
+  try {
+    const getData = await repository.find({where:{clientId}});
+    logger.info(`src > repository > getPlanesRepoByID > ${repoName}`, getData);
+    return getData;
+  } catch (error) {
+    logger.error(`Error Getting data in ${repoName}`, error);
+    throw error;
+  }
+};
+
+const getBasicPlaneDataByIDInRepo = (clientId) => getPlanesRepoByID(appBasicPlaneRepository, "getBasicPlaneDataInRepo",clientId);
+const getStandardPlaneDataByIDInRepo = (clientId) => getPlanesRepoByID(appStandardPlaneRepository, "getStandardPlaneDataInRepo",clientId);
+const getPremiumPlaneDataInByIDRepo = (clientId) => getPlanesRepoByID(appPremiumPlaneRepository, "getPremiumPlaneDataInRepo",clientId);
+
+
+
 module.exports = {
     appBasicPlaneRepo,
     appStandardPlaneRepo,
@@ -53,5 +64,9 @@ module.exports = {
     
     getBasicPlaneDataInRepo,
     getStandardPlaneDataInRepo,
-    getPremiumPlaneDataInRepo
+    getPremiumPlaneDataInRepo,
+
+    getBasicPlaneDataByIDInRepo,
+    getStandardPlaneDataByIDInRepo,
+    getPremiumPlaneDataInByIDRepo
 };

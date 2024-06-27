@@ -1,10 +1,11 @@
 const { webBasicPlaneService, webStandardPlaneService, webPremiumPlaneService,
-  getAllBasicWebPlanesData,getAllStandardWebPlanesData,getAllpremiumWebPlanesData
+  getAllBasicWebPlanesData,getAllStandardWebPlanesData,getAllpremiumWebPlanesData,
+  getWebBasicPlanesDataByID,getWebStandardPlanesDataByID,getWebpremiumPlanesDataByID
 
  } = require('../service/webPlainsService');
 const { logger } = require('../../logger');
 
-const {GenerateClientId}  = require('../utils/token');
+const { getClientId } = require("../service/clientService");
 
 
 const handlePlain = async (request, reply, serviceFunction) => {
@@ -26,7 +27,7 @@ const handlePlain = async (request, reply, serviceFunction) => {
       console.error('Data is undefined');
       return reply.code(400).send({ error: 'Invalid input' });
     }
-    data.clientId=GenerateClientId()
+    data.clientId = await getClientId(data.email, data.name);
 
     const result = await serviceFunction(data);
     reply.code(201).send({ success: 'success', data: result });
@@ -88,16 +89,43 @@ const allWebPremiumPlaneData = async (request, reply) => {
 
 
 
+const getWebPlanesDataById = async (request, reply, serviceFunction) => {
+  try {
+    const clientId=request.params.id
+    const result = await serviceFunction(clientId);
+    console.log("Result",result)
+    if(result){
+    reply.code(201).send({
+       success: 'success', data: result });
+    }else{
+      reply.send({
+        message:`${serviceFunction} Data Not Found`
+      })
+    }
+  } catch (error) {
+    console.error('Error occurred in getDataPlanes Function', error);
+    throw error
+  }
+};
+
+const WebBasicPlanesDataById = async (request, reply) => {
+  await getWebPlanesDataById(request, reply, getWebBasicPlanesDataByID);
+};
+
+const WebStandardPlaneDataById = async (request, reply) => {
+  await getWebPlanesDataById(request, reply, getWebStandardPlanesDataByID);
+};
+
+const WebPremiumPlaneDataById = async (request, reply) => {
+  await getWebPlanesDataById(request, reply, getWebpremiumPlanesDataByID);
+};
+
 
 
 module.exports = {
-  webBasicPlane,
-  webStandardPlane,
-  webPremiumPlane,
-
-  allWebBasicPlanesData,
-  allWebStandardPlaneData,
-  allWebPremiumPlaneData
+  webBasicPlane,webStandardPlane,webPremiumPlane,
+  allWebBasicPlanesData,allWebStandardPlaneData,allWebPremiumPlaneData,
+  WebBasicPlanesDataById,WebStandardPlaneDataById,WebPremiumPlaneDataById
 
 
 };

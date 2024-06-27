@@ -1,6 +1,8 @@
 const nodemailer = require('nodemailer');
 const { appBasicPlaneRepo, appStandardPlaneRepo, appPremiumPlaneRepo
-  ,getBasicPlaneDataInRepo,getStandardPlaneDataInRepo,getPremiumPlaneDataInRepo 
+  ,getBasicPlaneDataInRepo,getStandardPlaneDataInRepo,getPremiumPlaneDataInRepo ,
+
+  getBasicPlaneDataByIDInRepo,getStandardPlaneDataByIDInRepo,getPremiumPlaneDataInByIDRepo
 } = require('../repository/appPlanesRepository');
 const { logger } = require('../../logger');
 const dotenv = require("dotenv");
@@ -29,7 +31,7 @@ const sendEmails = async (plan, planData) => {
   let adminMailOptions = {
     from: process.env.EMAIL,
     to: process.env.ADMIN_EMAIL,
-    subject: `New ${plan} Form Submission from ${planData.name}`,
+    subject: `New ${plan} Form Submission from ${planData.name} Client Id ${planData.clientId}`,
     text: `
       Name: ${planData.name}
       Email: ${planData.email}
@@ -49,7 +51,7 @@ const sendEmails = async (plan, planData) => {
     from: process.env.EMAIL,
     to: planData.email,
     subject: `Thanks ${planData.name}`,
-    text: 'Thank you for your submission. Our team will contact you soon.',
+    html: `Thank you for your submission. <b> Your Order Id Number: ${planData.clientId} </b>. Our team will contact you soon.`,
   };
 
   await sendEmail(transporter,clientMailOptions);
@@ -93,6 +95,37 @@ const getAllStandardAppPlanesData = () => getAppPlaneprocessService('Get App Sta
 const getAllpremiumAppPlanesData = () => getAppPlaneprocessService('Get App Premium Plane Data', getPremiumPlaneDataInRepo);
 
 
+// const DeletePlaneprocessServiceByID = async (planName, id, repoFunction) => {
+//   try {
+//     logger.info(`src > Service > getAppPlaneprocessService > ${planName}Service`);
+//     const data = await repoFunction(id);
+//     return { success: true,  data };
+//   } catch (error) {
+//     logger.error(`Error in ${planName}Service`, error);
+//     throw error;
+//   }
+// };
+
+// const deleteBasicAppPlanesDataByID = (id) => DeletePlaneprocessServiceByID('Delete App Basic Plane Data',id, getBasicPlaneDataInRepo);
+// const deleteStandardAppPlanesDataByID = (id) => DeletePlaneprocessServiceByID('Delete App Standard Plane Data',id, getStandardPlaneDataInRepo);
+// const deletepremiumAppPlanesDataByID = (id) => DeletePlaneprocessServiceByID('Delete App Premium Plane Data',id, getPremiumPlaneDataInRepo);
+
+
+ const getPlaneprocessServiceByID = async (planName, clientId, repoFunction) => {
+    try {
+      logger.info(`src > Service > getAppPlaneprocessService > ${planName}Service`);
+      const data = await repoFunction(clientId);
+      return { success: true,  data };
+    } catch (error) {
+      logger.error(`Error in ${planName}Service`, error);
+      throw error;
+    }
+  };
+  
+  const getBasicAppPlanesDataByID = (clientId) => getPlaneprocessServiceByID('Get App Basic Plane Data',clientId, getBasicPlaneDataByIDInRepo);
+  const getStandardAppPlanesDataByID = (clientId) => getPlaneprocessServiceByID('Get App Standard Plane Data',clientId, getStandardPlaneDataByIDInRepo);
+  const getpremiumAppPlanesDataByID = (clientId) => getPlaneprocessServiceByID('Get App Premium Plane Data',clientId, getPremiumPlaneDataInByIDRepo);
+  
 module.exports = {
   appBasicPlaneService,
   appStandardPlaneService,
@@ -100,5 +133,14 @@ module.exports = {
 
   getAllBasicAppPlanesData,
   getAllStandardAppPlanesData,
-  getAllpremiumAppPlanesData
+  getAllpremiumAppPlanesData,
+
+  getBasicAppPlanesDataByID,
+  getStandardAppPlanesDataByID,
+  getpremiumAppPlanesDataByID
+
+
+  // deleteBasicAppPlanesDataByID,
+  // deleteStandardAppPlanesDataByID,
+  // deletepremiumAppPlanesDataByID
 };

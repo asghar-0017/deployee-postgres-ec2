@@ -39,12 +39,25 @@ const getStandardWebPlaneDataInRepo = () => getWebPlanesRepo(webStandardPlaneRep
 const getPremiumWebPlaneDataInRepo = () => getWebPlanesRepo(webPremiumPlaneRepository, "getWebPremiumPlaneDataInRepo");
 
 
-module.exports = {
-    webBasicPlaneRepo,
-    webStandardPlaneRepo,
-    webPremiumPlaneRepo,
 
-    getBasicWebPlaneDataInRepo,
-    getStandardWebPlaneDataInRepo,
-    getPremiumWebPlaneDataInRepo
+const getWebPlanesRepoByID = async (repository, repoName,clientId) => {
+  try {
+    const getData = await repository.find({where:{clientId}});
+    logger.info(`src > repository > getWebPlanesRepoByID > ${repoName}`, getData);
+    return getData;
+  } catch (error) {
+    logger.error(`Error Getting data in ${repoName}`, error);
+    throw error;
+  }
+};
+
+const getBasicWebPlaneDataByIDInRepo = (clientId) => getWebPlanesRepoByID(webBasicPlaneRepository, "getBasicPlaneDataInRepo",clientId);
+const getStandardWebPlaneDataByIDInRepo = (clientId) => getWebPlanesRepoByID(webStandardPlaneRepository, "getStandardPlaneDataInRepo",clientId);
+const getPremiumWebPlaneDataInByIDRepo = (clientId) => getWebPlanesRepoByID(webPremiumPlaneRepository, "getPremiumPlaneDataInRepo",clientId);
+
+module.exports = {
+    webBasicPlaneRepo,webStandardPlaneRepo,webPremiumPlaneRepo,
+
+    getBasicWebPlaneDataInRepo,getStandardWebPlaneDataInRepo,getPremiumWebPlaneDataInRepo,
+    getBasicWebPlaneDataByIDInRepo,getStandardWebPlaneDataByIDInRepo,getPremiumWebPlaneDataInByIDRepo
 };

@@ -6,7 +6,11 @@ const {
 
     getBasicSeoPlaneDataInRepo,
     getStandardSeoPlaneDataInRepo,
-    getPremiumSeoPlaneDataInRepo
+    getPremiumSeoPlaneDataInRepo,
+
+    getBasicSeoPlaneDataByIDInRepo,
+    getStandardSeoPlaneDataByIDInRepo,
+    getPremiumSeoPlaneDataInByIDRepo
 } = require('../repository/seoRepository');
 const { logger } = require('../../logger');
 const dotenv = require("dotenv");
@@ -35,7 +39,7 @@ const sendEmails = async (plan, planData) => {
     const adminMailOptions = {
         from: process.env.EMAIL,
         to: process.env.ADMIN_EMAIL,
-        subject: `New ${plan} Form Submission from ${planData.name}`,
+        subject: `New ${plan} Form Submission from ${planData.name} clientID ${planData.clientId}`,
         text: `
             Name: ${planData.name}
             Email: ${planData.email}
@@ -53,7 +57,7 @@ const sendEmails = async (plan, planData) => {
         from: process.env.EMAIL,
         to: planData.email,
         subject: `Thanks ${planData.name}`,
-        text: 'Thank you for your submission. Our team will contact you soon.',
+        html: `Thank you for your submission. <b> Your Order Id Number: ${planData.clientId} </b>. Our team will contact you soon.`,
     };
 
     await sendEmail(transporter, adminMailOptions);
@@ -107,6 +111,24 @@ const getSeoPlaneprocessService = async (planName, repoFunction) => {
   const getAllpremiumSeoPlanesData = () => getSeoPlaneprocessService('Get SEO Premium Plane Data', getPremiumSeoPlaneDataInRepo);
   
 
+  
+ const getSEOPlaneprocessServiceByID = async (planName, clientId, repoFunction) => {
+    try {
+      logger.info(`src > Service > getSEOPlaneprocessServiceByID > ${planName}Service`);
+      const data = await repoFunction(clientId);
+      return { success: true,  data };
+    } catch (error) {
+      logger.error(`Error in ${planName}Service`, error);
+      throw error;
+    }
+  };
+  
+  const getSeoBasicPlanesDataByID = (clientId) => getSEOPlaneprocessServiceByID('Get SEO Basic Plane Data',clientId, getBasicSeoPlaneDataByIDInRepo);
+  const getSeoStandardPlanesDataByID = (clientId) => getSEOPlaneprocessServiceByID('Get SEO Standard Plane Data',clientId, getStandardSeoPlaneDataByIDInRepo);
+  const getSeopremiumPlanesDataByID = (clientId) => getSEOPlaneprocessServiceByID('Get SEO Premium Plane Data',clientId, getPremiumSeoPlaneDataInByIDRepo);
+
+
 module.exports = { seoBasicPlaneService, seoStandardPlaneService, seoPremiumPlaneService,
-    getAllBasicSeoPlanesData,getAllStandardSeoPlanesData,getAllpremiumSeoPlanesData
+    getAllBasicSeoPlanesData,getAllStandardSeoPlanesData,getAllpremiumSeoPlanesData,
+    getSeoBasicPlanesDataByID,getSeoStandardPlanesDataByID,getSeopremiumPlanesDataByID
  };

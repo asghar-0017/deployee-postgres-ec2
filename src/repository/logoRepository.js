@@ -43,6 +43,23 @@ const getPremiumLogoPlaneDataInRepo = () => getLogoPlanesRepo(logoPremiumPlaneRe
 const getBusinnessLogoPlaneDataInRepo = () => getLogoPlanesRepo(logoBusinessPlaneRepository, "getLogoBusinessPlaneDataInRepo");
 
 
+const getLogoPlanesRepoByID = async (repository, repoName,clientId) => {
+  try {
+    const getData = await repository.find({where:{clientId}});
+    logger.info(`src > repository > getPlanesRepoByID > ${repoName}`, getData);
+    return getData;
+  } catch (error) {
+    logger.error(`Error Getting data in ${repoName}`, error);
+    throw error;
+  }
+};
+
+const getBasicLogoPlaneDataByIDInRepo = (clientId) => getLogoPlanesRepoByID(logoBasicPlaneRepository, "getBasicPlaneDataInRepo",clientId);
+const getStandardLogoPlaneDataByIDInRepo = (clientId) => getLogoPlanesRepoByID(logoStandardPlaneRepository, "getStandardPlaneDataInRepo",clientId);
+const getPremiumLogoPlaneDataInByIDRepo = (clientId) => getLogoPlanesRepoByID(logoPremiumPlaneRepository, "getPremiumPlaneDataInRepo",clientId);
+const getBusinessLogoPlaneDataInByIDRepo = (clientId) => getLogoPlanesRepoByID(logoBusinessPlaneRepository, "getBusinessPlaneDataInRepo",clientId);
+
+
 
 module.exports = {
   logoBasicPlaneRepo,
@@ -53,5 +70,10 @@ module.exports = {
   getBasicLogoPlaneDataInRepo,
   getStandardLogoPlaneDataInRepo,
   getPremiumLogoPlaneDataInRepo,
-  getBusinnessLogoPlaneDataInRepo
+  getBusinnessLogoPlaneDataInRepo,
+
+  getBasicLogoPlaneDataByIDInRepo,
+  getStandardLogoPlaneDataByIDInRepo,
+  getPremiumLogoPlaneDataInByIDRepo,
+  getBusinessLogoPlaneDataInByIDRepo
 };

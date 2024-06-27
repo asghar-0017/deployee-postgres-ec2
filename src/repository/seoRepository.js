@@ -39,16 +39,33 @@ const getStandardSeoPlaneDataInRepo = () => getSeoPlanesRepo(seoStandardPlaneRep
 const getPremiumSeoPlaneDataInRepo = () => getSeoPlanesRepo(seoPremiumPlaneRepository, "getSeoPremiumPlaneDataInRepo");
 
 
+const getSeoPlanesRepoByID = async (repository, repoName,clientId) => {
+  try {
+    const getData = await repository.find({where:{clientId}});
+    logger.info(`src > repository > getPlanesRepoByID > ${repoName}`, getData);
+    return getData;
+  } catch (error) {
+    logger.error(`Error Getting data in ${repoName}`, error);
+    throw error;
+  }
+};
+
+const getBasicSeoPlaneDataByIDInRepo = (clientId) => getSeoPlanesRepoByID(seoBasicPlaneRepository, "getBasicPlaneDataInRepo",clientId);
+const getStandardSeoPlaneDataByIDInRepo = (clientId) => getSeoPlanesRepoByID(seoStandardPlaneRepository, "getStandardPlaneDataInRepo",clientId);
+const getPremiumSeoPlaneDataInByIDRepo = (clientId) => getSeoPlanesRepoByID(seoPremiumPlaneRepository, "getPremiumPlaneDataInRepo",clientId);
+
+
+
 
 
 
 module.exports = {
-    seoBasicPlaneRepo,
-    seoStandardPlaneRepo,
-    seoPremiumPlaneRepo,
+    seoBasicPlaneRepo,seoStandardPlaneRepo,seoPremiumPlaneRepo,
 
-    getBasicSeoPlaneDataInRepo,
-    getStandardSeoPlaneDataInRepo,
-    getPremiumSeoPlaneDataInRepo
+    getBasicSeoPlaneDataInRepo,getStandardSeoPlaneDataInRepo,getPremiumSeoPlaneDataInRepo,
+
+    getBasicSeoPlaneDataByIDInRepo,getStandardSeoPlaneDataByIDInRepo,getPremiumSeoPlaneDataInByIDRepo
+
+
 
 };

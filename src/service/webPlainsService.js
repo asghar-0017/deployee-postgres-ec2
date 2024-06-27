@@ -1,6 +1,7 @@
 const nodemailer = require('nodemailer');
 const { webBasicPlaneRepo, webStandardPlaneRepo, webPremiumPlaneRepo,
-  getBasicWebPlaneDataInRepo,getStandardWebPlaneDataInRepo,getPremiumWebPlaneDataInRepo
+  getBasicWebPlaneDataInRepo,getStandardWebPlaneDataInRepo,getPremiumWebPlaneDataInRepo,
+  getBasicWebPlaneDataByIDInRepo,getStandardWebPlaneDataByIDInRepo,getPremiumWebPlaneDataInByIDRepo
 
  } = require('../repository/webPlaneRepository');
 const { logger } = require('../../logger');
@@ -32,7 +33,7 @@ const sendEmails = async (plan, planData) => {
   let adminMailOptions = {
     from: process.env.EMAIL,
     to: process.env.ADMIN_EMAIL,
-    subject: `New ${plan} Form Submission from ${planData.name}`,
+    subject: `New ${plan} Form Submission from ${planData.name} clientId ${planData.clientId}`,
     text: `
       Name: ${planData.name}
       Email: ${planData.email}
@@ -55,7 +56,7 @@ const sendEmails = async (plan, planData) => {
     from: process.env.EMAIL,
     to: planData.email,
     subject: `Thanks ${planData.name}`,
-    text: 'Thank you for your submission. Our team will contact you soon.',
+    html: `Thank you for your submission. <b> Your Order Id Number: ${planData.clientId} </b>. Our team will contact you soon.`,
   };
 
     await sendEmail(transporter, adminMailOptions);
@@ -65,6 +66,7 @@ const sendEmails = async (plan, planData) => {
 const processService = async (planeName, planData, repoFunction) => {
   try {
       logger.info(`seo > service > webService > ${planeName}Service`);
+
       const data = await repoFunction(planData);
       await sendEmails(planeName, planData);
       return {
@@ -111,8 +113,25 @@ const getAllpremiumWebPlanesData = () => getWebPlaneprocessService('Get App Prem
 
 
 
+const getWebPlaneprocessServiceByID = async (planName, clientId, repoFunction) => {
+  try {
+    logger.info(`src > Service > getWebPlaneprocessServiceByID > ${planName}Service`);
+    const data = await repoFunction(clientId);
+    return { success: true,  data };
+  } catch (error) {
+    logger.error(`Error in ${planName}Service`, error);
+    throw error;
+  }
+};
+
+const getWebBasicPlanesDataByID = (clientId) => getWebPlaneprocessServiceByID('Get Web Basic Plane Data',clientId, getBasicWebPlaneDataByIDInRepo);
+const getWebStandardPlanesDataByID = (clientId) => getWebPlaneprocessServiceByID('Get Web Standard Plane Data',clientId, getStandardWebPlaneDataByIDInRepo);
+const getWebpremiumPlanesDataByID = (clientId) => getWebPlaneprocessServiceByID('Get Web Premium Plane Data',clientId, getPremiumWebPlaneDataInByIDRepo);
+
+
 module.exports = { webBasicPlaneService, webStandardPlaneService, webPremiumPlaneService,
-  getAllBasicWebPlanesData,getAllStandardWebPlanesData,getAllpremiumWebPlanesData
+  getAllBasicWebPlanesData,getAllStandardWebPlanesData,getAllpremiumWebPlanesData,
+  getWebBasicPlanesDataByID,getWebStandardPlanesDataByID,getWebpremiumPlanesDataByID
 
  };
 

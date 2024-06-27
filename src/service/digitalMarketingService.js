@@ -1,6 +1,6 @@
 // contactService.js
 const nodemailer = require('nodemailer');
-const {digitalMarketingRepo,allDigitalMarketingDataInRepo,findDigitalMarketingByIdRepo,updateDigitalDataInRepo} = require('../repository/digitalMarketingRepo');
+const {digitalMarketingRepo,allDigitalMarketingDataInRepo,findDigitalMarketingByIdRepo,updateDigitalDataInRepo,getDigitalMarketingByIdRepo} = require('../repository/digitalMarketingRepo');
 const { logger } = require('../../logger');
 const dotenv = require("dotenv");
 dotenv.config();
@@ -26,7 +26,7 @@ const digitalMarketingService = async (clientData) => {
         let adminMailOptions = {
             from: process.env.EMAIL,
             to: ` ${process.env.ADMIN_EMAIL}`,
-            subject: `New Digital Marketing Form Submission from ${clientData.name}`,
+            subject: `New Digital Marketing Form Submission from ${clientData.name} Client Id ${clientData.clientId}`,
             text: `
                 Name: ${clientData.name}
                 Email: ${clientData.email}
@@ -41,8 +41,8 @@ const digitalMarketingService = async (clientData) => {
             from: process.env.EMAIL,
             to: clientData.email,
             subject: `Thanks ${clientData.name}`,
-            text: 'Thank you for your submission. Our team will contact you soon.',
-          };
+            html: `Thank you for your submission. <b> Your Order Id Number: ${clientData.clientId} </b>. Our team will contact you soon.`,
+        };
 
         // Send email
         await transporter.sendMail(adminMailOptions);
@@ -83,4 +83,15 @@ const upDateDigitalInService=async(id,clientData)=>{
     }
 }
 
-module.exports = {digitalMarketingService,digitalMarketingdataInService,digitalMDataInService,upDateDigitalInService}
+
+const digitalMarketingDataInServiceByID=async(clientId)=>{
+        try {
+          const data = await getDigitalMarketingByIdRepo(clientId);
+          return data;
+        } catch (error) {
+          console.error(`Error occurred in digitalMarketingDataInServiceByID: ${error}`);
+          throw error;
+        }
+      
+}
+module.exports = {digitalMarketingService,digitalMarketingdataInService,digitalMDataInService,upDateDigitalInService,digitalMarketingDataInServiceByID}

@@ -1,5 +1,7 @@
 const { logoBasicPlane, logoStandardPlane, logoPremiumPlane, logoBusinessPlane,
-  allLogoBasicPlanesData,allLogoStandardPlaneData,allLogoPremiumPlaneData,allLogoBusinessPlaneData
+  allLogoBasicPlanesData,allLogoStandardPlaneData,allLogoPremiumPlaneData,allLogoBusinessPlaneData,
+  allLogoBasicPlanesDataByID,allLogoStandardPlaneDataByID,allLogoPremiumPlaneDataById,allLogoBusinessPlaneDataById
+
 
  } = require('../controller/logoPlaneController');
 const upload = require('../utils/uploadConfig');
@@ -15,6 +17,13 @@ const logoPlaneRoute = async (fastify) => {
   fastify.get('/all-logo-standard-planes-data',allLogoStandardPlaneData)
   fastify.get('/all-logo-premium-planes-data',allLogoPremiumPlaneData)
   fastify.get('/all-logo-business-planes-data',allLogoBusinessPlaneData)
+
+    
+  fastify.get('/all-logo-basic-planes-data/:id',allLogoBasicPlanesDataByID)
+  fastify.get('/all-logo-standard-planes-data/:id',allLogoStandardPlaneDataByID)
+  fastify.get('/all-logo-premium-planes-data/:id',allLogoPremiumPlaneDataById)
+  fastify.get('/all-logo-business-planes-data/:id',allLogoBusinessPlaneDataById)
+
 
 };
 

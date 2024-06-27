@@ -1,9 +1,10 @@
 const { appBasicPlaneService, appStandardPlaneService, appPremiumPlaneService,
   getAllBasicAppPlanesData,getAllStandardAppPlanesData ,getAllpremiumAppPlanesData,
-  // deleteBasicAppPlanesDataByID,deleteStandardAppPlanesDataByID,deletepremiumAppPlanesDataByID
+  // deleteBasicAppPlanesDataByID,deleteStandardAppPlanesDataByID,deletepremiumAppPlanesDataByID,
+  getBasicAppPlanesDataByID,getStandardAppPlanesDataByID,getpremiumAppPlanesDataByID
 } = require('../service/appPlaneService');
 const { logger } = require('../../logger');
-const {GenerateClientId}  = require('../utils/token');
+const { getClientId } = require("../service/clientService");
 
 
 const handlePlain = async (request, reply, serviceFunction) => {
@@ -26,7 +27,7 @@ const handlePlain = async (request, reply, serviceFunction) => {
       console.error('Data is undefined');
       return reply.code(400).send({ error: 'Invalid input' });
     }
-    data.clientId=GenerateClientId();
+    data.clientId = await getClientId(data.email, data.name);
     const result = await serviceFunction(data);
     reply.code(201).send({ success: 'success', data: result });
 
@@ -120,6 +121,41 @@ const allAppPremiumPlaneData = async (request, reply) => {
 
 
 
+const getPlanesDataById = async (request, reply, serviceFunction) => {
+  try {
+    const clientId=request.params.id
+    const result = await serviceFunction(clientId);
+    console.log("Result",result)
+    if(result){
+    reply.code(201).send({
+       success: 'success', data: result });
+    }else{
+      reply.send({
+        message:`${serviceFunction} Data Not Found`
+      })
+    }
+  } catch (error) {
+    console.error('Error occurred in getDataPlanes Function', error);
+    throw error
+  }
+};
+
+const getAppBasicPlanesDataById = async (request, reply) => {
+  await getPlanesDataById(request, reply, getBasicAppPlanesDataByID);
+};
+
+const getAppStandardPlaneDataById = async (request, reply) => {
+  await getPlanesDataById(request, reply, getStandardAppPlanesDataByID);
+};
+
+const getAppPremiumPlaneDataById = async (request, reply) => {
+  await getPlanesDataById(request, reply, getpremiumAppPlanesDataByID);
+};
+
+
+
+
+
 module.exports = {
 appBasicPlane,
   appStandardPlane,
@@ -128,6 +164,10 @@ appBasicPlane,
   allAppBasicPlanesData,
   allAppStandardPlaneData,
   allAppPremiumPlaneData,
+
+  getAppBasicPlanesDataById,
+  getAppStandardPlaneDataById,
+  getAppPremiumPlaneDataById
 
   // deleteAppBasicPlanesData,
   // deleteAppStandardPlaneData,
