@@ -1,11 +1,15 @@
 const { appBasicPlaneService, appStandardPlaneService, appPremiumPlaneService,
-  getAllBasicAppPlanesData,getAllStandardAppPlanesData ,getAllpremiumAppPlanesData
+  getAllBasicAppPlanesData,getAllStandardAppPlanesData ,getAllpremiumAppPlanesData,
+  // deleteBasicAppPlanesDataByID,deleteStandardAppPlanesDataByID,deletepremiumAppPlanesDataByID
 } = require('../service/appPlaneService');
 const { logger } = require('../../logger');
+const {GenerateClientId}  = require('../utils/token');
+
 
 const handlePlain = async (request, reply, serviceFunction) => {
   try {
     const data = request.body;
+  
     if (request.files && Array.isArray(request.files)) {
       data.Link_to_Graphics = request.files.map(file => file.path);
     } else {
@@ -22,7 +26,7 @@ const handlePlain = async (request, reply, serviceFunction) => {
       console.error('Data is undefined');
       return reply.code(400).send({ error: 'Invalid input' });
     }
-
+    data.clientId=GenerateClientId();
     const result = await serviceFunction(data);
     reply.code(201).send({ success: 'success', data: result });
 
@@ -82,6 +86,40 @@ const allAppPremiumPlaneData = async (request, reply) => {
 
 
 
+// const deletePlanesDataById = async (request, reply, serviceFunction) => {
+//   try {
+//     const id=request.params.id
+//     const result = await serviceFunction(id);
+//     console.log("Result",result)
+//     if(result){
+//     reply.code(201).send({
+//        success: 'success', data: result });
+//     }else{
+//       reply.send({
+//         message:`${serviceFunction} Data Not Found`
+//       })
+//     }
+//   } catch (error) {
+//     console.error('Error occurred in getDataPlanes Function', error);
+//     throw error
+//   }
+// };
+
+// const deleteAppBasicPlanesData = async (request, reply) => {
+//   await deletePlanesDataById(request, reply, deleteBasicAppPlanesDataByID);
+// };
+
+// const deleteAppStandardPlaneData = async (request, reply) => {
+//   await deletePlanesDataById(request, reply, deleteStandardAppPlanesDataByID);
+// };
+
+// const deleteAppPremiumPlaneData = async (request, reply) => {
+//   await deletePlanesDataById(request, reply, deletepremiumAppPlanesDataByID);
+// };
+
+
+
+
 module.exports = {
 appBasicPlane,
   appStandardPlane,
@@ -89,5 +127,11 @@ appBasicPlane,
 
   allAppBasicPlanesData,
   allAppStandardPlaneData,
-  allAppPremiumPlaneData
+  allAppPremiumPlaneData,
+
+  // deleteAppBasicPlanesData,
+  // deleteAppStandardPlaneData,
+  // deleteAppPremiumPlaneData
+
+
 };
