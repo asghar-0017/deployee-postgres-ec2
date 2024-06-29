@@ -28,13 +28,13 @@ const allDigitalMarketingDataInRepo=async()=>{
     }
     }
     
-    const findDigitalMarketingByIdRepo=async(id)=>{
+    const findDigitalMarketingByIdRepo=async(clientId)=>{
     try{
-        const data=await digitalMarketingRepository.findOne({where:{id}})
+        const data=await digitalMarketingRepository.findOne({where:{clientId}})
         if(data){
             const deletedata=await digitalMarketingRepository.remove(data)
             if(deletedata){
-                return `client is Deleted Successfully with id ${id}`
+                return `client is Deleted Successfully with id ${clientId}`
             } 
         }
     
@@ -69,7 +69,7 @@ const updateDigitalDataInRepo=async(id,clientData)=>{
 const getDigitalMarketingByIdRepo=async(clientId)=>{
     try {
         const data = await digitalMarketingRepository.find({ where: { clientId } });
-        return data || null;
+        return data
       } catch (error) {
         console.error(`Error occurred in getDigitalMarketingByIdRepo: ${error}`);
         throw error;

@@ -63,9 +63,9 @@ const digitalMarketingdataInService=async()=>{
     }
     }
     
-    const digitalMDataInService=async(id)=>{
+    const digitalMDataInService=async(clientId)=>{
         try{
-        const data=await findDigitalMarketingByIdRepo(id)
+        const data=await findDigitalMarketingByIdRepo(clientId)
         return data
     
         }catch(error){

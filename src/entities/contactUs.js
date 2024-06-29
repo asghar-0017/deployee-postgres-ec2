@@ -49,5 +49,11 @@ module.exports = new EntitySchema({
       default: () => "CURRENT_TIMESTAMP",
       onUpdate: "CURRENT_TIMESTAMP",
     },
+  }, relations: {
+    client: {
+      target: "Client",
+      type: "many-to-one",
+      joinColumn: { name: "clientId", referencedColumnName: "clientId" },
+    },
   },
 });

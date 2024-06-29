@@ -49,7 +49,7 @@ const allDigitalMarketingData=async(request,reply)=>{
     const delDigitalMarketingById=async(request,reply)=>{
     try{
         const clientId=request.params.id
-        const digitalMarketingData=await digitalMDataInService(id)
+        const digitalMarketingData=await digitalMDataInService(clientId)
         if(digitalMarketingData){
             reply.code(200).send({
               status:"succcess" ,
@@ -57,7 +57,7 @@ const allDigitalMarketingData=async(request,reply)=>{
             })
         }else if(!digitalMarketingData){
             reply.code(200).send({
-                message:`Client Data not Found With ID ${id}`
+                message:`Client Data not Found With ID ${clientId}`
             })
         }
     

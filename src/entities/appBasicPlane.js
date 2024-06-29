@@ -53,4 +53,11 @@ module.exports = new EntitySchema({
       },
  
   },
+  relations: {
+    client: {
+      target: "Client",
+      type: "many-to-one",
+      joinColumn: { name: "clientId", referencedColumnName: "clientId" },
+    },
+  },
 });

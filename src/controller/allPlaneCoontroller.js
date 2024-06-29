@@ -91,23 +91,23 @@ const {
   getpremiumAppPlanesDataByID,
 } = require('../service/appPlaneService');
 
-// const {
-//   getSeoBasicPlanesDataByID,
-//   getSeoStandardPlanesDataByID,
-//   getSeopremiumPlanesDataByID,
-// } = require('../service/seoService');
+const {
+  getSeoBasicPlanesDataByID,
+  getSeoStandardPlanesDataByID,
+  getSeopremiumPlanesDataByID,
+} = require('../service/seoService');
 
-// const {
-//   getDigitalMarketingById
+const {
+  digitalMarketingDataInServiceByID
 
-// } = require('../service/digitalMarketingService');
+} = require('../service/digitalMarketingService');
 
-// const {
-//   getLogoBasicPlanesDataByID,
-//   getLogoStandardPlanesDataByID,
-//   getLogopremiumPlanesDataByID,
-//   // getLogoBusinessPlanesDataByID
-// }=require('../service/logoPlaneService')
+const {
+  getLogoBasicPlanesDataByID,
+  getLogoStandardPlanesDataByID,
+  getLogopremiumPlanesDataByID,
+  getLogoBusinessPlanesDataByID
+}=require('../service/logoPlaneService')
 
 const getAllPlanesDataByID = async (req, reply) => {
   const clientId = req.params.id;
@@ -120,16 +120,16 @@ const getAllPlanesDataByID = async (req, reply) => {
     const appStandardData = await getStandardAppPlanesDataByID(clientId);
     const appPremiumData = await getpremiumAppPlanesDataByID(clientId);
 
-    // const seoBasicData = await getSeoBasicPlanesDataByID(clientId);
-    // const seoStandardData = await getSeoStandardPlanesDataByID(clientId);
-    // const seoPremiumData = await getSeopremiumPlanesDataByID(clientId);
+    const seoBasicData = await getSeoBasicPlanesDataByID(clientId);
+    const seoStandardData = await getSeoStandardPlanesDataByID(clientId);
+    const seoPremiumData = await getSeopremiumPlanesDataByID(clientId);
 
-    // const digitalMarketingBasicData = await getDigitalMarketingById(clientId);
+    const digitalMarketingBasicData = await digitalMarketingDataInServiceByID(clientId);
 
-    // const logoBasicData= await getLogoBasicPlanesDataByID(clientId)
-    // const logoStandardData= await getLogoStandardPlanesDataByID(clientId)
-    // const logoPremiumData= await getLogopremiumPlanesDataByID(clientId)
-    // // const logoBusinessData= await getLogoBusinessPlanesDataByID(clientId)
+    const logoBasicData= await getLogoBasicPlanesDataByID(clientId)
+    const logoStandardData= await getLogoStandardPlanesDataByID(clientId)
+    const logoPremiumData= await getLogopremiumPlanesDataByID(clientId)
+    const logoBusinessData= await getLogoBusinessPlanesDataByID(clientId)
 
 
     const allData = [
@@ -139,14 +139,15 @@ const getAllPlanesDataByID = async (req, reply) => {
       appBasicData.data,
       appStandardData.data,
       appPremiumData.data,
-      // seoBasicData.data,
-      // seoStandardData.data,
-      // seoPremiumData.data,
-      // digitalMarketingBasicData.data,
-      // logoBasicData.data,
-      // logoStandardData.data,
-      // logoPremiumData.data,
-      // logoBusinessData.data
+      seoBasicData.data,
+      seoStandardData.data,
+      seoPremiumData.data,
+      logoBasicData.data,
+      logoStandardData.data,
+      logoPremiumData.data,
+      logoBusinessData.data,
+      digitalMarketingBasicData.data,
+
 
 
 

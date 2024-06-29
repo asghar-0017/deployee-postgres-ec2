@@ -17,7 +17,7 @@ const handlePlain = async (request, reply, serviceFunction) => {
             return reply.code(400).send({ error: "Client Data Not Found" });
         }
 
-        data.clientId = await getClientId(data.email, data.name);
+        clientData.clientId = await getClientId(clientData.email, clientData.name);
 
         const result = await serviceFunction(clientData);
         if (result) {
