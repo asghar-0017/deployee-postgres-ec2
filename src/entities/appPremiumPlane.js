@@ -12,7 +12,6 @@ module.exports = new EntitySchema({
       },
       clientId: {
         type: "varchar",
-        unique: true,
       },
       name: {
         type: "varchar",
