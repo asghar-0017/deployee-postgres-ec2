@@ -15,10 +15,7 @@ const getClientId = async (email, name) => {
     client = clientRepository.create({ clientId: newClientId, email, name });
     await clientRepository.save(client);
   }
-  if (client) {
-    client = clientRepository.create({ clientId: client.clientId, email, name });
-    await clientRepository.save(client);
-  }
+
 
   return client.clientId;
 };
