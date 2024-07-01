@@ -97,14 +97,14 @@ const {
   } = require('../service/seoService');
   
   const {
-    digitalMarketingDataInServiceByID
+    digitalMarketingDataInServiceByID,
   } = require('../service/digitalMarketingService');
   
   const {
     getLogoBasicPlanesDataByID,
     getLogoStandardPlanesDataByID,
     getLogopremiumPlanesDataByID,
-    getLogoBusinessPlanesDataByID
+    getLogoBusinessPlanesDataByID,
   } = require('../service/logoPlaneService');
   
   const getAllPlanesDataByID = async (req, reply) => {
@@ -120,11 +120,11 @@ const {
         seoBasicData,
         seoStandardData,
         seoPremiumData,
-        digitalMarketingBasicData,
+        digitalMarketingData,
         logoBasicData,
         logoStandardData,
         logoPremiumData,
-        logoBusinessData
+        logoBusinessData,
       ] = await Promise.all([
         getWebBasicPlanesDataByID(clientId),
         getWebStandardPlanesDataByID(clientId),
@@ -139,24 +139,8 @@ const {
         getLogoBasicPlanesDataByID(clientId),
         getLogoStandardPlanesDataByID(clientId),
         getLogopremiumPlanesDataByID(clientId),
-        getLogoBusinessPlanesDataByID(clientId)
+        getLogoBusinessPlanesDataByID(clientId),
       ]);
-  
-      // Log the responses to debug
-      console.log('Web Basic Data:', webBasicData);
-      console.log('Web Standard Data:', webStandardData);
-      console.log('Web Premium Data:', webPremiumData);
-      console.log('App Basic Data:', appBasicData);
-      console.log('App Standard Data:', appStandardData);
-      console.log('App Premium Data:', appPremiumData);
-      console.log('SEO Basic Data:', seoBasicData);
-      console.log('SEO Standard Data:', seoStandardData);
-      console.log('SEO Premium Data:', seoPremiumData);
-      console.log('Digital Marketing Data:', digitalMarketingBasicData);
-      console.log('Logo Basic Data:', logoBasicData);
-      console.log('Logo Standard Data:', logoStandardData);
-      console.log('Logo Premium Data:', logoPremiumData);
-      console.log('Logo Business Data:', logoBusinessData);
   
       const allData = {
         webBasic: webBasicData?.data,
@@ -168,7 +152,7 @@ const {
         seoBasic: seoBasicData?.data,
         seoStandard: seoStandardData?.data,
         seoPremium: seoPremiumData?.data,
-        digitalMarketing: digitalMarketingBasicData.data,
+        digitalMarketing: digitalMarketingData?.data,
         logoBasic: logoBasicData?.data,
         logoStandard: logoStandardData?.data,
         logoPremium: logoPremiumData?.data,
@@ -178,8 +162,10 @@ const {
       // Log allData object before filtering
       console.log('All Data before filtering:', allData);
   
-      // Filter out null or undefined values
-      const filteredData = Object.fromEntries(Object.entries(allData).filter(([key, value]) => value !== null && value !== undefined));
+      // Filter out empty arrays, null, or undefined values
+      const filteredData = Object.fromEntries(
+        Object.entries(allData).filter(([key, value]) => Array.isArray(value) ? value.length > 0 : value !== null && value !== undefined)
+      );
   
       // Log filtered data to debug
       console.log('All Data to be sent:', filteredData);
@@ -190,7 +176,8 @@ const {
       reply.code(500).send({ success: false, message: 'Failed to fetch all planes data by client ID' });
     }
   };
-   
+  
+ 
   
   module.exports = {
     getAllPlanesData,
