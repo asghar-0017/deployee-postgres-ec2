@@ -1,6 +1,6 @@
 const { appBasicPlane, appStandardPlane, appPremiumPlane,
   allAppBasicPlanesData ,allAppStandardPlaneData,allAppPremiumPlaneData,
-  // deleteAppBasicPlanesData,deleteAppStandardPlaneDat,adeleteAppPremiumPlaneData
+  deleteAppBasicPlanesData,deleteAppStandardPlaneData,deleteAppPremiumPlaneData,
   getAppBasicPlanesDataById,getAppStandardPlaneDataById,getAppPremiumPlaneDataById
 } = require('../controller/appPlaneController');
 const upload = require('../utils/uploadConfig');
@@ -15,9 +15,9 @@ const appPlaneRoute = async (fastify) => {
   fastify.get('/all-app-premium-planes-data',allAppPremiumPlaneData)
 
 
-  // fastify.delete('/app-basic-planes-data/:id',deleteAppBasicPlanesData)
-  // fastify.delete('/app-standard-planes-data/:id',deleteAppStandardPlaneData)
-  // fastify.delete('/app-premium-planes-data/:id',deleteAppPremiumPlaneData)
+  fastify.delete('/app-basic-planes-data/:id/:cliendId',deleteAppBasicPlanesData)
+  fastify.delete('/app-standard-planes-data/:id/:cliendId',deleteAppStandardPlaneData)
+  fastify.delete('/app-premium-planes-data/:id/:cliendId',deleteAppPremiumPlaneData)
 
   fastify.get('/app-basic-planes-data/:id',getAppBasicPlanesDataById)
   fastify.get('/app-standard-planes-data/:id',getAppStandardPlaneDataById)

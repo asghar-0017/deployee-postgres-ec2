@@ -56,17 +56,35 @@ const getStandardPlaneDataByIDInRepo = (clientId) => getPlanesRepoByID(appStanda
 const getPremiumPlaneDataInByIDRepo = (clientId) => getPlanesRepoByID(appPremiumPlaneRepository, "getPremiumPlaneDataInRepo",clientId);
 
 
+const DeleteAppPlanesRepoByID = async (repository, repoName, id, clientId) => {
+  try {
+    const getData = await repository.findOne({ where: { id, clientId } });
+    logger.info(`src > repository > getPlanesRepoByID > ${repoName}`, getData);
+
+    if (getData) {
+      const delRec = await repository.delete({ id, clientId });
+      logger.info(`Record deleted successfully in ${repoName}`, delRec);
+      return { success: true, message: `Record deleted successfully`, data: delRec };
+    } else {
+      return { success: false, message: `Data not found with id ${id} and clientId ${clientId}` };
+    }
+  } catch (error) {
+    logger.error(`Error deleting data in ${repoName}`, error);
+    throw error;
+  }
+};
+
+const deleteBasicPlaneDataInRepoByID = (id, clientId) => DeleteAppPlanesRepoByID(appBasicPlaneRepository, "deleteBasicPlaneDataInRepoByID", id, clientId);
+const deleteStandardPlaneDataInRepoByID = (id, clientId) => DeleteAppPlanesRepoByID(appStandardPlaneRepository, "DeleteStandardPlaneDataInRepoByID", id, clientId);
+const deletePremiumPlaneDataInRepoById = (id, clientId) => DeleteAppPlanesRepoByID(appPremiumPlaneRepository, "DeletePremiumPlaneDataInRepoByID", id, clientId);
 
 module.exports = {
-    appBasicPlaneRepo,
-    appStandardPlaneRepo,
-    appPremiumPlaneRepo,
+    appBasicPlaneRepo,appStandardPlaneRepo, appPremiumPlaneRepo,
     
-    getBasicPlaneDataInRepo,
-    getStandardPlaneDataInRepo,
-    getPremiumPlaneDataInRepo,
+    getBasicPlaneDataInRepo,getStandardPlaneDataInRepo,getPremiumPlaneDataInRepo,
 
-    getBasicPlaneDataByIDInRepo,
-    getStandardPlaneDataByIDInRepo,
-    getPremiumPlaneDataInByIDRepo
+    getBasicPlaneDataByIDInRepo,getStandardPlaneDataByIDInRepo,getPremiumPlaneDataInByIDRepo,
+
+    deleteBasicPlaneDataInRepoByID,deleteStandardPlaneDataInRepoByID,deletePremiumPlaneDataInRepoById,
+
 };

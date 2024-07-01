@@ -1,16 +1,12 @@
 const nodemailer = require('nodemailer');
 const {
-    seoBasicPlaneRepo,
-    seoStandardPlaneRepo,
-    seoPremiumPlaneRepo,
+    seoBasicPlaneRepo,seoStandardPlaneRepo,seoPremiumPlaneRepo,
 
-    getBasicSeoPlaneDataInRepo,
-    getStandardSeoPlaneDataInRepo,
-    getPremiumSeoPlaneDataInRepo,
+    getBasicSeoPlaneDataInRepo,getStandardSeoPlaneDataInRepo,getPremiumSeoPlaneDataInRepo,
 
-    getBasicSeoPlaneDataByIDInRepo,
-    getStandardSeoPlaneDataByIDInRepo,
-    getPremiumSeoPlaneDataInByIDRepo
+    getBasicSeoPlaneDataByIDInRepo,getStandardSeoPlaneDataByIDInRepo,getPremiumSeoPlaneDataInByIDRepo,
+
+    deleteBasicSeoPlaneDataInRepoByID,deleteStandardSeoPlaneDataInRepoByID,deletePremiumSeoPlaneDataInRepoById
 } = require('../repository/seoRepository');
 const { logger } = require('../../logger');
 const dotenv = require("dotenv");
@@ -128,7 +124,25 @@ const getSeoPlaneprocessService = async (planName, repoFunction) => {
   const getSeopremiumPlanesDataByID = (clientId) => getSEOPlaneprocessServiceByID('Get SEO Premium Plane Data',clientId, getPremiumSeoPlaneDataInByIDRepo);
 
 
+
+  const DeletePlaneprocessServiceByID = async (planName, id,cliendId, repoFunction) => {
+    try {
+      logger.info(`src > Service > DeletePlaneprocessServiceByID > ${planName}Service`);
+      const data = await repoFunction(id,cliendId);
+      return data
+    } catch (error) {
+      logger.error(`Error in ${planName}Service`, error);
+      throw error;
+    }
+  };
+  
+  const deleteBasicSeoPlanesDataByID = (id,cliendId) => DeletePlaneprocessServiceByID('Delete Seo Basic Plane Data',id,cliendId, deleteBasicSeoPlaneDataInRepoByID);
+  const deleteStandardSeoPlanesDataByID = (id,cliendId) => DeletePlaneprocessServiceByID('Delete Seo Standard Plane Data',id,cliendId, deleteStandardSeoPlaneDataInRepoByID);
+  const deletepremiumSeoPlanesDataByID = (id,cliendId) => DeletePlaneprocessServiceByID('Delete Seo Premium Plane Data',id,cliendId, deletePremiumSeoPlaneDataInRepoById);
+  
+
 module.exports = { seoBasicPlaneService, seoStandardPlaneService, seoPremiumPlaneService,
     getAllBasicSeoPlanesData,getAllStandardSeoPlanesData,getAllpremiumSeoPlanesData,
-    getSeoBasicPlanesDataByID,getSeoStandardPlanesDataByID,getSeopremiumPlanesDataByID
+    getSeoBasicPlanesDataByID,getSeoStandardPlanesDataByID,getSeopremiumPlanesDataByID,
+    deleteBasicSeoPlanesDataByID,deleteStandardSeoPlanesDataByID,deletepremiumSeoPlanesDataByID
  };

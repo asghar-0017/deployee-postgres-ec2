@@ -1,19 +1,12 @@
 const nodemailer = require('nodemailer');
 const {
-  logoBasicPlaneRepo,
-  logoStandardPlaneRepo,
-  logoPremiumPlaneRepo,
-  logoBusinessPlaneRepo,
+  logoBasicPlaneRepo,logoStandardPlaneRepo,logoPremiumPlaneRepo,logoBusinessPlaneRepo,
 
-  getBasicLogoPlaneDataInRepo,
-  getStandardLogoPlaneDataInRepo,
-  getPremiumLogoPlaneDataInRepo,
-  getBusinnessLogoPlaneDataInRepo,
+  getBasicLogoPlaneDataInRepo,getStandardLogoPlaneDataInRepo,getPremiumLogoPlaneDataInRepo,getBusinnessLogoPlaneDataInRepo,
 
-  getBasicLogoPlaneDataByIDInRepo,
-  getStandardLogoPlaneDataByIDInRepo,
-  getPremiumLogoPlaneDataInByIDRepo,
-  getBusinessLogoPlaneDataInByIDRepo
+  getBasicLogoPlaneDataByIDInRepo,getStandardLogoPlaneDataByIDInRepo,getPremiumLogoPlaneDataInByIDRepo,getBusinessLogoPlaneDataInByIDRepo,
+
+  deleteBasicLogoPlaneDataInRepoByID,deleteStandardLogoPlaneDataInRepoByID,deletePremiumLogoPlaneDataInRepoById,deleteBusinessLogoPlaneDataInRepoById
 
 } = require('../repository/logoRepository');
 const { logger } = require('../../logger');
@@ -123,25 +116,36 @@ const getAllBusinessLogoPlanesData = () => getLogoPlaneprocessService('Get Logo 
   const getLogoBasicPlanesDataByID = (clientId) => getPlaneprocessServiceByID('Get Logo Basic Plane Data',clientId, getBasicLogoPlaneDataByIDInRepo);
   const getLogoStandardPlanesDataByID = (clientId) => getPlaneprocessServiceByID('Get Logo Standard Plane Data',clientId, getStandardLogoPlaneDataByIDInRepo);
   const getLogopremiumPlanesDataByID = (clientId) => getPlaneprocessServiceByID('Get Logo Premium Plane Data',clientId, getPremiumLogoPlaneDataInByIDRepo);
-  const getLogoBusinessPlanesDataByID = (clientId) => getPlaneprocessServiceByID('Get Logo Premium Plane Data',clientId, getBusinessLogoPlaneDataInByIDRepo);
+  const getLogoBusinessPlanesDataByID = (clientId) => getPlaneprocessServiceByID('Get Logo Business Plane Data',clientId, getBusinessLogoPlaneDataInByIDRepo);
 
 
 
+  const DeletePlaneprocessServiceByID = async (planName, id,cliendId, repoFunction) => {
+    try {
+      logger.info(`src > Service > DeletePlaneprocessServiceByID > ${planName}Service`);
+      const data = await repoFunction(id,cliendId);
+      return data
+    } catch (error) {
+      logger.error(`Error in ${planName}Service`, error);
+      throw error;
+    }
+  };
+  
+  const deleteBasicLogoPlanesDataByID = (id,cliendId) => DeletePlaneprocessServiceByID('Delete Logo Basic Plane Data',id,cliendId, deleteBasicLogoPlaneDataInRepoByID);
+  const deleteStandardLogoPlanesDataByID = (id,cliendId) => DeletePlaneprocessServiceByID('Delete Logo Standard Plane Data',id,cliendId, deleteStandardLogoPlaneDataInRepoByID);
+  const deletepremiumLogoPlanesDataByID = (id,cliendId) => DeletePlaneprocessServiceByID('Delete Logo Premium Plane Data',id,cliendId, deletePremiumLogoPlaneDataInRepoById);
+  const deleteBusinessLogoPlanesDataByID = (id,cliendId) => DeletePlaneprocessServiceByID('Delete Logo Premium Plane Data',id,cliendId, deleteBusinessLogoPlaneDataInRepoById);
+  
 
 
 module.exports = {
-  logoBasicPlaneService,
-  logoStandardPlaneService,
-  logoPremiumPlaneService,
-  logoBusinessPlaneService,
+  logoBasicPlaneService,logoStandardPlaneService,logoPremiumPlaneService,logoBusinessPlaneService,
 
-  getAllBasicLogoPlanesData,
-  getAllStandardLogoPlanesData,
-  getAllpremiumLogoPlanesData,
-  getAllBusinessLogoPlanesData,
+  getAllBasicLogoPlanesData,getAllStandardLogoPlanesData,getAllpremiumLogoPlanesData,getAllBusinessLogoPlanesData,
 
-  getLogoBasicPlanesDataByID,
-  getLogoStandardPlanesDataByID,
-  getLogopremiumPlanesDataByID,
-  getLogoBusinessPlanesDataByID
+  getLogoBasicPlanesDataByID,getLogoStandardPlanesDataByID,getLogopremiumPlanesDataByID,getLogoBusinessPlanesDataByID,
+
+  deleteBasicLogoPlanesDataByID,deleteStandardLogoPlanesDataByID,deletepremiumLogoPlanesDataByID,deleteBusinessLogoPlanesDataByID
+
+
 };

@@ -4,7 +4,7 @@ FROM node:18.16.1
 RUN apt-get update && apt-get install -y python3 build-essential
 
 # Create app directory
-WORKDIR /usr/src/app
+WORKDIR /src/app
 
 # Copy package files
 COPY package*.json ./
@@ -20,5 +20,5 @@ RUN npm rebuild bcrypt --build-from-source
 # Bundle app source
 COPY . .
 
-EXPOSE 8080
+EXPOSE 4000
 CMD ["node", "server.js"]

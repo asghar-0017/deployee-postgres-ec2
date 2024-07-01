@@ -57,14 +57,36 @@ const getPremiumSeoPlaneDataInByIDRepo = (clientId) => getSeoPlanesRepoByID(seoP
 
 
 
+const DeleteAppPlanesRepoByID = async (repository, repoName, id, clientId) => {
+  try {
+    const getData = await repository.findOne({ where: { id, clientId } });
+    logger.info(`src > repository > DeleteAppPlanesRepoByID > ${repoName}`, getData);
+
+    if (getData) {
+      const delRec = await repository.delete({ id, clientId });
+      logger.info(`Record deleted successfully in ${repoName}`, delRec);
+      return { success: true, message: `Record deleted successfully`, data: delRec };
+    } else {
+      return { success: false, message: `Data not found with id ${id} and clientId ${clientId}` };
+    }
+  } catch (error) {
+    logger.error(`Error deleting data in ${repoName}`, error);
+    throw error;
+  }
+};
+
+const deleteBasicSeoPlaneDataInRepoByID = (id, clientId) => DeleteAppPlanesRepoByID(seoBasicPlaneRepository, "deleteBasicSeoPlaneDataInRepoByID", id, clientId);
+const deleteStandardSeoPlaneDataInRepoByID = (id, clientId) => DeleteAppPlanesRepoByID(seoStandardPlaneRepository, "DeleteSeoStandardPlaneDataInRepoByID", id, clientId);
+const deletePremiumSeoPlaneDataInRepoById = (id, clientId) => DeleteAppPlanesRepoByID(seoPremiumPlaneRepository, "DeleteSeoPremiumPlaneDataInRepoByID", id, clientId);
+
+
 
 
 module.exports = {
     seoBasicPlaneRepo,seoStandardPlaneRepo,seoPremiumPlaneRepo,
-
     getBasicSeoPlaneDataInRepo,getStandardSeoPlaneDataInRepo,getPremiumSeoPlaneDataInRepo,
-
-    getBasicSeoPlaneDataByIDInRepo,getStandardSeoPlaneDataByIDInRepo,getPremiumSeoPlaneDataInByIDRepo
+    getBasicSeoPlaneDataByIDInRepo,getStandardSeoPlaneDataByIDInRepo,getPremiumSeoPlaneDataInByIDRepo,
+    deleteBasicSeoPlaneDataInRepoByID,deleteStandardSeoPlaneDataInRepoByID,deletePremiumSeoPlaneDataInRepoById
 
 
 

@@ -1,6 +1,7 @@
 const { logoBasicPlaneService, logoStandardPlaneService, logoPremiumPlaneService, logoBusinessPlaneService,
   getAllBasicLogoPlanesData,getAllStandardLogoPlanesData,getAllpremiumLogoPlanesData,getAllBusinessLogoPlanesData,
-  getLogoBasicPlanesDataByID,getLogoStandardPlanesDataByID,getLogopremiumPlanesDataByID,getLogoBusinessPlanesDataByID
+  getLogoBasicPlanesDataByID,getLogoStandardPlanesDataByID,getLogopremiumPlanesDataByID,getLogoBusinessPlanesDataByID,
+  deleteBasicLogoPlanesDataByID,deleteStandardLogoPlanesDataByID,deletepremiumLogoPlanesDataByID,deleteBusinessLogoPlanesDataByID
 
  } = require('../service/logoPlaneService');
 const { logger } = require('../../logger');
@@ -135,22 +136,57 @@ const allLogoBusinessPlaneDataById = async (request, reply) => {
 
 
 
+const deletePlanesDataById = async (request, reply, serviceFunction) => {
+  try {
+    const id=request.params.id
+    const cliendId=request.params.clientId
+    console.log("ClientID",cliendId)
+    const result = await serviceFunction(id,cliendId);
+    console.log("Result",result)
+    if(result){
+    reply.code(201).send({
+      data: result
+     });
+    }else{
+      reply.send({
+        message:`${serviceFunction} Data Not Found`
+      })
+    }
+  } catch (error) {
+    console.error('Error occurred in getDataPlanes Function', error);
+    throw error
+  }
+};
+
+const deleteLogoBasicPlanesData = async (request, reply) => {
+  await deletePlanesDataById(request, reply, deleteBasicLogoPlanesDataByID);
+};
+
+const deleteLogoStandardPlaneData = async (request, reply) => {
+  await deletePlanesDataById(request, reply, deleteStandardLogoPlanesDataByID);
+};
+
+const deleteLogoPremiumPlaneData = async (request, reply) => {
+  await deletePlanesDataById(request, reply, deletepremiumLogoPlanesDataByID);
+};
+const deleteLogoBusinessPlaneData = async (request, reply) => {
+  await deletePlanesDataById(request, reply, deleteBusinessLogoPlanesDataByID);
+};
+
+
+
+
+
+
 
 
 module.exports = {
-  logoBasicPlane,
-  logoStandardPlane,
-  logoPremiumPlane,
-  logoBusinessPlane,
+  logoBasicPlane,logoStandardPlane,logoPremiumPlane,logoBusinessPlane,
 
-  allLogoBasicPlanesData,
-  allLogoStandardPlaneData,
-  allLogoPremiumPlaneData,
-  allLogoBusinessPlaneData,
+  allLogoBasicPlanesData,allLogoStandardPlaneData,allLogoPremiumPlaneData,allLogoBusinessPlaneData,
 
-  allLogoBasicPlanesDataByID,
-  allLogoStandardPlaneDataByID,
-  allLogoPremiumPlaneDataById,
-  allLogoBusinessPlaneDataById
+  allLogoBasicPlanesDataByID,allLogoStandardPlaneDataByID,allLogoPremiumPlaneDataById,allLogoBusinessPlaneDataById,
+
+  deleteLogoBasicPlanesData,deleteLogoStandardPlaneData,deleteLogoPremiumPlaneData,deleteLogoBusinessPlaneData
 
 };

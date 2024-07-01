@@ -1,7 +1,7 @@
 const nodemailer = require('nodemailer');
 const { appBasicPlaneRepo, appStandardPlaneRepo, appPremiumPlaneRepo
   ,getBasicPlaneDataInRepo,getStandardPlaneDataInRepo,getPremiumPlaneDataInRepo ,
-
+  deleteBasicPlaneDataInRepoByID,deleteStandardPlaneDataInRepoByID,deletePremiumPlaneDataInRepoById,
   getBasicPlaneDataByIDInRepo,getStandardPlaneDataByIDInRepo,getPremiumPlaneDataInByIDRepo
 } = require('../repository/appPlanesRepository');
 const { logger } = require('../../logger');
@@ -95,20 +95,20 @@ const getAllStandardAppPlanesData = () => getAppPlaneprocessService('Get App Sta
 const getAllpremiumAppPlanesData = () => getAppPlaneprocessService('Get App Premium Plane Data', getPremiumPlaneDataInRepo);
 
 
-// const DeletePlaneprocessServiceByID = async (planName, id, repoFunction) => {
-//   try {
-//     logger.info(`src > Service > getAppPlaneprocessService > ${planName}Service`);
-//     const data = await repoFunction(id);
-//     return { success: true,  data };
-//   } catch (error) {
-//     logger.error(`Error in ${planName}Service`, error);
-//     throw error;
-//   }
-// };
+const DeletePlaneprocessServiceByID = async (planName, id,cliendId, repoFunction) => {
+  try {
+    logger.info(`src > Service > DeletePlaneprocessServiceByID > ${planName}Service`);
+    const data = await repoFunction(id,cliendId);
+    return data
+  } catch (error) {
+    logger.error(`Error in ${planName}Service`, error);
+    throw error;
+  }
+};
 
-// const deleteBasicAppPlanesDataByID = (id) => DeletePlaneprocessServiceByID('Delete App Basic Plane Data',id, getBasicPlaneDataInRepo);
-// const deleteStandardAppPlanesDataByID = (id) => DeletePlaneprocessServiceByID('Delete App Standard Plane Data',id, getStandardPlaneDataInRepo);
-// const deletepremiumAppPlanesDataByID = (id) => DeletePlaneprocessServiceByID('Delete App Premium Plane Data',id, getPremiumPlaneDataInRepo);
+const deleteBasicAppPlanesDataByID = (id,cliendId) => DeletePlaneprocessServiceByID('Delete App Basic Plane Data',id,cliendId, deleteBasicPlaneDataInRepoByID);
+const deleteStandardAppPlanesDataByID = (id,cliendId) => DeletePlaneprocessServiceByID('Delete App Standard Plane Data',id,cliendId, deleteStandardPlaneDataInRepoByID);
+const deletepremiumAppPlanesDataByID = (id,cliendId) => DeletePlaneprocessServiceByID('Delete App Premium Plane Data',id,cliendId, deletePremiumPlaneDataInRepoById);
 
 
  const getPlaneprocessServiceByID = async (planName, clientId, repoFunction) => {
@@ -137,10 +137,10 @@ module.exports = {
 
   getBasicAppPlanesDataByID,
   getStandardAppPlanesDataByID,
-  getpremiumAppPlanesDataByID
+  getpremiumAppPlanesDataByID,
 
 
-  // deleteBasicAppPlanesDataByID,
-  // deleteStandardAppPlanesDataByID,
-  // deletepremiumAppPlanesDataByID
+  deleteBasicAppPlanesDataByID,
+  deleteStandardAppPlanesDataByID,
+  deletepremiumAppPlanesDataByID
 };

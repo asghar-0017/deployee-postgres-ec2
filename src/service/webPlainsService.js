@@ -1,7 +1,8 @@
 const nodemailer = require('nodemailer');
 const { webBasicPlaneRepo, webStandardPlaneRepo, webPremiumPlaneRepo,
   getBasicWebPlaneDataInRepo,getStandardWebPlaneDataInRepo,getPremiumWebPlaneDataInRepo,
-  getBasicWebPlaneDataByIDInRepo,getStandardWebPlaneDataByIDInRepo,getPremiumWebPlaneDataInByIDRepo
+  getBasicWebPlaneDataByIDInRepo,getStandardWebPlaneDataByIDInRepo,getPremiumWebPlaneDataInByIDRepo,
+  deleteBasicWebPlaneDataInRepoByID,deleteStandardWebPlaneDataInRepoByID,deletePremiumWebPlaneDataInRepoById
 
  } = require('../repository/webPlaneRepository');
 const { logger } = require('../../logger');
@@ -129,11 +130,32 @@ const getWebStandardPlanesDataByID = (clientId) => getWebPlaneprocessServiceByID
 const getWebpremiumPlanesDataByID = (clientId) => getWebPlaneprocessServiceByID('Get Web Premium Plane Data',clientId, getPremiumWebPlaneDataInByIDRepo);
 
 
-module.exports = { webBasicPlaneService, webStandardPlaneService, webPremiumPlaneService,
+const DeletePlaneprocessServiceByID = async (planName, id,cliendId, repoFunction) => {
+  try {
+    logger.info(`src > Service > DeletePlaneprocessServiceByID > ${planName}Service`);
+    const data = await repoFunction(id,cliendId);
+    return data
+  } catch (error) {
+    logger.error(`Error in ${planName}Service`, error);
+    throw error;
+  }
+};
+
+const deleteBasicWebPlanesDataByID = (id,cliendId) => DeletePlaneprocessServiceByID('Delete Web Basic Plane Data',id,cliendId, deleteBasicWebPlaneDataInRepoByID);
+const deleteStandardWebPlanesDataByID = (id,cliendId) => DeletePlaneprocessServiceByID('Delete Web Standard Plane Data',id,cliendId, deleteStandardWebPlaneDataInRepoByID);
+const deletepremiumWebPlanesDataByID = (id,cliendId) => DeletePlaneprocessServiceByID('Delete Web Premium Plane Data',id,cliendId, deletePremiumWebPlaneDataInRepoById);
+
+
+module.exports = {
+  webBasicPlaneService, webStandardPlaneService, webPremiumPlaneService,
   getAllBasicWebPlanesData,getAllStandardWebPlanesData,getAllpremiumWebPlanesData,
-  getWebBasicPlanesDataByID,getWebStandardPlanesDataByID,getWebpremiumPlanesDataByID
+  getWebBasicPlanesDataByID,getWebStandardPlanesDataByID,getWebpremiumPlanesDataByID,
+  deleteBasicWebPlanesDataByID,deleteStandardWebPlanesDataByID,deletepremiumWebPlanesDataByID
 
  };
+
+
+ 
 
 
 

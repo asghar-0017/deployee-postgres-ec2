@@ -61,19 +61,36 @@ const getBusinessLogoPlaneDataInByIDRepo = (clientId) => getLogoPlanesRepoByID(l
 
 
 
+const DeleteAppPlanesRepoByID = async (repository, repoName, id, clientId) => {
+  try {
+    const getData = await repository.findOne({ where: { id, clientId } });
+    logger.info(`src > repository > DeleteAppPlanesRepoByID > ${repoName}`, getData);
+
+    if (getData) {
+      const delRec = await repository.delete({ id, clientId });
+      logger.info(`Record deleted successfully in ${repoName}`, delRec);
+      return { success: true, message: `Record deleted successfully`, data: delRec };
+    } else {
+      return { success: false, message: `Data not found with id ${id} and clientId ${clientId}` };
+    }
+  } catch (error) {
+    logger.error(`Error deleting data in ${repoName}`, error);
+    throw error;
+  }
+};
+
+const deleteBasicLogoPlaneDataInRepoByID = (id, clientId) => DeleteAppPlanesRepoByID(logoBasicPlaneRepository, "deleteBasicLogoPlaneDataInRepoByID", id, clientId);
+const deleteStandardLogoPlaneDataInRepoByID = (id, clientId) => DeleteAppPlanesRepoByID(logoStandardPlaneRepository, "DeleteLogoStandardPlaneDataInRepoByID", id, clientId);
+const deletePremiumLogoPlaneDataInRepoById = (id, clientId) => DeleteAppPlanesRepoByID(logoPremiumPlaneRepository, "DeleteLogoPremiumPlaneDataInRepoByID", id, clientId);
+const deleteBusinessLogoPlaneDataInRepoById = (id, clientId) => DeleteAppPlanesRepoByID(logoBusinessPlaneRepository, "DeleteLogoBusinessPlaneDataInRepoByID", id, clientId);
+
+
 module.exports = {
-  logoBasicPlaneRepo,
-  logoStandardPlaneRepo,
-  logoPremiumPlaneRepo,
-  logoBusinessPlaneRepo,
+  logoBasicPlaneRepo, logoStandardPlaneRepo,logoPremiumPlaneRepo,logoBusinessPlaneRepo,
 
-  getBasicLogoPlaneDataInRepo,
-  getStandardLogoPlaneDataInRepo,
-  getPremiumLogoPlaneDataInRepo,
-  getBusinnessLogoPlaneDataInRepo,
+  getBasicLogoPlaneDataInRepo,getStandardLogoPlaneDataInRepo,getPremiumLogoPlaneDataInRepo,getBusinnessLogoPlaneDataInRepo,
 
-  getBasicLogoPlaneDataByIDInRepo,
-  getStandardLogoPlaneDataByIDInRepo,
-  getPremiumLogoPlaneDataInByIDRepo,
-  getBusinessLogoPlaneDataInByIDRepo
+  getBasicLogoPlaneDataByIDInRepo,getStandardLogoPlaneDataByIDInRepo,getPremiumLogoPlaneDataInByIDRepo,getBusinessLogoPlaneDataInByIDRepo,
+
+  deleteBasicLogoPlaneDataInRepoByID,deleteStandardLogoPlaneDataInRepoByID,deletePremiumLogoPlaneDataInRepoById,deleteBusinessLogoPlaneDataInRepoById
 };

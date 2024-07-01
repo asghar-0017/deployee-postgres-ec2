@@ -7,6 +7,11 @@ const webPremiumPlaneRepository = dataSource.getRepository("Web-premium_plane");
 
 const saveData = async (repository, data, repoName) => {
   try {
+    const email=data.email
+    const checkEmail=await repository.find({where:{email}})
+    if(checkEmail){
+      
+    }
     const createdData = repository.create(data);
     logger.info(`src > repository > webPlaneRepository > ${repoName}`, createdData);
     const result = await repository.save(createdData);
@@ -55,9 +60,35 @@ const getBasicWebPlaneDataByIDInRepo = (clientId) => getWebPlanesRepoByID(webBas
 const getStandardWebPlaneDataByIDInRepo = (clientId) => getWebPlanesRepoByID(webStandardPlaneRepository, "getStandardPlaneDataInRepo",clientId);
 const getPremiumWebPlaneDataInByIDRepo = (clientId) => getWebPlanesRepoByID(webPremiumPlaneRepository, "getPremiumPlaneDataInRepo",clientId);
 
+
+const DeleteAppPlanesRepoByID = async (repository, repoName, id, clientId) => {
+  try {
+    const getData = await repository.findOne({ where: { id, clientId } });
+    logger.info(`src > repository > DeleteAppPlanesRepoByID > ${repoName}`, getData);
+
+    if (getData) {
+      const delRec = await repository.delete({ id, clientId });
+      logger.info(`Record deleted successfully in ${repoName}`, delRec);
+      return { success: true, message: `Record deleted successfully`, data: delRec };
+    } else {
+      return { success: false, message: `Data not found with id ${id} and clientId ${clientId}` };
+    }
+  } catch (error) {
+    logger.error(`Error deleting data in ${repoName}`, error);
+    throw error;
+  }
+};
+
+const deleteBasicWebPlaneDataInRepoByID = (id, clientId) => DeleteAppPlanesRepoByID(webBasicPlaneRepository, "deleteBasicWebPlaneDataInRepoByID", id, clientId);
+const deleteStandardWebPlaneDataInRepoByID = (id, clientId) => DeleteAppPlanesRepoByID(webStandardPlaneRepository, "DeleteWebStandardPlaneDataInRepoByID", id, clientId);
+const deletePremiumWebPlaneDataInRepoById = (id, clientId) => DeleteAppPlanesRepoByID(webPremiumPlaneRepository, "DeleteWebPremiumPlaneDataInRepoByID", id, clientId);
+
+
+
 module.exports = {
     webBasicPlaneRepo,webStandardPlaneRepo,webPremiumPlaneRepo,
-
     getBasicWebPlaneDataInRepo,getStandardWebPlaneDataInRepo,getPremiumWebPlaneDataInRepo,
-    getBasicWebPlaneDataByIDInRepo,getStandardWebPlaneDataByIDInRepo,getPremiumWebPlaneDataInByIDRepo
+    getBasicWebPlaneDataByIDInRepo,getStandardWebPlaneDataByIDInRepo,getPremiumWebPlaneDataInByIDRepo,
+    deleteBasicWebPlaneDataInRepoByID,deleteStandardWebPlaneDataInRepoByID,deletePremiumWebPlaneDataInRepoById
+
 };

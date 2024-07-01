@@ -1,6 +1,6 @@
 const { appBasicPlaneService, appStandardPlaneService, appPremiumPlaneService,
   getAllBasicAppPlanesData,getAllStandardAppPlanesData ,getAllpremiumAppPlanesData,
-  // deleteBasicAppPlanesDataByID,deleteStandardAppPlanesDataByID,deletepremiumAppPlanesDataByID,
+  deleteBasicAppPlanesDataByID,deleteStandardAppPlanesDataByID,deletepremiumAppPlanesDataByID,
   getBasicAppPlanesDataByID,getStandardAppPlanesDataByID,getpremiumAppPlanesDataByID
 } = require('../service/appPlaneService');
 const { logger } = require('../../logger');
@@ -87,36 +87,38 @@ const allAppPremiumPlaneData = async (request, reply) => {
 
 
 
-// const deletePlanesDataById = async (request, reply, serviceFunction) => {
-//   try {
-//     const id=request.params.id
-//     const result = await serviceFunction(id);
-//     console.log("Result",result)
-//     if(result){
-//     reply.code(201).send({
-//        success: 'success', data: result });
-//     }else{
-//       reply.send({
-//         message:`${serviceFunction} Data Not Found`
-//       })
-//     }
-//   } catch (error) {
-//     console.error('Error occurred in getDataPlanes Function', error);
-//     throw error
-//   }
-// };
+const deletePlanesDataById = async (request, reply, serviceFunction) => {
+  try {
+    const id=request.params.id
+    const cliendId=request.params.cliendId
+    const result = await serviceFunction(id,cliendId);
+    console.log("Result",result)
+    if(result){
+    reply.code(201).send({
+      data: result
+     });
+    }else{
+      reply.send({
+        message:`${serviceFunction} Data Not Found`
+      })
+    }
+  } catch (error) {
+    console.error('Error occurred in getDataPlanes Function', error);
+    throw error
+  }
+};
 
-// const deleteAppBasicPlanesData = async (request, reply) => {
-//   await deletePlanesDataById(request, reply, deleteBasicAppPlanesDataByID);
-// };
+const deleteAppBasicPlanesData = async (request, reply) => {
+  await deletePlanesDataById(request, reply, deleteBasicAppPlanesDataByID);
+};
 
-// const deleteAppStandardPlaneData = async (request, reply) => {
-//   await deletePlanesDataById(request, reply, deleteStandardAppPlanesDataByID);
-// };
+const deleteAppStandardPlaneData = async (request, reply) => {
+  await deletePlanesDataById(request, reply, deleteStandardAppPlanesDataByID);
+};
 
-// const deleteAppPremiumPlaneData = async (request, reply) => {
-//   await deletePlanesDataById(request, reply, deletepremiumAppPlanesDataByID);
-// };
+const deleteAppPremiumPlaneData = async (request, reply) => {
+  await deletePlanesDataById(request, reply, deletepremiumAppPlanesDataByID);
+};
 
 
 
@@ -167,11 +169,11 @@ appBasicPlane,
 
   getAppBasicPlanesDataById,
   getAppStandardPlaneDataById,
-  getAppPremiumPlaneDataById
+  getAppPremiumPlaneDataById,
 
-  // deleteAppBasicPlanesData,
-  // deleteAppStandardPlaneData,
-  // deleteAppPremiumPlaneData
+  deleteAppBasicPlanesData,
+  deleteAppStandardPlaneData,
+  deleteAppPremiumPlaneData
 
 
 };

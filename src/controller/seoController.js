@@ -1,6 +1,7 @@
 const { seoBasicPlaneService, seoStandardPlaneService, seoPremiumPlaneService,
     getAllBasicSeoPlanesData,getAllStandardSeoPlanesData,getAllpremiumSeoPlanesData,
-    getSeoBasicPlanesDataByID,getSeoStandardPlanesDataByID,getSeopremiumPlanesDataByID
+    getSeoBasicPlanesDataByID,getSeoStandardPlanesDataByID,getSeopremiumPlanesDataByID,
+    deleteBasicSeoPlanesDataByID,deleteStandardSeoPlanesDataByID,deletepremiumSeoPlanesDataByID
 
  } = require('../service/seoService');
 const { logger } = require('../../logger');
@@ -116,10 +117,44 @@ const SeoPremiumPlaneDataById = async (request, reply) => {
   
 
 
+const deletePlanesDataById = async (request, reply, serviceFunction) => {
+  try {
+    const id=request.params.id
+    const cliendId=request.params.clientId
+    const result = await serviceFunction(id,cliendId);
+    console.log("Result",result)
+    if(result){
+    reply.code(201).send({
+      data: result
+     });
+    }else{
+      reply.send({
+        message:`${serviceFunction} Data Not Found`
+      })
+    }
+  } catch (error) {
+    console.error('Error occurred in getDataPlanes Function', error);
+    throw error
+  }
+};
+
+const deleteSeoBasicPlanesData = async (request, reply) => {
+  await deletePlanesDataById(request, reply, deleteBasicSeoPlanesDataByID);
+};
+
+const deleteSeoStandardPlaneData = async (request, reply) => {
+  await deletePlanesDataById(request, reply, deleteStandardSeoPlanesDataByID);
+};
+
+const deleteSeoPremiumPlaneData = async (request, reply) => {
+  await deletePlanesDataById(request, reply, deletepremiumSeoPlanesDataByID);
+};
+
 
 module.exports = {
    seoBasicPlaneController, seoStandardPlaneController, seoPremiumPlaneController,
     allSeoBasicPlanesData,allSeoStandardPlaneData,allSeoPremiumPlaneData,
-    SeoBasicPlanesDataById,SeoStandardPlaneDataById,SeoPremiumPlaneDataById
+    SeoBasicPlanesDataById,SeoStandardPlaneDataById,SeoPremiumPlaneDataById,
+    deleteSeoBasicPlanesData,deleteSeoStandardPlaneData,deleteSeoPremiumPlaneData
 
  };
