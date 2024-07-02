@@ -8,32 +8,31 @@ const { webBasicPlaneService, webStandardPlaneService, webPremiumPlaneService,
 const { logger } = require('../../logger');
 
 const { getClientId,RandomId } = require("../service/clientService");
-const { req } = require('pino-std-serializers');
+const cloudinary = require('cloudinary').v2;
+
 
 
 const handlePlain = async (request, reply, serviceFunction) => {
   try {
     const data = request.body;
 
-    const baseUrl = `${request.protocol}://${request.hostname}${process.env.PORT ? `:${process.env.PORT}` : ''}`;
-    console.log('Base URL:', baseUrl); // Log the base URL
-
-    if (request.files && Array.isArray(request.files)) {
-      data.Link_to_Graphics = request.files.map(file => `${baseUrl}/uploads/${file.filename}`);
-    } else {
-      data.Link_to_Graphics = [];
+    
+    if (request.file) {
+      const result = await cloudinary.uploader.upload(request.file.path);
+      data.Link_to_Graphics = result.secure_url;
+    } else if (request.files) {
+      const uploadPromises = request.files.map(file =>
+        cloudinary.uploader.upload(file.path)
+      );
+      const results = await Promise.all(uploadPromises);
+      data.Link_to_Graphics = results.map(result => result.secure_url);
     }
 
-    console.log('Received Data:', data);
-
-    if (typeof data.functionalities === 'string') {
-      data.functionalities = JSON.parse(data.functionalities);
-    }
 
     if (!data) {
-      console.error('Data is undefined');
       return reply.code(400).send({ error: 'Invalid input' });
     }
+
     data.clientId = await getClientId(data.email, data.name);
     data.id = RandomId();
 

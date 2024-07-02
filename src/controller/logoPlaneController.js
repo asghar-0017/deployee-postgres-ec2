@@ -7,15 +7,22 @@ const { logoBasicPlaneService, logoStandardPlaneService, logoPremiumPlaneService
  } = require('../service/logoPlaneService');
 const { logger } = require('../../logger');
 const { getClientId,RandomId } = require("../service/clientService");
+const cloudinary = require('cloudinary').v2;
 
 
 const handlePlain = async (request, reply, serviceFunction) => {
   try {
     const data = request.body;
-    if (request.files && Array.isArray(request.files)) {
-      data.Link_to_Graphics = request.files.map(file => file.path);
-    } else {
-      data.Link_to_Graphics = [];
+   
+    if (request.file) {
+      const result = await cloudinary.uploader.upload(request.file.path);
+      data.Link_to_Graphics = result.secure_url;
+    } else if (request.files) {
+      const uploadPromises = request.files.map(file =>
+        cloudinary.uploader.upload(file.path)
+      );
+      const results = await Promise.all(uploadPromises);
+      data.Link_to_Graphics = results.map(result => result.secure_url);
     }
 
     console.log('Received Data:', data);

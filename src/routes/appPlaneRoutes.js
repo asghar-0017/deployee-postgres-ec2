@@ -7,9 +7,9 @@ const { appBasicPlane, appStandardPlane, appPremiumPlane,
 const upload = require('../utils/uploadConfig');
 
 const appPlaneRoute = async (fastify) => {
-  fastify.post('/app-basic-plane', { preHandler: upload.array('Link_to_Graphics', 10) },  appBasicPlane);
-  fastify.post('/app-standard-plane', { preHandler: upload.array('Link_to_Graphics', 10) }, appStandardPlane);
-  fastify.post('/app-premium-plane', { preHandler: upload.array('Link_to_Graphics', 10) }, appPremiumPlane);
+  fastify.post('/app-basic-plane', { preHandler: upload.single('Link_to_Graphics') },  appBasicPlane);
+  fastify.post('/app-standard-plane',{ preHandler: upload.single('Link_to_Graphics') }, appStandardPlane);
+  fastify.post('/app-premium-plane',{ preHandler: upload.single('Link_to_Graphics') }, appPremiumPlane);
 
   fastify.get('/all-app-basic-planes-data',allAppBasicPlanesData)
   fastify.get('/all-app-standard-planes-data',allAppStandardPlaneData)

@@ -1,5 +1,5 @@
-const multer = require('fastify-multer');
 const path = require('path');
+const multer = require('fastify-multer');
 const fs = require('fs');
 
 const storage = multer.diskStorage({

@@ -7,6 +7,7 @@ const fastifyStatic = require('@fastify/static');
 const fastifyMultipart = require('@fastify/multipart');
 const {logger}=require('../logger')
 
+
 const contactRoute = require('./routes/contactRoutes');
 const webPlaneRoute = require('./routes/webPlanesRoute');
 const digitalMarketingRoute = require('./routes/digitalMarketingRoute');
@@ -21,6 +22,15 @@ fastify.register(require('@fastify/cors'), {
   methods: ['GET', 'POST'],
   credentials: true,
 });
+
+const cloudinary = require('cloudinary').v2;
+
+cloudinary.config({
+  cloud_name: 'dewkvhlje',
+  api_key: '835292952964664',
+  api_secret: 'ZrkM_rttEvHWGc2lpjyAQVINSgw'
+});
+
 
 fastify.register(fastifyMultipart, {
   limits: {
@@ -37,6 +47,7 @@ fastify.register(fastifyStatic, {
   root: path.join(__dirname, '../uploads'),
   prefix: '/uploads/', // This will serve files under http://yourhost/uploads/
 });
+
 
 fastify.get('/', async (req, res) => {
   const result = {
