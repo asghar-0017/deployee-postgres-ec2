@@ -21,10 +21,10 @@ const logoPlaneRoute = async (fastify) => {
   fastify.get('/all-logo-business-planes-data',allLogoBusinessPlaneData)
 
     
-  fastify.get('/all-logo-basic-planes-data/:id',allLogoBasicPlanesDataByID)
-  fastify.get('/all-logo-standard-planes-data/:id',allLogoStandardPlaneDataByID)
-  fastify.get('/all-logo-premium-planes-data/:id',allLogoPremiumPlaneDataById)
-  fastify.get('/all-logo-business-planes-data/:id',allLogoBusinessPlaneDataById)
+  fastify.get('/all-logo-basic-planes-data/:clientId',allLogoBasicPlanesDataByID)
+  fastify.get('/all-logo-standard-planes-data/:clientId',allLogoStandardPlaneDataByID)
+  fastify.get('/all-logo-premium-planes-data/:clientId',allLogoPremiumPlaneDataById)
+  fastify.get('/all-logo-business-planes-data/:clientId',allLogoBusinessPlaneDataById)
 
   fastify.delete('/all-logo-basic-planes-data/:id/:clientId',deleteLogoBasicPlanesData)
   fastify.delete('/all-logo-standard-planes-data/:id/:clientId',deleteLogoStandardPlaneData)

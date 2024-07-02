@@ -99,21 +99,16 @@ const allWebPremiumPlaneData = async (request, reply) => {
 
 const getWebPlanesDataById = async (request, reply, serviceFunction) => {
   try {
-    const clientId=request.params.cliendId
-    console.log("Client Id",clientId)
+    const clientId = request.params.clientId;
     const result = await serviceFunction(clientId);
-    console.log("Result",result)
-    if(result){
-    reply.code(201).send({
-       success: 'success', data: result });
-    }else{
-      reply.send({
-        message:`${serviceFunction} Data Not Found`
-      })
+    if (result) {
+      reply.code(201).send({ success: 'success', data: result });
+    } else {
+      reply.send({ message: `${serviceFunction} Data Not Found` });
     }
   } catch (error) {
-    console.error('Error occurred in getDataPlanes Function', error);
-    throw error
+    console.error('Error occurred in getWebPlanesDataById Function', error);
+    throw error;
   }
 };
 

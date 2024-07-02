@@ -106,15 +106,17 @@ const {
     getLogopremiumPlanesDataByID,
     getLogoBusinessPlanesDataByID,
   } = require('../service/logoPlaneService');
-  
+
+
   const getAllPlanesDataByID = async (req, reply) => {
     const clientId = req.params.clientId;
     try {
+      console.log(`Fetching data for client ID: ${clientId}`);
+  
       const [
         webBasicData,
         webStandardData,
         webPremiumData,
-
         appBasicData,
         appStandardData,
         appPremiumData,
@@ -130,7 +132,6 @@ const {
         getWebBasicPlanesDataByID(clientId),
         getWebStandardPlanesDataByID(clientId),
         getWebpremiumPlanesDataByID(clientId),
-
         getBasicAppPlanesDataByID(clientId),
         getStandardAppPlanesDataByID(clientId),
         getpremiumAppPlanesDataByID(clientId),
@@ -144,46 +145,82 @@ const {
         getLogoBusinessPlanesDataByID(clientId),
       ]);
   
+      console.log('Fetched data:', {
+        webBasicData,
+        webStandardData,
+        webPremiumData,
+        appBasicData,
+        appStandardData,
+        appPremiumData,
+        seoBasicData,
+        seoStandardData,
+        seoPremiumData,
+        digitalMarketingData,
+        logoBasicData,
+        logoStandardData,
+        logoPremiumData,
+        logoBusinessData,
+      });
+  
       const allData = {
         Web_Basic: webBasicData,
         Web_Standard: webStandardData,
         Web_Premium: webPremiumData,
-        App_Basic: appBasicData?.data,
-        App_Standard: appStandardData?.data,
-        App_Premium: appPremiumData?.data,
-        Seo_Basic: seoBasicData?.data,
-        Seo_Standard: seoStandardData?.data,
-        Seo_Premium: seoPremiumData?.data,
+        App_Basic: appBasicData,
+        App_Standard: appStandardData,
+        App_Premium: appPremiumData,
+        Seo_Basic: seoBasicData,
+        Seo_Standard: seoStandardData,
+        Seo_Premium: seoPremiumData,
         Digital_Marketing: digitalMarketingData,
-        Logo_Basic: logoBasicData?.data,
-        Logo_Standard: logoStandardData?.data,
-        Logo_Premium: logoPremiumData?.data,
-        Logo_Business: logoBusinessData?.data,
+        Logo_Basic: logoBasicData,
+        Logo_Standard: logoStandardData,
+        Logo_Premium: logoPremiumData,
+        Logo_Business: logoBusinessData,
       };
-
-      console.log("Web Basic data",webBasicData);
-      console.log("Web Standard data",webStandardData);
-      console.log("Web Premium data",webPremiumData);
-      console.log("Digital Data",digitalMarketingData);
-
-      console.log("Web Basic data",allData.Web_Basic);
-      console.log("Web Standard data",allData.Web_Standard);
-      console.log("Web Premium data",allData.Web_Premium);
-      console.log("Digital Data",allData.Digital_Marketing);
   
+      console.log('All data before filtering:', allData);
   
-      // Filter out empty arrays, null, or undefined values
+    
       const filteredData = Object.fromEntries(
-        Object.entries(allData).filter(([key, value]) => Array.isArray(value) ? value.length > 0 : value !== null && value !== undefined)
+        Object.entries(allData)
+          .map(([key, value]) => {
+            if (value && value.data) {
+              // If it's an object with 'data' property (like SEO, Logo services)
+              return [
+                key,
+                value.data.filter(item => item.clientId === clientId)
+              ];
+            } else if (Array.isArray(value)) {
+              // If it's an array (like Digital Marketing)
+              return [
+                key,
+                value.filter(item => item.clientId === clientId)
+              ];
+            } else {
+              // If it's a single object (like Web and App services)
+              return [
+                key,
+                value && value.clientId === clientId ? [value] : []
+              ];
+            }
+          })
+          .filter(([key, value]) => value.length > 0)
       );
   
   
-      reply.code(200).send({ success: true, data: filteredData });
+    console.log('Filtered data:', filteredData);
+
+    reply.code(200).send({ success: true, data: filteredData });
     } catch (error) {
       console.error('Error fetching all planes data by client ID:', error);
       reply.code(500).send({ success: false, message: 'Failed to fetch all planes data by client ID' });
     }
   };
+  
+
+
+
   
     const {
       deleteBasicWebPlanesDataByID,

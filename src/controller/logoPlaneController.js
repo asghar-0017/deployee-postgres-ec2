@@ -103,7 +103,8 @@ const allLogoBusinessPlaneData = async (request, reply) => {
 
 const getPlanesDataById = async (request, reply, serviceFunction) => {
   try {
-    const clientId=request.params.id
+    const clientId=request.params.clientId
+    console.log("Client Id",clientId)
     const result = await serviceFunction(clientId);
     console.log("Result",result)
     if(result){

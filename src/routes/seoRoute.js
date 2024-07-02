@@ -20,9 +20,9 @@ const seoRoute = async(fastify) => {
     fastify.get('/all-seo-standard-planes-data',allSeoStandardPlaneData)
     fastify.get('/all-seo-premium-planes-data',allSeoPremiumPlaneData)
 
-    fastify.get('/all-seo-basic-planes-data/:id',SeoBasicPlanesDataById)
-    fastify.get('/all-seo-standard-planes-data/:id',SeoStandardPlaneDataById)
-    fastify.get('/all-seo-premium-planes-data/:id',SeoPremiumPlaneDataById)
+    fastify.get('/all-seo-basic-planes-data/:clientId',SeoBasicPlanesDataById)
+    fastify.get('/all-seo-standard-planes-data/:clientId',SeoStandardPlaneDataById)
+    fastify.get('/all-seo-premium-planes-data/:clientId',SeoPremiumPlaneDataById)
 
     fastify.delete('/all-seo-basic-planes-data/:id/:clientId',deleteSeoBasicPlanesData)
     fastify.delete('/all-seo-standard-planes-data/:id/:clientId',deleteSeoStandardPlaneData)

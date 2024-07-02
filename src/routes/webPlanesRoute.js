@@ -16,9 +16,9 @@ const webPlaneRoute = async (fastify) => {
   fastify.get('/all-web-standard-planes-data',allWebStandardPlaneData)
   fastify.get('/all-web-premium-planes-data',allWebPremiumPlaneData)
 
-  fastify.get('/all-web-basic-planes-data/:id',WebBasicPlanesDataById)
-  fastify.get('/all-web-standard-planes-data/:id',WebStandardPlaneDataById)
-  fastify.get('/all-web-premium-planes-data/:id',WebPremiumPlaneDataById)
+  fastify.get('/all-web-basic-planes-data/:clientId',WebBasicPlanesDataById)
+  fastify.get('/all-web-standard-planes-data/:clientId',WebStandardPlaneDataById)
+  fastify.get('/all-web-premium-planes-data/:clientId',WebPremiumPlaneDataById)
 
   fastify.delete('/all-web-basic-planes-data/:id/:clientId',deleteWebBasicPlanesData)
   fastify.delete('/all-web-standard-planes-data/:id/:clientId',deleteWebStandardPlaneData)
