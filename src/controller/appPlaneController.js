@@ -1,18 +1,21 @@
 const { appBasicPlaneService, appStandardPlaneService, appPremiumPlaneService,
   getAllBasicAppPlanesData,getAllStandardAppPlanesData ,getAllpremiumAppPlanesData,
   deleteBasicAppPlanesDataByID,deleteStandardAppPlanesDataByID,deletepremiumAppPlanesDataByID,
-  getBasicAppPlanesDataByID,getStandardAppPlanesDataByID,getpremiumAppPlanesDataByID
+  getBasicAppPlanesDataByID,getStandardAppPlanesDataByID,getpremiumAppPlanesDataByID,
+  updateBasicAppPlanesDataByID,updateStandardAppPlanesDataByID,updatepremiumAppPlanesDataByID
 } = require('../service/appPlaneService');
 const { logger } = require('../../logger');
-const { getClientId } = require("../service/clientService");
+const { getClientId,RandomId } = require("../service/clientService");
 
 
 const handlePlain = async (request, reply, serviceFunction) => {
   try {
     const data = request.body;
+    const baseUrl = `${request.protocol}://${request.hostname}`;
+
   
     if (request.files && Array.isArray(request.files)) {
-      data.Link_to_Graphics = request.files.map(file => file.path);
+      data.Link_to_Graphics = request.files.map(file => `${baseUrl}/uploads/${file.filename}`);
     } else {
       data.Link_to_Graphics = [];
     }
@@ -26,7 +29,9 @@ const handlePlain = async (request, reply, serviceFunction) => {
     if (!data) {
       console.error('Data is undefined');
       return reply.code(400).send({ error: 'Invalid input' });
+
     }
+    data.id=RandomId()
     data.clientId = await getClientId(data.email, data.name);
     const result = await serviceFunction(data);
     reply.code(201).send({ success: 'success', data: result });
@@ -90,7 +95,7 @@ const allAppPremiumPlaneData = async (request, reply) => {
 const deletePlanesDataById = async (request, reply, serviceFunction) => {
   try {
     const id=request.params.id
-    const cliendId=request.params.cliendId
+    const cliendId=request.params.clientId
     const result = await serviceFunction(id,cliendId);
     console.log("Result",result)
     if(result){
@@ -125,7 +130,7 @@ const deleteAppPremiumPlaneData = async (request, reply) => {
 
 const getPlanesDataById = async (request, reply, serviceFunction) => {
   try {
-    const clientId=request.params.id
+    const clientId=request.params.clientId
     const result = await serviceFunction(clientId);
     console.log("Result",result)
     if(result){
@@ -133,7 +138,7 @@ const getPlanesDataById = async (request, reply, serviceFunction) => {
        success: 'success', data: result });
     }else{
       reply.send({
-        message:`${serviceFunction} Data Not Found`
+        message:`client data Not Found With Id ${clientId}`
       })
     }
   } catch (error) {
@@ -142,7 +147,7 @@ const getPlanesDataById = async (request, reply, serviceFunction) => {
   }
 };
 
-const getAppBasicPlanesDataById = async (request, reply) => {
+const   getAppBasicPlanesDataById = async (request, reply) => {
   await getPlanesDataById(request, reply, getBasicAppPlanesDataByID);
 };
 
@@ -155,6 +160,40 @@ const getAppPremiumPlaneDataById = async (request, reply) => {
 };
 
 
+
+const updatePlanesDataById = async (request, reply, serviceFunction) => {
+  try {
+    const id=request.params.id
+    const cliendId=request.params.clientId
+    const data=request.body
+    const result = await serviceFunction(id,cliendId,data);
+    console.log("Result",result)
+    if(result){
+    reply.code(201).send({
+      data: result
+     });
+    }else{
+      reply.send({
+        message:`${serviceFunction} Data Not Found`
+      })
+    }
+  } catch (error) {
+    console.error('Error occurred in getDataPlanes Function', error);
+    throw error
+  }
+};
+
+const updateAppBasicPlanesData = async (request, reply) => {
+  await updatePlanesDataById(request, reply, updateBasicAppPlanesDataByID);
+};
+
+const updateAppStandardPlaneData = async (request, reply) => {
+  await updatePlanesDataById(request, reply, updateStandardAppPlanesDataByID);
+};
+
+const updateAppPremiumPlaneData = async (request, reply) => {
+  await updatePlanesDataById(request, reply, updatepremiumAppPlanesDataByID);
+};
 
 
 
@@ -173,7 +212,11 @@ appBasicPlane,
 
   deleteAppBasicPlanesData,
   deleteAppStandardPlaneData,
-  deleteAppPremiumPlaneData
+  deleteAppPremiumPlaneData,
+
+  updateAppBasicPlanesData,
+  updateAppStandardPlaneData,
+  updateAppPremiumPlaneData
 
 
 };

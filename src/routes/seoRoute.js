@@ -2,7 +2,9 @@ const {seoBasicPlaneController,seoStandardPlaneController,seoPremiumPlaneControl
     allSeoBasicPlanesData,allSeoStandardPlaneData,allSeoPremiumPlaneData,
 
     SeoBasicPlanesDataById,SeoStandardPlaneDataById,SeoPremiumPlaneDataById,
-    deleteSeoBasicPlanesData,deleteSeoStandardPlaneData,deleteSeoPremiumPlaneData
+    deleteSeoBasicPlanesData,deleteSeoStandardPlaneData,deleteSeoPremiumPlaneData,
+
+    updateSeoBasicPlanesData,updateSeoStandardPlaneData,updateeoPremiumPlaneData
 
 
 } = require('../controller/seoController');
@@ -23,8 +25,12 @@ const seoRoute = async(fastify) => {
     fastify.get('/all-seo-premium-planes-data/:id',SeoPremiumPlaneDataById)
 
     fastify.delete('/all-seo-basic-planes-data/:id/:clientId',deleteSeoBasicPlanesData)
-    fastify.delete('/all-seo-standard-planes-data/:id/:cliendId',deleteSeoStandardPlaneData)
-    fastify.delete('/all-seo-premium-planes-data/:id/:cliendId',deleteSeoPremiumPlaneData)
+    fastify.delete('/all-seo-standard-planes-data/:id/:clientId',deleteSeoStandardPlaneData)
+    fastify.delete('/all-seo-premium-planes-data/:id/:clientId',deleteSeoPremiumPlaneData)
+
+    fastify.put('/all-seo-basic-planes-data/:id/:clientId',updateSeoBasicPlanesData)
+    fastify.put('/all-seo-standard-planes-data/:id/:clientId',updateSeoStandardPlaneData)
+    fastify.put('/all-seo-premium-planes-data/:id/:clientId',updateeoPremiumPlaneData)
 
 
 };

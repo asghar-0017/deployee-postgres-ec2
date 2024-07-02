@@ -2,7 +2,8 @@ const nodemailer = require('nodemailer');
 const { webBasicPlaneRepo, webStandardPlaneRepo, webPremiumPlaneRepo,
   getBasicWebPlaneDataInRepo,getStandardWebPlaneDataInRepo,getPremiumWebPlaneDataInRepo,
   getBasicWebPlaneDataByIDInRepo,getStandardWebPlaneDataByIDInRepo,getPremiumWebPlaneDataInByIDRepo,
-  deleteBasicWebPlaneDataInRepoByID,deleteStandardWebPlaneDataInRepoByID,deletePremiumWebPlaneDataInRepoById
+  deleteBasicWebPlaneDataInRepoByID,deleteStandardWebPlaneDataInRepoByID,deletePremiumWebPlaneDataInRepoById,
+  updateBasicWebPlaneDataInRepoByID,updateStandardWebPlaneDataInRepoByID,updatePremiumWebPlaneDataInRepoById
 
  } = require('../repository/webPlaneRepository');
 const { logger } = require('../../logger');
@@ -118,7 +119,7 @@ const getWebPlaneprocessServiceByID = async (planName, clientId, repoFunction) =
   try {
     logger.info(`src > Service > getWebPlaneprocessServiceByID > ${planName}Service`);
     const data = await repoFunction(clientId);
-    return { success: true,  data };
+    return data
   } catch (error) {
     logger.error(`Error in ${planName}Service`, error);
     throw error;
@@ -146,11 +147,28 @@ const deleteStandardWebPlanesDataByID = (id,cliendId) => DeletePlaneprocessServi
 const deletepremiumWebPlanesDataByID = (id,cliendId) => DeletePlaneprocessServiceByID('Delete Web Premium Plane Data',id,cliendId, deletePremiumWebPlaneDataInRepoById);
 
 
+const updatePlaneprocessServiceByID = async (planName, id,cliendId,data, repoFunction) => {
+  try {
+    logger.info(`src > Service > updatePlaneprocessServiceByID > ${planName}Service`);
+    const dataInService = await repoFunction(id,cliendId,data);
+    return dataInService
+  } catch (error) {
+    logger.error(`Error in ${planName}Service`, error);
+    throw error;
+  }
+};
+
+const updateBasicWebPlanesDataByID = (id,cliendId,data) => updatePlaneprocessServiceByID('Update Web Basic Plane Data',id,cliendId,data, updateBasicWebPlaneDataInRepoByID);
+const updateStandardWebPlanesDataByID = (id,cliendId,data) => updatePlaneprocessServiceByID('Update Web Standard Plane Data',id,cliendId,data, updateStandardWebPlaneDataInRepoByID);
+const updatepremiumWebPlanesDataByID = (id,cliendId,data) => updatePlaneprocessServiceByID('Update Web Premium Plane Data',id,cliendId, data,updatePremiumWebPlaneDataInRepoById);
+
+
 module.exports = {
   webBasicPlaneService, webStandardPlaneService, webPremiumPlaneService,
   getAllBasicWebPlanesData,getAllStandardWebPlanesData,getAllpremiumWebPlanesData,
   getWebBasicPlanesDataByID,getWebStandardPlanesDataByID,getWebpremiumPlanesDataByID,
-  deleteBasicWebPlanesDataByID,deleteStandardWebPlanesDataByID,deletepremiumWebPlanesDataByID
+  deleteBasicWebPlanesDataByID,deleteStandardWebPlanesDataByID,deletepremiumWebPlanesDataByID,
+  updateBasicWebPlanesDataByID,updateStandardWebPlanesDataByID,updatepremiumWebPlanesDataByID
 
  };
 

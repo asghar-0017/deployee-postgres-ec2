@@ -1,11 +1,12 @@
 const { seoBasicPlaneService, seoStandardPlaneService, seoPremiumPlaneService,
     getAllBasicSeoPlanesData,getAllStandardSeoPlanesData,getAllpremiumSeoPlanesData,
     getSeoBasicPlanesDataByID,getSeoStandardPlanesDataByID,getSeopremiumPlanesDataByID,
-    deleteBasicSeoPlanesDataByID,deleteStandardSeoPlanesDataByID,deletepremiumSeoPlanesDataByID
+    deleteBasicSeoPlanesDataByID,deleteStandardSeoPlanesDataByID,deletepremiumSeoPlanesDataByID,
+    updateBasicSeoPlanesDataByID,updateStandardSeoPlanesDataByID,updatepremiumSeoPlanesDataByID
 
  } = require('../service/seoService');
 const { logger } = require('../../logger');
-const { getClientId } = require("../service/clientService");
+const { getClientId,RandomId } = require("../service/clientService");
 
 
 const handlePlain = async (request, reply, serviceFunction) => {
@@ -19,6 +20,7 @@ const handlePlain = async (request, reply, serviceFunction) => {
         }
 
         clientData.clientId = await getClientId(clientData.email, clientData.name);
+        clientData.id=RandomId()
 
         const result = await serviceFunction(clientData);
         if (result) {
@@ -86,7 +88,7 @@ const getSeoPlanesData = async (request, reply, serviceFunction) => {
   
 const getPlanesDataById = async (request, reply, serviceFunction) => {
   try {
-    const clientId=request.params.id
+    const clientId=request.params.cliendId
     const result = await serviceFunction(clientId);
     console.log("Result",result)
     if(result){
@@ -151,10 +153,51 @@ const deleteSeoPremiumPlaneData = async (request, reply) => {
 };
 
 
+const updatePlanesDataById = async (request, reply, serviceFunction) => {
+  try {
+    const id=request.params.id
+    const cliendId=request.params.clientId
+    const data=request.body
+    console.log("id",id)
+    console.log("cliendId",cliendId)
+    console.log("data",data)
+
+    const result = await serviceFunction(id,cliendId,data);
+    console.log("Result",result)
+    if(result){
+    reply.code(201).send({
+      data: result
+     });
+    }else{
+      reply.send({
+        message:`${serviceFunction} Data Not Found`
+      })
+    }
+  } catch (error) {
+    console.error('Error occurred in getDataPlanes Function', error);
+    throw error
+  }
+};
+
+const updateSeoBasicPlanesData = async (request, reply) => {
+  await updatePlanesDataById(request, reply, updateBasicSeoPlanesDataByID);
+};
+
+const updateSeoStandardPlaneData = async (request, reply) => {
+  await updatePlanesDataById(request, reply, updateStandardSeoPlanesDataByID);
+};
+
+const updateeoPremiumPlaneData = async (request, reply) => {
+  await updatePlanesDataById(request, reply, updatepremiumSeoPlanesDataByID);
+};
+
+
 module.exports = {
    seoBasicPlaneController, seoStandardPlaneController, seoPremiumPlaneController,
     allSeoBasicPlanesData,allSeoStandardPlaneData,allSeoPremiumPlaneData,
     SeoBasicPlanesDataById,SeoStandardPlaneDataById,SeoPremiumPlaneDataById,
-    deleteSeoBasicPlanesData,deleteSeoStandardPlaneData,deleteSeoPremiumPlaneData
+    deleteSeoBasicPlanesData,deleteSeoStandardPlaneData,deleteSeoPremiumPlaneData,
+    updateSeoBasicPlanesData,updateSeoStandardPlaneData,updateeoPremiumPlaneData
+
 
  };

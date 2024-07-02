@@ -1,7 +1,8 @@
 const { webBasicPlane, webStandardPlane, webPremiumPlane,
   allWebBasicPlanesData,allWebStandardPlaneData,allWebPremiumPlaneData,
   WebBasicPlanesDataById,WebStandardPlaneDataById,WebPremiumPlaneDataById,
-  deleteWebBasicPlanesData,deleteWebStandardPlaneData,deleteWebPremiumPlaneData
+  deleteWebBasicPlanesData,deleteWebStandardPlaneData,deleteWebPremiumPlaneData,
+  updateWebBasicPlanesData,updateWebStandardPlaneData,updateWebPremiumPlaneData
  } = require('../controller/webPlanesController');
 const upload = require('../utils/uploadConfig');
 
@@ -20,8 +21,12 @@ const webPlaneRoute = async (fastify) => {
   fastify.get('/all-web-premium-planes-data/:id',WebPremiumPlaneDataById)
 
   fastify.delete('/all-web-basic-planes-data/:id/:clientId',deleteWebBasicPlanesData)
-  fastify.delete('/all-web-standard-planes-data/:id/:cliendId',deleteWebStandardPlaneData)
-  fastify.delete('/all-web-premium-planes-data/:id/:cliendId',deleteWebPremiumPlaneData)
+  fastify.delete('/all-web-standard-planes-data/:id/:clientId',deleteWebStandardPlaneData)
+  fastify.delete('/all-web-premium-planes-data/:id/:clientId',deleteWebPremiumPlaneData)
+
+  fastify.put('/all-web-basic-planes-data/:id/:clientId',updateWebBasicPlanesData)
+  fastify.put('/all-web-standard-planes-data/:id/:clientId',updateWebStandardPlaneData)
+  fastify.put('/all-web-premium-planes-data/:id/:clientId',updateWebPremiumPlaneData)
 };
 
 module.exports = webPlaneRoute;

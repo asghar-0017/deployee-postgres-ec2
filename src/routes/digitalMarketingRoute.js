@@ -2,10 +2,14 @@ const { digitalMarketing, allDigitalMarketingData, delDigitalMarketingById, upda
 
 const digitalMarketingRoute = async (fastify) => {
   fastify.post('/digital-marketing', digitalMarketing);
+
   fastify.get('/all-digital-marketing-data', allDigitalMarketingData);
+  
   fastify.get('/all-digital-marketing-data/:clientId', getDigitalMarketingById);
-  fastify.delete('/digital-marketing/:id/:clientId', delDigitalMarketingById);
-  fastify.put('/digital-marketing/:id', updateDigitalMarketingById);
+
+  fastify.delete('/all-digital-marketing-data/:id/:clientId', delDigitalMarketingById);
+
+  fastify.put('/all-digital-marketing-data/:id/:clientId', updateDigitalMarketingById);
 };
 
 module.exports = digitalMarketingRoute;

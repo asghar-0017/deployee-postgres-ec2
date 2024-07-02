@@ -17,34 +17,33 @@ const digitalMarketingRepo = async (ClientData) => {
 const allDigitalMarketingDataInRepo = async () => {
   try {
     const data = await digitalMarketingRepository.find();
-    return data || null;
+    return data
   } catch (error) {
     throw error;
   }
 };
 
-const findDigitalMarketingByIdRepo = async (id, clientId) => {
+const findDigitalMarketingByIdRepo = async (clientId) => {
   try {
-    const data = await digitalMarketingRepository.findOne({ where: { id, clientId } });
+    const data = await digitalMarketingRepository.find({ where: { clientId } });
     if (data) {
-      await digitalMarketingRepository.remove(data);
-      return `Client data deleted successfully with ID ${clientId}`;
+      return data
     } else {
-      return null;
+      return `Data not Found With Client Id ${clientId}`;
     }
   } catch (error) {
     throw error;
   }
 };
 
-const updateDigitalDataInRepo = async (id, clientData) => {
+const updateDigitalDataInRepo = async (id,cliendId, clientData) => {
   try {
-    const data = await digitalMarketingRepository.findOne({ where: { id } });
+    const data = await digitalMarketingRepository.findOne({ where: { id,cliendId } });
     if (!data) {
       return "Data Not Found";
     } else {
-      await digitalMarketingRepository.update({ id }, clientData);
-      const updatedData = await digitalMarketingRepository.findOne({ where: { id } });
+      await digitalMarketingRepository.update({ id,cliendId }, clientData);
+      const updatedData = await digitalMarketingRepository.findOne({ where: { id,cliendId } });
       return updatedData;
     }
   } catch (error) {
@@ -52,10 +51,11 @@ const updateDigitalDataInRepo = async (id, clientData) => {
   }
 };
 
-const getDigitalMarketingByIdRepo = async (clientId) => {
+const getDigitalMarketingByIdRepo = async (id,clientId) => {
   try {
-    const data = await digitalMarketingRepository.find({ where: { clientId } });
+    const data = await digitalMarketingRepository.findOne({ where: { id,clientId } });
     if(data){
+        await digitalMarketingRepository.delete({ id,clientId })
     return data 
     }else{
         return `client not found With Client id ${clientId}`

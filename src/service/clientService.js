@@ -20,4 +20,8 @@ const getClientId = async (email, name) => {
   return client.clientId;
 };
 
-module.exports = { getClientId };
+const RandomId = () => {
+  return Math.floor(1000 + Math.random() * 9000).toString(); // Generate a 4-digit code
+};
+
+module.exports = { getClientId,RandomId };

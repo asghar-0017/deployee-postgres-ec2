@@ -6,7 +6,8 @@ const {
 
     getBasicSeoPlaneDataByIDInRepo,getStandardSeoPlaneDataByIDInRepo,getPremiumSeoPlaneDataInByIDRepo,
 
-    deleteBasicSeoPlaneDataInRepoByID,deleteStandardSeoPlaneDataInRepoByID,deletePremiumSeoPlaneDataInRepoById
+    deleteBasicSeoPlaneDataInRepoByID,deleteStandardSeoPlaneDataInRepoByID,deletePremiumSeoPlaneDataInRepoById,
+    updateBasicSeoPlaneDataInRepoByID,updateStandardSeoPlaneDataInRepoByID,updatePremiumSeoPlaneDataInRepoById
 } = require('../repository/seoRepository');
 const { logger } = require('../../logger');
 const dotenv = require("dotenv");
@@ -112,7 +113,7 @@ const getSeoPlaneprocessService = async (planName, repoFunction) => {
     try {
       logger.info(`src > Service > getSEOPlaneprocessServiceByID > ${planName}Service`);
       const data = await repoFunction(clientId);
-      return { success: true,  data };
+      return data
     } catch (error) {
       logger.error(`Error in ${planName}Service`, error);
       throw error;
@@ -141,8 +142,26 @@ const getSeoPlaneprocessService = async (planName, repoFunction) => {
   const deletepremiumSeoPlanesDataByID = (id,cliendId) => DeletePlaneprocessServiceByID('Delete Seo Premium Plane Data',id,cliendId, deletePremiumSeoPlaneDataInRepoById);
   
 
+  
+  const UpdatePlaneprocessServiceByID = async (planName, id,cliendId,data ,repoFunction) => {
+    try {
+      logger.info(`src > Service > UpdatePlaneprocessServiceByID > ${planName}Service`);
+      const dataInService = await repoFunction(id,cliendId,data);
+      return dataInService
+    } catch (error) {
+      logger.error(`Error in ${planName}Service`, error);
+      throw error;
+    }
+  };
+  
+  const updateBasicSeoPlanesDataByID = (id,cliendId,data) => UpdatePlaneprocessServiceByID('Update Seo Basic Plane Data',id,cliendId,data, updateBasicSeoPlaneDataInRepoByID);
+  const updateStandardSeoPlanesDataByID = (id,cliendId,data) => UpdatePlaneprocessServiceByID('Update Seo Standard Plane Data',id,cliendId,data, updateStandardSeoPlaneDataInRepoByID);
+  const updatepremiumSeoPlanesDataByID = (id,cliendId,data) => UpdatePlaneprocessServiceByID('Update Seo Premium Plane Data',id,cliendId,data, updatePremiumSeoPlaneDataInRepoById);
+  
+
 module.exports = { seoBasicPlaneService, seoStandardPlaneService, seoPremiumPlaneService,
     getAllBasicSeoPlanesData,getAllStandardSeoPlanesData,getAllpremiumSeoPlanesData,
     getSeoBasicPlanesDataByID,getSeoStandardPlanesDataByID,getSeopremiumPlanesDataByID,
-    deleteBasicSeoPlanesDataByID,deleteStandardSeoPlanesDataByID,deletepremiumSeoPlanesDataByID
+    deleteBasicSeoPlanesDataByID,deleteStandardSeoPlanesDataByID,deletepremiumSeoPlanesDataByID,
+    updateBasicSeoPlanesDataByID,updateStandardSeoPlanesDataByID,updatepremiumSeoPlanesDataByID
  };

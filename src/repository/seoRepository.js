@@ -81,12 +81,38 @@ const deletePremiumSeoPlaneDataInRepoById = (id, clientId) => DeleteAppPlanesRep
 
 
 
+const updateAppPlanesRepoByID = async (repository, repoName, id, clientId,data) => {
+  try {
+    const getData = await repository.findOne({ where: { id, clientId } });
+    logger.info(`src > repository > updateAppPlanesRepoByID > ${repoName}`, getData);
+
+    if (getData) {
+      await repository.update({ id, clientId  },data);
+      logger.info(`Record Updated successfully in ${repoName}`);
+      const updatedData=await repository.findOne({where:{id,clientId}})
+      return { success: true, message: `Record Updating successfully`, data: updatedData };
+    } else {
+      return { success: false, message: `Data not found with id ${id} and clientId ${clientId}` };
+    }
+  } catch (error) {
+    logger.error(`Error Updating data in ${repoName}`, error);
+    throw error;
+  }
+};
+
+const updateBasicSeoPlaneDataInRepoByID = (id, clientId,data) => updateAppPlanesRepoByID(seoBasicPlaneRepository, "updateBasicSeoPlaneDataInRepoByID", id, clientId,data);
+const updateStandardSeoPlaneDataInRepoByID = (id, clientId,data) => updateAppPlanesRepoByID(seoStandardPlaneRepository, "updateSeoStandardPlaneDataInRepoByID", id, clientId,data);
+const updatePremiumSeoPlaneDataInRepoById = (id, clientId,data) => updateAppPlanesRepoByID(seoPremiumPlaneRepository, "updateSeoPremiumPlaneDataInRepoByID", id, clientId,data);
+
+
+
 
 module.exports = {
     seoBasicPlaneRepo,seoStandardPlaneRepo,seoPremiumPlaneRepo,
     getBasicSeoPlaneDataInRepo,getStandardSeoPlaneDataInRepo,getPremiumSeoPlaneDataInRepo,
     getBasicSeoPlaneDataByIDInRepo,getStandardSeoPlaneDataByIDInRepo,getPremiumSeoPlaneDataInByIDRepo,
-    deleteBasicSeoPlaneDataInRepoByID,deleteStandardSeoPlaneDataInRepoByID,deletePremiumSeoPlaneDataInRepoById
+    deleteBasicSeoPlaneDataInRepoByID,deleteStandardSeoPlaneDataInRepoByID,deletePremiumSeoPlaneDataInRepoById,
+    updateBasicSeoPlaneDataInRepoByID,updateStandardSeoPlaneDataInRepoByID,updatePremiumSeoPlaneDataInRepoById
 
 
 

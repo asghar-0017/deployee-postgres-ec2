@@ -45,16 +45,22 @@ const getPremiumWebPlaneDataInRepo = () => getWebPlanesRepo(webPremiumPlaneRepos
 
 
 
-const getWebPlanesRepoByID = async (repository, repoName,clientId) => {
+const getWebPlanesRepoByID = async (repository, repoName, clientId) => {
   try {
-    const getData = await repository.find({where:{clientId}});
+    const getData = await repository.find({ where: { clientId } });
     logger.info(`src > repository > getWebPlanesRepoByID > ${repoName}`, getData);
-    return getData;
+
+    if (getData) {
+      return getData;
+    } else {
+      return `Data not found with clientId ${clientId}`;
+    }
   } catch (error) {
-    logger.error(`Error Getting data in ${repoName}`, error);
+    logger.error(`Error getting data in ${repoName}`, error);
     throw error;
   }
 };
+
 
 const getBasicWebPlaneDataByIDInRepo = (clientId) => getWebPlanesRepoByID(webBasicPlaneRepository, "getBasicPlaneDataInRepo",clientId);
 const getStandardWebPlaneDataByIDInRepo = (clientId) => getWebPlanesRepoByID(webStandardPlaneRepository, "getStandardPlaneDataInRepo",clientId);
@@ -84,11 +90,38 @@ const deleteStandardWebPlaneDataInRepoByID = (id, clientId) => DeleteAppPlanesRe
 const deletePremiumWebPlaneDataInRepoById = (id, clientId) => DeleteAppPlanesRepoByID(webPremiumPlaneRepository, "DeleteWebPremiumPlaneDataInRepoByID", id, clientId);
 
 
+const UpdateAppPlanesRepoByID = async (repository, repoName, id, clientId,data) => {
+  try {
+    const getData = await repository.findOne({ where: { id, clientId } });
+    logger.info(`src > repository > UpdateAppPlanesRepoByID > ${repoName}`, getData);
+
+    if (getData) {
+      await repository.update({ id, clientId  },data);
+      logger.info(`Record Update successfully in ${repoName}`);
+
+      const updatedData=await repository.findOne({where:{id,clientId}})
+
+      return { success: true, message: `Record Updated successfully`, data: updatedData };
+    } else {
+      return { success: false, message: `Data not found with id ${id} and clientId ${clientId}` };
+    }
+  } catch (error) {
+    logger.error(`Error Updating data in ${repoName}`, error);
+    throw error;
+  }
+};
+
+const updateBasicWebPlaneDataInRepoByID = (id, clientId,data) => UpdateAppPlanesRepoByID(webBasicPlaneRepository, "updateBasicWebPlaneDataInRepoByID", id, clientId,data);
+const updateStandardWebPlaneDataInRepoByID = (id, clientId,data) => UpdateAppPlanesRepoByID(webStandardPlaneRepository, "updateWebStandardPlaneDataInRepoByID", id, clientId,data);
+const updatePremiumWebPlaneDataInRepoById = (id, clientId,data) => UpdateAppPlanesRepoByID(webPremiumPlaneRepository, "updateWebPremiumPlaneDataInRepoByID", id, clientId,data);
+
+
 
 module.exports = {
     webBasicPlaneRepo,webStandardPlaneRepo,webPremiumPlaneRepo,
     getBasicWebPlaneDataInRepo,getStandardWebPlaneDataInRepo,getPremiumWebPlaneDataInRepo,
     getBasicWebPlaneDataByIDInRepo,getStandardWebPlaneDataByIDInRepo,getPremiumWebPlaneDataInByIDRepo,
-    deleteBasicWebPlaneDataInRepoByID,deleteStandardWebPlaneDataInRepoByID,deletePremiumWebPlaneDataInRepoById
+    deleteBasicWebPlaneDataInRepoByID,deleteStandardWebPlaneDataInRepoByID,deletePremiumWebPlaneDataInRepoById,
+    updateBasicWebPlaneDataInRepoByID,updateStandardWebPlaneDataInRepoByID,updatePremiumWebPlaneDataInRepoById
 
 };

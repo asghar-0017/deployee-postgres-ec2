@@ -1,6 +1,7 @@
 const { digitalMarketingService, digitalMarketingdataInService, deleteDigitalMarketingByIdInService, updateDigitalInService, digitalMarketingDataInServiceByID } = require('../service/digitalMarketingService');
 const { logger } = require('../../logger');
-const { getClientId } = require("../service/clientService");
+const { getClientId,RandomId } = require("../service/clientService");
+const { err } = require('pino-std-serializers');
 
 const digitalMarketing = async (request, reply) => {
   try {
@@ -11,6 +12,7 @@ const digitalMarketing = async (request, reply) => {
       logger.error("ClientData is undefined");
       return reply.code(400).send({ error: "Invalid input" });
     }
+    clientData.id = RandomId(); // Generate a unique ID
     clientData.clientId = await getClientId(clientData.email, clientData.name);
 
     const data = await digitalMarketingService(clientData);
@@ -37,7 +39,9 @@ const allDigitalMarketingData = async (request, reply) => {
 
 const delDigitalMarketingById = async (request, reply) => {
   try {
-    const { id, clientId } = request.params;
+    const id=request.params.cliendId
+    const clientId = request.params.clientId
+    console.log("Id ",id ,"clientId",clientId)
     const result = await deleteDigitalMarketingByIdInService(id, clientId);
     if (result) {
       reply.code(200).send({ status: "success", message: result });
@@ -50,11 +54,18 @@ const delDigitalMarketingById = async (request, reply) => {
   }
 };
 
+
 const updateDigitalMarketingById = async (request, reply) => {
   try {
     const id = request.params.id;
+    const clientId = request.params.clientId;
     const clientData = request.body;
-    const data = await updateDigitalInService(id, clientData);
+
+    console.log("Id",id)
+    console.log("clientId",clientId)
+
+    const data = await updateDigitalInService(id, clientId, clientData);
+
     if (data) {
       reply.send({ data: data });
     } else {
@@ -62,23 +73,25 @@ const updateDigitalMarketingById = async (request, reply) => {
     }
   } catch (error) {
     logger.error("Error occurred while updating digital marketing data:", error);
-    reply.code(500).send({ error: "Internal Server Error" });
+    throw error;
   }
 };
 
+
+
 const getDigitalMarketingById = async (request, reply) => {
   try {
-    const clientId = request.params.clientId;
-    console.log("Client id inController",clientId)
-    const digitalMarketingData = await digitalMarketingDataInServiceByID(clientId);
+    const cliendId = request.params.clientId;  
+     console.log("Client id inController",cliendId)
+    const digitalMarketingData = await digitalMarketingDataInServiceByID(cliendId);
     if (digitalMarketingData) {
       reply.code(200).send({ status: "success", data: digitalMarketingData });
     } else {
-      reply.code(404).send({ message: `Client Data not Found With ID ${clientId}` });
+      reply.code(404).send({ message: `Client Data not Found With ID ${cliendId}` });
     }
   } catch (error) {
     logger.error("Error occurred while fetching digital marketing data by client ID:", error);
-    reply.code(500).send({ error: "Internal Server Error" });
+throw error
   }
 };
 

@@ -6,7 +6,8 @@ const {
 
   getBasicLogoPlaneDataByIDInRepo,getStandardLogoPlaneDataByIDInRepo,getPremiumLogoPlaneDataInByIDRepo,getBusinessLogoPlaneDataInByIDRepo,
 
-  deleteBasicLogoPlaneDataInRepoByID,deleteStandardLogoPlaneDataInRepoByID,deletePremiumLogoPlaneDataInRepoById,deleteBusinessLogoPlaneDataInRepoById
+  deleteBasicLogoPlaneDataInRepoByID,deleteStandardLogoPlaneDataInRepoByID,deletePremiumLogoPlaneDataInRepoById,deleteBusinessLogoPlaneDataInRepoById,
+  updateBasicLogoPlaneDataInRepoByID,updateStandardLogoPlaneDataInRepoByID,updatePremiumLogoPlaneDataInRepoById,updateBusinessLogoPlaneDataInRepoById
 
 } = require('../repository/logoRepository');
 const { logger } = require('../../logger');
@@ -134,7 +135,26 @@ const getAllBusinessLogoPlanesData = () => getLogoPlaneprocessService('Get Logo 
   const deleteBasicLogoPlanesDataByID = (id,cliendId) => DeletePlaneprocessServiceByID('Delete Logo Basic Plane Data',id,cliendId, deleteBasicLogoPlaneDataInRepoByID);
   const deleteStandardLogoPlanesDataByID = (id,cliendId) => DeletePlaneprocessServiceByID('Delete Logo Standard Plane Data',id,cliendId, deleteStandardLogoPlaneDataInRepoByID);
   const deletepremiumLogoPlanesDataByID = (id,cliendId) => DeletePlaneprocessServiceByID('Delete Logo Premium Plane Data',id,cliendId, deletePremiumLogoPlaneDataInRepoById);
-  const deleteBusinessLogoPlanesDataByID = (id,cliendId) => DeletePlaneprocessServiceByID('Delete Logo Premium Plane Data',id,cliendId, deleteBusinessLogoPlaneDataInRepoById);
+  const deleteBusinessLogoPlanesDataByID = (id,cliendId) => DeletePlaneprocessServiceByID('Delete Logo Business Plane Data',id,cliendId, deleteBusinessLogoPlaneDataInRepoById);
+  
+
+
+  
+  const updatePlaneprocessServiceByID = async (planName, id,cliendId,data, repoFunction) => {
+    try {
+      logger.info(`src > Service > updatePlaneprocessServiceByID > ${planName}Service`);
+      const dataInService = await repoFunction(id,cliendId,data);
+      return dataInService
+    } catch (error) {
+      logger.error(`Error in ${planName}Service`, error);
+      throw error;
+    }
+  };
+  
+  const updateBasicLogoPlanesDataByID = (id,cliendId,data) => updatePlaneprocessServiceByID('Update Logo Basic Plane Data',id,cliendId,data, updateBasicLogoPlaneDataInRepoByID);
+  const updateStandardLogoPlanesDataByID = (id,cliendId,data) => updatePlaneprocessServiceByID('Update Logo Standard Plane Data',id,cliendId,data, updateStandardLogoPlaneDataInRepoByID);
+  const updatepremiumLogoPlanesDataByID = (id,cliendId,data) => updatePlaneprocessServiceByID('Update Logo Premium Plane Data',id,cliendId,data, updatePremiumLogoPlaneDataInRepoById);
+  const updateBusinessLogoPlanesDataByID = (id,cliendId,data) => updatePlaneprocessServiceByID('Update Logo Business Plane Data',id,cliendId,data, updateBusinessLogoPlaneDataInRepoById);
   
 
 
@@ -145,7 +165,8 @@ module.exports = {
 
   getLogoBasicPlanesDataByID,getLogoStandardPlanesDataByID,getLogopremiumPlanesDataByID,getLogoBusinessPlanesDataByID,
 
-  deleteBasicLogoPlanesDataByID,deleteStandardLogoPlanesDataByID,deletepremiumLogoPlanesDataByID,deleteBusinessLogoPlanesDataByID
+  deleteBasicLogoPlanesDataByID,deleteStandardLogoPlanesDataByID,deletepremiumLogoPlanesDataByID,deleteBusinessLogoPlanesDataByID,
+  updateBasicLogoPlanesDataByID,updateStandardLogoPlanesDataByID,updatepremiumLogoPlanesDataByID,updateBusinessLogoPlanesDataByID
 
 
 };

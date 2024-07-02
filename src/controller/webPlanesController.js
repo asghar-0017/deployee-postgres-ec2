@@ -1,19 +1,25 @@
 const { webBasicPlaneService, webStandardPlaneService, webPremiumPlaneService,
   getAllBasicWebPlanesData,getAllStandardWebPlanesData,getAllpremiumWebPlanesData,
   getWebBasicPlanesDataByID,getWebStandardPlanesDataByID,getWebpremiumPlanesDataByID,
-  deleteBasicWebPlanesDataByID,deleteStandardWebPlanesDataByID,deletepremiumWebPlanesDataByID
+  deleteBasicWebPlanesDataByID,deleteStandardWebPlanesDataByID,deletepremiumWebPlanesDataByID,
+  updateBasicWebPlanesDataByID,updateStandardWebPlanesDataByID,updatepremiumWebPlanesDataByID
 
  } = require('../service/webPlainsService');
 const { logger } = require('../../logger');
 
-const { getClientId } = require("../service/clientService");
+const { getClientId,RandomId } = require("../service/clientService");
+const { req } = require('pino-std-serializers');
 
 
 const handlePlain = async (request, reply, serviceFunction) => {
   try {
     const data = request.body;
+
+    const baseUrl = `${request.protocol}://${request.hostname}${process.env.PORT ? `:${process.env.PORT}` : ''}`;
+    console.log('Base URL:', baseUrl); // Log the base URL
+
     if (request.files && Array.isArray(request.files)) {
-      data.Link_to_Graphics = request.files.map(file => file.path);
+      data.Link_to_Graphics = request.files.map(file => `${baseUrl}/uploads/${file.filename}`);
     } else {
       data.Link_to_Graphics = [];
     }
@@ -29,6 +35,7 @@ const handlePlain = async (request, reply, serviceFunction) => {
       return reply.code(400).send({ error: 'Invalid input' });
     }
     data.clientId = await getClientId(data.email, data.name);
+    data.id = RandomId();
 
     const result = await serviceFunction(data);
     reply.code(201).send({ success: 'success', data: result });
@@ -93,6 +100,7 @@ const allWebPremiumPlaneData = async (request, reply) => {
 const getWebPlanesDataById = async (request, reply, serviceFunction) => {
   try {
     const clientId=request.params.cliendId
+    console.log("Client Id",clientId)
     const result = await serviceFunction(clientId);
     console.log("Result",result)
     if(result){
@@ -158,12 +166,52 @@ const deleteWebPremiumPlaneData = async (request, reply) => {
 
 
 
+const updatePlanesDataById = async (request, reply, serviceFunction) => {
+  try {
+    const id=request.params.id
+    const cliendId=request.params.clientId
+    const data=request.body
+    console.log("ID ",id)
+    console.log("cliendId ",cliendId)
+    console.log("data ",data)
+
+
+    const result = await serviceFunction(id,cliendId,data);
+    console.log("Result",result)
+    if(result){
+    reply.code(201).send({
+      data: result
+     });
+    }else{
+      reply.send({
+        message:`${serviceFunction} Data Not Found`
+      })
+    }
+  } catch (error) {
+    console.error('Error occurred in getDataPlanes Function', error);
+    throw error
+  }
+};
+
+const updateWebBasicPlanesData = async (request, reply) => {
+  await updatePlanesDataById(request, reply, updateBasicWebPlanesDataByID);
+};
+
+const updateWebStandardPlaneData = async (request, reply) => {
+  await updatePlanesDataById(request, reply, updateStandardWebPlanesDataByID);
+};
+
+const updateWebPremiumPlaneData = async (request, reply) => {
+  await updatePlanesDataById(request, reply, updatepremiumWebPlanesDataByID);
+};
+
 
 module.exports = {
   webBasicPlane,webStandardPlane,webPremiumPlane,
   allWebBasicPlanesData,allWebStandardPlaneData,allWebPremiumPlaneData,
   WebBasicPlanesDataById,WebStandardPlaneDataById,WebPremiumPlaneDataById,
-  deleteWebBasicPlanesData,deleteWebStandardPlaneData,deleteWebPremiumPlaneData
+  deleteWebBasicPlanesData,deleteWebStandardPlaneData,deleteWebPremiumPlaneData,
+  updateWebBasicPlanesData,updateWebStandardPlaneData,updateWebPremiumPlaneData
 
 
 };

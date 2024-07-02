@@ -1,11 +1,12 @@
 const { logoBasicPlaneService, logoStandardPlaneService, logoPremiumPlaneService, logoBusinessPlaneService,
   getAllBasicLogoPlanesData,getAllStandardLogoPlanesData,getAllpremiumLogoPlanesData,getAllBusinessLogoPlanesData,
   getLogoBasicPlanesDataByID,getLogoStandardPlanesDataByID,getLogopremiumPlanesDataByID,getLogoBusinessPlanesDataByID,
-  deleteBasicLogoPlanesDataByID,deleteStandardLogoPlanesDataByID,deletepremiumLogoPlanesDataByID,deleteBusinessLogoPlanesDataByID
+  deleteBasicLogoPlanesDataByID,deleteStandardLogoPlanesDataByID,deletepremiumLogoPlanesDataByID,deleteBusinessLogoPlanesDataByID,
+  updateBasicLogoPlanesDataByID,updateStandardLogoPlanesDataByID,updatepremiumLogoPlanesDataByID,updateBusinessLogoPlanesDataByID
 
  } = require('../service/logoPlaneService');
 const { logger } = require('../../logger');
-const { getClientId } = require("../service/clientService");
+const { getClientId,RandomId } = require("../service/clientService");
 
 
 const handlePlain = async (request, reply, serviceFunction) => {
@@ -31,6 +32,7 @@ const handlePlain = async (request, reply, serviceFunction) => {
     //   return reply.code(400).send({ error: error.details[0].message });
     // }       
     data.clientId = await getClientId(data.email, data.name);
+    data.id=RandomId()
 
     const result = await serviceFunction(data);
     reply.code(201).send({ success: 'success', data: result });
@@ -175,6 +177,46 @@ const deleteLogoBusinessPlaneData = async (request, reply) => {
 
 
 
+const updatePlanesDataById = async (request, reply, serviceFunction) => {
+  try {
+    const id = request.params.id;
+    const clientId = request.params.clientId; // Corrected typo here
+    const data = request.body;
+
+    console.log("ClientID", clientId);  // Should print the correct clientId
+    console.log("id", id);              // Should print the correct id
+    console.log("data", data);
+
+    const result = await serviceFunction(id, clientId, data);
+    console.log("Result", result);
+
+    if (result) {
+      reply.code(201).send({ data: result });
+    } else {
+      reply.send({ message: `${serviceFunction} Data Not Found` });
+    }
+  } catch (error) {
+    console.error('Error occurred in updatePlanesDataById Function', error);
+    throw error;
+  }
+};
+
+const updateLogoBasicPlanesData = async (request, reply) => {
+  await updatePlanesDataById(request, reply, updateBasicLogoPlanesDataByID);
+};
+
+const updateLogoStandardPlaneData = async (request, reply) => {
+  await updatePlanesDataById(request, reply, updateStandardLogoPlanesDataByID);
+};
+
+const updateLogoPremiumPlaneData = async (request, reply) => {
+  await updatePlanesDataById(request, reply, updatepremiumLogoPlanesDataByID);
+};
+
+const updateLogoBusinessPlaneData = async (request, reply) => {
+  await updatePlanesDataById(request, reply, updateBusinessLogoPlanesDataByID);
+};
+
 
 
 
@@ -187,6 +229,7 @@ module.exports = {
 
   allLogoBasicPlanesDataByID,allLogoStandardPlaneDataByID,allLogoPremiumPlaneDataById,allLogoBusinessPlaneDataById,
 
-  deleteLogoBasicPlanesData,deleteLogoStandardPlaneData,deleteLogoPremiumPlaneData,deleteLogoBusinessPlaneData
+  deleteLogoBasicPlanesData,deleteLogoStandardPlaneData,deleteLogoPremiumPlaneData,deleteLogoBusinessPlaneData,
+  updateLogoBasicPlanesData,updateLogoStandardPlaneData,updateLogoPremiumPlaneData,updateLogoBusinessPlaneData
 
 };

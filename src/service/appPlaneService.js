@@ -2,7 +2,8 @@ const nodemailer = require('nodemailer');
 const { appBasicPlaneRepo, appStandardPlaneRepo, appPremiumPlaneRepo
   ,getBasicPlaneDataInRepo,getStandardPlaneDataInRepo,getPremiumPlaneDataInRepo ,
   deleteBasicPlaneDataInRepoByID,deleteStandardPlaneDataInRepoByID,deletePremiumPlaneDataInRepoById,
-  getBasicPlaneDataByIDInRepo,getStandardPlaneDataByIDInRepo,getPremiumPlaneDataInByIDRepo
+  getBasicPlaneDataByIDInRepo,getStandardPlaneDataByIDInRepo,getPremiumPlaneDataInByIDRepo,
+  updateBasicPlaneDataInRepoByID,updateStandardPlaneDataInRepoByID,updatePremiumPlaneDataInRepoById
 } = require('../repository/appPlanesRepository');
 const { logger } = require('../../logger');
 const dotenv = require("dotenv");
@@ -115,7 +116,7 @@ const deletepremiumAppPlanesDataByID = (id,cliendId) => DeletePlaneprocessServic
     try {
       logger.info(`src > Service > getAppPlaneprocessService > ${planName}Service`);
       const data = await repoFunction(clientId);
-      return { success: true,  data };
+      return data
     } catch (error) {
       logger.error(`Error in ${planName}Service`, error);
       throw error;
@@ -126,21 +127,28 @@ const deletepremiumAppPlanesDataByID = (id,cliendId) => DeletePlaneprocessServic
   const getStandardAppPlanesDataByID = (clientId) => getPlaneprocessServiceByID('Get App Standard Plane Data',clientId, getStandardPlaneDataByIDInRepo);
   const getpremiumAppPlanesDataByID = (clientId) => getPlaneprocessServiceByID('Get App Premium Plane Data',clientId, getPremiumPlaneDataInByIDRepo);
   
+
+  
+const updatePlaneprocessServiceByID = async (planName, id,cliendId, data,repoFunction) => {
+  try {
+    logger.info(`src > Service > DeletePlaneprocessServiceByID > ${planName}Service`);
+    const dataInService = await repoFunction(id,cliendId,data);
+    return dataInService
+  } catch (error) {
+    logger.error(`Error in ${planName}Service`, error);
+    throw error;
+  }
+};
+
+const updateBasicAppPlanesDataByID = (id,cliendId,data) => updatePlaneprocessServiceByID('Update App Basic Plane Data',id,cliendId,data, updateBasicPlaneDataInRepoByID);
+const updateStandardAppPlanesDataByID = (id,cliendId,data) => updatePlaneprocessServiceByID('Update App Standard Plane Data',id,cliendId,data, updateStandardPlaneDataInRepoByID);
+const updatepremiumAppPlanesDataByID = (id,cliendId,data) => updatePlaneprocessServiceByID('Update App Premium Plane Data',id,cliendId,data, updatePremiumPlaneDataInRepoById);
+
+
 module.exports = {
-  appBasicPlaneService,
-  appStandardPlaneService,
-  appPremiumPlaneService,
-
-  getAllBasicAppPlanesData,
-  getAllStandardAppPlanesData,
-  getAllpremiumAppPlanesData,
-
-  getBasicAppPlanesDataByID,
-  getStandardAppPlanesDataByID,
-  getpremiumAppPlanesDataByID,
-
-
-  deleteBasicAppPlanesDataByID,
-  deleteStandardAppPlanesDataByID,
-  deletepremiumAppPlanesDataByID
+  appBasicPlaneService,appStandardPlaneService,appPremiumPlaneService,
+  getAllBasicAppPlanesData,getAllStandardAppPlanesData,getAllpremiumAppPlanesData,
+  getBasicAppPlanesDataByID,getStandardAppPlanesDataByID,getpremiumAppPlanesDataByID,
+  deleteBasicAppPlanesDataByID,deleteStandardAppPlanesDataByID,deletepremiumAppPlanesDataByID,
+  updateBasicAppPlanesDataByID,updateStandardAppPlanesDataByID,updatepremiumAppPlanesDataByID
 };

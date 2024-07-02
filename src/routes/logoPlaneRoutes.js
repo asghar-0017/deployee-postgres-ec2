@@ -1,7 +1,8 @@
 const { logoBasicPlane, logoStandardPlane, logoPremiumPlane, logoBusinessPlane,
   allLogoBasicPlanesData,allLogoStandardPlaneData,allLogoPremiumPlaneData,allLogoBusinessPlaneData,
   allLogoBasicPlanesDataByID,allLogoStandardPlaneDataByID,allLogoPremiumPlaneDataById,allLogoBusinessPlaneDataById,
-  deleteLogoBasicPlanesData,deleteLogoStandardPlaneData,deleteLogoPremiumPlaneData,deleteLogoBusinessPlaneData
+  deleteLogoBasicPlanesData,deleteLogoStandardPlaneData,deleteLogoPremiumPlaneData,deleteLogoBusinessPlaneData,
+  updateLogoBasicPlanesData,updateLogoStandardPlaneData,updateLogoPremiumPlaneData,updateLogoBusinessPlaneData
 
 
  } = require('../controller/logoPlaneController');
@@ -26,9 +27,15 @@ const logoPlaneRoute = async (fastify) => {
   fastify.get('/all-logo-business-planes-data/:id',allLogoBusinessPlaneDataById)
 
   fastify.delete('/all-logo-basic-planes-data/:id/:clientId',deleteLogoBasicPlanesData)
-  fastify.delete('/all-logo-standard-planes-data/:id/:cliendId',deleteLogoStandardPlaneData)
-  fastify.delete('/all-logo-premium-planes-data/:id/:cliendId',deleteLogoPremiumPlaneData)
-  fastify.delete('/all-logo-business-planes-data/:id/:cliendId',deleteLogoBusinessPlaneData)
+  fastify.delete('/all-logo-standard-planes-data/:id/:clientId',deleteLogoStandardPlaneData)
+  fastify.delete('/all-logo-premium-planes-data/:id/:clientId',deleteLogoPremiumPlaneData)
+  fastify.delete('/all-logo-business-planes-data/:id/:clientId',deleteLogoBusinessPlaneData)
+
+  fastify.put('/all-logo-basic-planes-data/:id/:clientId', updateLogoBasicPlanesData);
+  fastify.put('/all-logo-standard-planes-data/:id/:clientId', updateLogoStandardPlaneData);
+  fastify.put('/all-logo-premium-planes-data/:id/:clientId', updateLogoPremiumPlaneData);
+  fastify.put('/all-logo-business-planes-data/:id/:clientId', updateLogoBusinessPlaneData);
+  
 
 
 };

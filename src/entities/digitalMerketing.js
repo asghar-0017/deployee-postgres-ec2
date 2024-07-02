@@ -7,7 +7,7 @@ module.exports = new EntitySchema({
     id: {
       type: "int",
       primary: true,
-      generated: true,
+      unique: true,
     },
     clientId: {
       type: "varchar",
@@ -40,10 +40,10 @@ module.exports = new EntitySchema({
       type: "varchar",
       nullable: false,
     },
-    plane:{
-      type:"varchar",
+    plane: {
+      type: "varchar",
       default: "Digital Marketing",
-      },
+    },
     created_at: {
       type: "timestamp",
       default: () => "CURRENT_TIMESTAMP",
@@ -53,7 +53,8 @@ module.exports = new EntitySchema({
       default: () => "CURRENT_TIMESTAMP",
       onUpdate: "CURRENT_TIMESTAMP",
     },
-  }, relations: {
+  },
+  relations: {
     client: {
       target: "Client",
       type: "many-to-one",

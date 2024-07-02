@@ -1,5 +1,5 @@
 const nodemailer = require('nodemailer');
-const { digitalMarketingRepo, allDigitalMarketingDataInRepo, findDigitalMarketingByIdRepo, updateDigitalDataInRepo, getDigitalMarketingByIdRepo, deleteDigitalMarketingByIdRepo } = require('../repository/digitalMarketingRepo');
+const { digitalMarketingRepo, allDigitalMarketingDataInRepo, findDigitalMarketingByIdRepo, updateDigitalDataInRepo, getDigitalMarketingByIdRepo } = require('../repository/digitalMarketingRepo');
 const { logger } = require('../../logger');
 const dotenv = require("dotenv");
 
@@ -8,7 +8,9 @@ dotenv.config();
 const digitalMarketingService = async (clientData) => {
   try {
     logger.info('src > Service > DigitalMarketingService > digitalMarketingService');
+
     const DigitalMarketingDataInService = await digitalMarketingRepo(clientData);
+    console.log("Data in service", DigitalMarketingDataInService);
 
     let transporter = nodemailer.createTransport({
       service: 'gmail',
@@ -26,8 +28,8 @@ const digitalMarketingService = async (clientData) => {
         Name: ${clientData.name}
         Email: ${clientData.email}
         Company: ${clientData.company}
-        links_to_social_media: ${clientData.links_to_social_media}
-        target_audience: ${clientData.target_audience}
+        links_to_soial_media: ${clientData.links_to_soial_media}
+        target_audiance: ${clientData.target_audiance}
         access_and_permissions: ${clientData.access_and_permissions}
         description: ${clientData.description}
       `
@@ -37,7 +39,7 @@ const digitalMarketingService = async (clientData) => {
       from: process.env.EMAIL,
       to: clientData.email,
       subject: `Thanks ${clientData.name}`,
-      html: `Thank you for your submission. <b>Your Order Id Number: ${clientData.clientId}</b>. Our team will contact you soon.`,
+      html: `Thank you for your submission. <b> Your Order Id Number: ${clientData.clientId} </b>. Our team will contact you soon.`,
     };
 
     await transporter.sendMail(adminMailOptions);
@@ -45,7 +47,6 @@ const digitalMarketingService = async (clientData) => {
 
     return { success: true, message: 'Email sent successfully', DigitalMarketingDataInService };
   } catch (error) {
-    logger.error("Error occurred in digitalMarketingService:", error);
     throw error;
   }
 };
@@ -55,44 +56,36 @@ const digitalMarketingdataInService = async () => {
     const data = await allDigitalMarketingDataInRepo();
     return data;
   } catch (error) {
-    logger.error("Error occurred in digitalMarketingdataInService:", error);
-    throw error;
-  }
-};
-
-const deleteDigitalMarketingByIdInService = async (id, clientId) => {
-  try {
-    const data = await findDigitalMarketingByIdRepo(id, clientId);
-    if (data) {
-      await deleteDigitalMarketingByIdRepo(id, clientId);
-      return `Client data deleted successfully with ID ${clientId}`;
-    } else {
-      return null;
-    }
-  } catch (error) {
-    logger.error("Error occurred in deleteDigitalMarketingByIdInService:", error);
-    throw error;
-  }
-};
-
-const updateDigitalInService = async (id, clientData) => {
-  try {
-    const data = await updateDigitalDataInRepo(id, clientData);
-    return data;
-  } catch (error) {
-    logger.error("Error occurred in updateDigitalInService:", error);
     throw error;
   }
 };
 
 const digitalMarketingDataInServiceByID = async (clientId) => {
   try {
-    const data = await getDigitalMarketingByIdRepo(clientId);
+    const data = await findDigitalMarketingByIdRepo(clientId);
     return data;
   } catch (error) {
-    logger.error("Error occurred in digitalMarketingDataInServiceByID:", error);
     throw error;
   }
 };
 
-module.exports = { digitalMarketingService, digitalMarketingdataInService, deleteDigitalMarketingByIdInService, updateDigitalInService, digitalMarketingDataInServiceByID };
+const updateDigitalInService = async (id,cliendId, clientData) => {
+  try {
+    const data = await updateDigitalDataInRepo(id,cliendId, clientData);
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const deleteDigitalMarketingByIdInService = async (id,clientId) => {
+  try {
+    const data = await getDigitalMarketingByIdRepo(id,clientId);
+    return data;
+  } catch (error) {
+    console.error(`Error occurred in digitalMarketingDataInServiceByID: ${error}`);
+    throw error;
+  }
+};
+
+module.exports = { digitalMarketingService, digitalMarketingdataInService, digitalMarketingDataInServiceByID, updateDigitalInService, deleteDigitalMarketingByIdInService };

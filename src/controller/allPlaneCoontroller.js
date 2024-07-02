@@ -106,9 +106,8 @@ const {
     getLogopremiumPlanesDataByID,
     getLogoBusinessPlanesDataByID,
   } = require('../service/logoPlaneService');
-  
   const getAllPlanesDataByID = async (req, reply) => {
-    const clientId = req.params.id;
+    const clientId = req.params.clientId;
     try {
       const [
         webBasicData,
@@ -142,33 +141,34 @@ const {
         getLogoBusinessPlanesDataByID(clientId),
       ]);
   
+      // Directly use the data returned from the service functions
       const allData = {
-        webBasic: webBasicData?.data,
-        webStandard: webStandardData?.data,
-        webPremium: webPremiumData?.data,
-        appBasic: appBasicData?.data,
-        appStandard: appStandardData?.data,
-        appPremium: appPremiumData?.data,
-        seoBasic: seoBasicData?.data,
-        seoStandard: seoStandardData?.data,
-        seoPremium: seoPremiumData?.data,
-        digitalMarketing: digitalMarketingData?.data,
-        logoBasic: logoBasicData?.data,
-        logoStandard: logoStandardData?.data,
-        logoPremium: logoPremiumData?.data,
-        logoBusiness: logoBusinessData?.data,
+        Web_Basic: webBasicData,
+        Web_Standard: webStandardData,
+        Web_Premium: webPremiumData,
+        App_Basic: appBasicData,
+        App_Standard: appStandardData,
+        App_Premium: appPremiumData,
+        Seo_Basic: seoBasicData,
+        Seo_Standard: seoStandardData,
+        Seo_Premium: seoPremiumData,
+        Digital_Marketing: digitalMarketingData,
+        Logo_Basic: logoBasicData,
+        Logo_Standard: logoStandardData,
+        Logo_Premium: logoPremiumData,
+        Logo_Business: logoBusinessData,
       };
   
-      // Log allData object before filtering
-      console.log('All Data before filtering:', allData);
+      console.log("SEO Basic Data:", allData.Seo_Basic);
+      console.log("SEO Standard Data:", allData.Seo_Standard);
+      console.log("SEO Premium Data:", allData.Seo_Premium);
   
       // Filter out empty arrays, null, or undefined values
       const filteredData = Object.fromEntries(
-        Object.entries(allData).filter(([key, value]) => Array.isArray(value) ? value.length > 0 : value !== null && value !== undefined)
+        Object.entries(allData).filter(([key, value]) => 
+          Array.isArray(value) ? value.length > 0 : value !== null && value !== undefined
+        )
       );
-  
-      // Log filtered data to debug
-      console.log('All Data to be sent:', filteredData);
   
       reply.code(200).send({ success: true, data: filteredData });
     } catch (error) {
@@ -177,11 +177,256 @@ const {
     }
   };
   
- 
+
+  
+    const {
+      deleteBasicWebPlanesDataByID,
+      deleteStandardWebPlanesDataByID,
+      deletepremiumWebPlanesDataByID
+  
+    }=require('../service/webPlainsService')
+  
+    const {
+      deleteBasicAppPlanesDataByID,
+      deleteStandardAppPlanesDataByID,
+      deletepremiumAppPlanesDataByID
+  
+    }=require('../service/appPlaneService');
+
+  const{
+    deleteBasicLogoPlanesDataByID,
+    deleteStandardLogoPlanesDataByID,
+    deletepremiumLogoPlanesDataByID,
+    deleteBusinessLogoPlanesDataByID
+  } = require('../service/logoPlaneService');
+
+  
+  const {
+    deleteBasicSeoPlanesDataByID,
+    deleteStandardSeoPlanesDataByID,
+    deletepremiumSeoPlanesDataByID
+  }=require('../service/seoService')
+
+  const {
+    deleteDigitalMarketingByIdInService
+  }=require('../service/digitalMarketingService')
+
+  const deleteAllPlansDataByID = async (req, reply) => {
+    const clientId = req.params.clientId;
+    const id = req.params.id;
+    try {
+      const [
+        webBasicData,
+        webStandardData,
+        webPremiumData,
+
+        appBasicData,
+        appStandardData,
+        appPremiumData,
+
+        logoBasicData,
+        logoStandardData,
+        logoPremiumData,
+        logoBusinessData,
+
+        seoBasicData,
+        seoStandardData,
+        seoPremiumData,
+
+        digitalData
+
+
+
+      ] = await Promise.all([
+        deleteBasicWebPlanesDataByID(id, clientId),
+        deleteStandardWebPlanesDataByID(id, clientId),
+        deletepremiumWebPlanesDataByID(id, clientId),
+
+        deleteBasicAppPlanesDataByID(id, clientId),
+        deleteStandardAppPlanesDataByID(id, clientId),
+        deletepremiumAppPlanesDataByID(id, clientId),
+
+        deleteBasicLogoPlanesDataByID(id, clientId),
+        deleteStandardLogoPlanesDataByID(id, clientId),
+        deletepremiumLogoPlanesDataByID(id, clientId),
+        deleteBusinessLogoPlanesDataByID(id, clientId),
+
+        deleteBasicSeoPlanesDataByID(id, clientId),
+        deleteStandardSeoPlanesDataByID(id, clientId),
+        deletepremiumSeoPlanesDataByID(id, clientId),
+
+        deleteDigitalMarketingByIdInService(id, clientId),
+      ]);
+  
+      const allData = {
+        Web_Basic_Plan: webBasicData?.data,
+        Web_Standard_Plan: webStandardData?.data,
+        Web_Premium_Plan: webPremiumData?.data,
+
+        App_Basic_Plan: appBasicData?.data,
+        App_Standard_Plan: appStandardData?.data,
+        App_Premium_Plan: appPremiumData?.data,
+
+        Logo_Basic_Plan: logoBasicData?.data,
+        Logo_Standard_Plan: logoStandardData?.data,
+        Logo_Premium_Plan: logoPremiumData?.data,
+        Logo_Business_Plan: logoBusinessData?.data,
+        
+        Seo_Standard_Plan: seoBasicData?.data,
+        Seo_Premium_Plan: seoStandardData?.data,
+        Seo_Business_Plan: seoPremiumData?.data,
+
+        Digitial_Marketing_Plan: digitalData?.data,
+
+    
+      };
+  
+      console.log('All Data before filtering:', allData);
+  
+      const filteredData = Object.fromEntries(
+        Object.entries(allData).filter(([key, value]) => Array.isArray(value) ? value.length > 0 : value !== null && value !== undefined)
+      );
+  
+      console.log('All Data to be sent:', filteredData);
+  
+      reply.code(200).send({ success: true, data: filteredData });
+    } catch (error) {
+      console.error('Error deleting all plans data by client ID:', error);
+      reply.code(500).send({ success: false, message: 'Failed to delete all plans data by client ID' });
+    }
+  };
+
+  //update Data 
+
+  
+  const {
+    updateBasicWebPlanesDataByID,
+    updateStandardWebPlanesDataByID,
+    updatepremiumWebPlanesDataByID
+
+  }=require('../service/webPlainsService')
+
+  const {
+    updateBasicAppPlanesDataByID,
+    updateStandardAppPlanesDataByID,
+    updatepremiumAppPlanesDataByID
+
+  }=require('../service/appPlaneService');
+
+const{
+  updateBasicLogoPlanesDataByID,
+  updateStandardLogoPlanesDataByID,
+  updatepremiumLogoPlanesDataByID,
+  updateBusinessLogoPlanesDataByID
+} = require('../service/logoPlaneService');
+
+
+const {
+  updateBasicSeoPlanesDataByID,
+  updateStandardSeoPlanesDataByID,
+  updatepremiumSeoPlanesDataByID
+}=require('../service/seoService')
+
+const {
+  upDateDigitalInService
+}=require('../service/digitalMarketingService')
+
+const updateAllPlansDataByID = async (req, reply) => {
+  const clientId = req.params.clientId;
+  const id = req.params.id;
+  const clientData=req.body
+  try {
+    const [
+      webBasicData,
+      webStandardData,
+      webPremiumData,
+
+      appBasicData,
+      appStandardData,
+      appPremiumData,
+
+      logoBasicData,
+      logoStandardData,
+      logoPremiumData,
+      logoBusinessData,
+
+      seoBasicData,
+      seoStandardData,
+      seoPremiumData,
+
+      digitalData
+
+
+
+    ] = await Promise.all([
+
+
+      updateBasicWebPlanesDataByID(id, clientId,clientData),
+      updateStandardWebPlanesDataByID(id, clientId,clientData),
+      updatepremiumWebPlanesDataByID(id, clientId,clientData),
+
+      updateBasicAppPlanesDataByID(id, clientId,clientData),
+      updateStandardAppPlanesDataByID(id, clientId,clientData),
+      updatepremiumAppPlanesDataByID(id, clientId,clientData),
+      
+      updateBasicLogoPlanesDataByID(id, clientId,clientData),
+      updateStandardLogoPlanesDataByID(id, clientId,clientData),
+      updatepremiumLogoPlanesDataByID(id, clientId,clientData),
+      updateBusinessLogoPlanesDataByID(id, clientId,clientData),
+      
+      updateBasicSeoPlanesDataByID(id, clientId,clientData),
+      updateStandardSeoPlanesDataByID(id, clientId,clientData),
+      updatepremiumSeoPlanesDataByID(id, clientId,clientData),
+
+      upDateDigitalInService(id, clientId,clientData),
+    ]);
+
+    const allData = {
+      Web_Basic_Plan: webBasicData?.data,
+      Web_Standard_Plan: webStandardData?.data,
+      Web_Premium_Plan: webPremiumData?.data,
+
+      App_Basic_Plan: appBasicData?.data,
+      App_Standard_Plan: appStandardData?.data,
+      App_Premium_Plan: appPremiumData?.data,
+
+      Logo_Basic_Plan: logoBasicData?.data,
+      Logo_Standard_Plan: logoStandardData?.data,
+      Logo_Premium_Plan: logoPremiumData?.data,
+      Logo_Business_Plan: logoBusinessData?.data,
+      
+      Seo_Standard_Plan: seoBasicData?.data,
+      Seo_Premium_Plan: seoStandardData?.data,
+      Seo_Business_Plan: seoPremiumData?.data,
+
+      Digitial_Marketing_Plan: digitalData?.data,
+
+  
+    };
+
+    console.log('All Data before filtering:', allData);
+
+    const filteredData = Object.fromEntries(
+      Object.entries(allData).filter(([key, value]) => Array.isArray(value) ? value.length > 0 : value !== null && value !== undefined)
+    );
+
+    console.log('All Data to be sent:', filteredData);
+
+    reply.code(200).send({ success: true, data: filteredData });
+  } catch (error) {
+    console.error('Error Updating all plans data by client ID:', error);
+    reply.code(500).send({ success: false, message: 'Failed to Update all plans data by client ID' });
+  }
+};
+
+
+
   
   module.exports = {
     getAllPlanesData,
     getAllPlanesDataByID,
+    deleteAllPlansDataByID,
+    updateAllPlansDataByID
 
   };
   

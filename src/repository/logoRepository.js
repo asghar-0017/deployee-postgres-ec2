@@ -85,6 +85,33 @@ const deletePremiumLogoPlaneDataInRepoById = (id, clientId) => DeleteAppPlanesRe
 const deleteBusinessLogoPlaneDataInRepoById = (id, clientId) => DeleteAppPlanesRepoByID(logoBusinessPlaneRepository, "DeleteLogoBusinessPlaneDataInRepoByID", id, clientId);
 
 
+
+const updateAppPlanesRepoByID = async (repository, repoName, id, clientId,data) => {
+  try {
+    const getData = await repository.findOne({ where: { id, clientId } });
+    logger.info(`src > repository > updateAppPlanesRepoByID > ${repoName}`, getData);
+
+    if (getData) {
+      const updatingData=await repository.update({ id, clientId },data);
+      console.log("Updating data",updatingData)
+      const UpdatedData=await repository.findOne({where:{id,clientId}})
+      logger.info(`Record Updated successfully in ${repoName}`,UpdatedData);
+      return { success: true, message: `Record Updated successfully`, data: UpdatedData };
+    } else {
+      return { success: false, message: `Data not found with id ${id} and clientId ${clientId}` };
+    }
+  } catch (error) {
+    logger.error(`Error deleting data in ${repoName}`, error);
+    throw error;
+  }
+};
+
+const updateBasicLogoPlaneDataInRepoByID = (id, clientId,data) => updateAppPlanesRepoByID(logoBasicPlaneRepository, "updateBasicLogoPlaneDataInRepoByID", id, clientId,data);
+const updateStandardLogoPlaneDataInRepoByID = (id, clientId,data) => updateAppPlanesRepoByID(logoStandardPlaneRepository, "updateLogoStandardPlaneDataInRepoByID", id, clientId,data);
+const updatePremiumLogoPlaneDataInRepoById = (id, clientId,data) => updateAppPlanesRepoByID(logoPremiumPlaneRepository, "updateLogoPremiumPlaneDataInRepoByID", id, clientId,data);
+const updateBusinessLogoPlaneDataInRepoById = (id, clientId,data) => updateAppPlanesRepoByID(logoBusinessPlaneRepository, "updateLogoBusinessPlaneDataInRepoByID", id, clientId,data);
+
+
 module.exports = {
   logoBasicPlaneRepo, logoStandardPlaneRepo,logoPremiumPlaneRepo,logoBusinessPlaneRepo,
 
@@ -92,5 +119,6 @@ module.exports = {
 
   getBasicLogoPlaneDataByIDInRepo,getStandardLogoPlaneDataByIDInRepo,getPremiumLogoPlaneDataInByIDRepo,getBusinessLogoPlaneDataInByIDRepo,
 
-  deleteBasicLogoPlaneDataInRepoByID,deleteStandardLogoPlaneDataInRepoByID,deletePremiumLogoPlaneDataInRepoById,deleteBusinessLogoPlaneDataInRepoById
+  deleteBasicLogoPlaneDataInRepoByID,deleteStandardLogoPlaneDataInRepoByID,deletePremiumLogoPlaneDataInRepoById,deleteBusinessLogoPlaneDataInRepoById,
+  updateBasicLogoPlaneDataInRepoByID,updateStandardLogoPlaneDataInRepoByID,updatePremiumLogoPlaneDataInRepoById,updateBusinessLogoPlaneDataInRepoById
 };
