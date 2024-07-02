@@ -36,14 +36,14 @@ const findDigitalMarketingByIdRepo = async (clientId) => {
   }
 };
 
-const updateDigitalDataInRepo = async (id,cliendId, clientData) => {
+const updateDigitalDataInRepo = async (id,clientId, clientData) => {
   try {
-    const data = await digitalMarketingRepository.findOne({ where: { id,cliendId } });
+    const data = await digitalMarketingRepository.findOne({ where: { id,clientId } });
     if (!data) {
       return "Data Not Found";
     } else {
-      await digitalMarketingRepository.update({ id,cliendId }, clientData);
-      const updatedData = await digitalMarketingRepository.findOne({ where: { id,cliendId } });
+      await digitalMarketingRepository.update({ id,clientId }, clientData);
+      const updatedData = await digitalMarketingRepository.findOne({ where: { id,clientId } });
       return updatedData;
     }
   } catch (error) {

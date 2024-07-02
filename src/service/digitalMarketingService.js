@@ -69,9 +69,9 @@ const digitalMarketingDataInServiceByID = async (clientId) => {
   }
 };
 
-const updateDigitalInService = async (id,cliendId, clientData) => {
+const updateDigitalInService = async (id,clientId, clientData) => {
   try {
-    const data = await updateDigitalDataInRepo(id,cliendId, clientData);
+    const data = await updateDigitalDataInRepo(id,clientId, clientData);
     return data;
   } catch (error) {
     throw error;

@@ -106,6 +106,7 @@ const {
     getLogopremiumPlanesDataByID,
     getLogoBusinessPlanesDataByID,
   } = require('../service/logoPlaneService');
+  
   const getAllPlanesDataByID = async (req, reply) => {
     const clientId = req.params.clientId;
     try {
@@ -113,6 +114,7 @@ const {
         webBasicData,
         webStandardData,
         webPremiumData,
+
         appBasicData,
         appStandardData,
         appPremiumData,
@@ -128,6 +130,7 @@ const {
         getWebBasicPlanesDataByID(clientId),
         getWebStandardPlanesDataByID(clientId),
         getWebpremiumPlanesDataByID(clientId),
+
         getBasicAppPlanesDataByID(clientId),
         getStandardAppPlanesDataByID(clientId),
         getpremiumAppPlanesDataByID(clientId),
@@ -141,34 +144,39 @@ const {
         getLogoBusinessPlanesDataByID(clientId),
       ]);
   
-      // Directly use the data returned from the service functions
       const allData = {
         Web_Basic: webBasicData,
         Web_Standard: webStandardData,
         Web_Premium: webPremiumData,
-        App_Basic: appBasicData,
-        App_Standard: appStandardData,
-        App_Premium: appPremiumData,
-        Seo_Basic: seoBasicData,
-        Seo_Standard: seoStandardData,
-        Seo_Premium: seoPremiumData,
+        App_Basic: appBasicData?.data,
+        App_Standard: appStandardData?.data,
+        App_Premium: appPremiumData?.data,
+        Seo_Basic: seoBasicData?.data,
+        Seo_Standard: seoStandardData?.data,
+        Seo_Premium: seoPremiumData?.data,
         Digital_Marketing: digitalMarketingData,
-        Logo_Basic: logoBasicData,
-        Logo_Standard: logoStandardData,
-        Logo_Premium: logoPremiumData,
-        Logo_Business: logoBusinessData,
+        Logo_Basic: logoBasicData?.data,
+        Logo_Standard: logoStandardData?.data,
+        Logo_Premium: logoPremiumData?.data,
+        Logo_Business: logoBusinessData?.data,
       };
+
+      console.log("Web Basic data",webBasicData);
+      console.log("Web Standard data",webStandardData);
+      console.log("Web Premium data",webPremiumData);
+      console.log("Digital Data",digitalMarketingData);
+
+      console.log("Web Basic data",allData.Web_Basic);
+      console.log("Web Standard data",allData.Web_Standard);
+      console.log("Web Premium data",allData.Web_Premium);
+      console.log("Digital Data",allData.Digital_Marketing);
   
-      console.log("SEO Basic Data:", allData.Seo_Basic);
-      console.log("SEO Standard Data:", allData.Seo_Standard);
-      console.log("SEO Premium Data:", allData.Seo_Premium);
   
       // Filter out empty arrays, null, or undefined values
       const filteredData = Object.fromEntries(
-        Object.entries(allData).filter(([key, value]) => 
-          Array.isArray(value) ? value.length > 0 : value !== null && value !== undefined
-        )
+        Object.entries(allData).filter(([key, value]) => Array.isArray(value) ? value.length > 0 : value !== null && value !== undefined)
       );
+  
   
       reply.code(200).send({ success: true, data: filteredData });
     } catch (error) {
@@ -176,8 +184,6 @@ const {
       reply.code(500).send({ success: false, message: 'Failed to fetch all planes data by client ID' });
     }
   };
-  
-
   
     const {
       deleteBasicWebPlanesDataByID,
