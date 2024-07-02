@@ -53,30 +53,27 @@ const delDigitalMarketingById = async (request, reply) => {
     reply.code(500).send({ error: "Internal Server Error" });
   }
 };
-
-
 const updateDigitalMarketingById = async (request, reply) => {
   try {
     const id = request.params.id;
     const clientId = request.params.clientId;
     const clientData = request.body;
 
-    console.log("Id",id)
-    console.log("clientId",clientId)
+    console.log("Id", id);
+    console.log("clientId", clientId);
 
     const data = await updateDigitalInService(id, clientId, clientData);
 
-    if (data) {
-      reply.send({ data: data });
-    } else {
+    if (data === "Data Not Found") {
       reply.code(404).send({ message: `Client data Not Found With ID ${id}` });
+    } else {
+      reply.send({ data: data });
     }
   } catch (error) {
     logger.error("Error occurred while updating digital marketing data:", error);
     throw error;
   }
 };
-
 
 
 const getDigitalMarketingById = async (request, reply) => {
