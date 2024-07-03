@@ -24,9 +24,9 @@ const appPlaneRoute = async (fastify) => {
   fastify.get('/app-standard-planes-data/:clientId',getAppStandardPlaneDataById)
   fastify.get('/app-premium-planes-data/:clientId',getAppPremiumPlaneDataById)
 
-  fastify.put('/app-basic-planes-data/:id/:clientId',updateAppBasicPlanesData)
-  fastify.put('/app-standard-planes-data/:id/:clientId',updateAppStandardPlaneData)
-  fastify.put('/app-premium-planes-data/:id/:clientId',updateAppPremiumPlaneData)
+  fastify.put('/app-basic-planes-data/:id/:clientId', { preHandler: upload.single('Link_to_Graphics') },updateAppBasicPlanesData)
+  fastify.put('/app-standard-planes-data/:id/:clientId', { preHandler: upload.single('Link_to_Graphics') },updateAppStandardPlaneData)
+  fastify.put('/app-premium-planes-data/:id/:clientId', { preHandler: upload.single('Link_to_Graphics') },updateAppPremiumPlaneData)
   
 
 

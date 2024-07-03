@@ -164,11 +164,24 @@ const updatePlanesDataById = async (request, reply, serviceFunction) => {
   try {
     const id=request.params.id
     const cliendId=request.params.clientId
-    const data=request.body
-    console.log("ID ",id)
-    console.log("cliendId ",cliendId)
-    console.log("data ",data)
+    const data = request.body;
 
+    
+    if (request.file) {
+      const result = await cloudinary.uploader.upload(request.file.path);
+      data.Link_to_Graphics = result.secure_url;
+    } else if (request.files) {
+      const uploadPromises = request.files.map(file =>
+        cloudinary.uploader.upload(file.path)
+      );
+      const results = await Promise.all(uploadPromises);
+      data.Link_to_Graphics = results.map(result => result.secure_url);
+    }
+
+
+    if (!data) {
+      return reply.code(400).send({ error: 'Invalid input' });
+    }
 
     const result = await serviceFunction(id,cliendId,data);
     console.log("Result",result)

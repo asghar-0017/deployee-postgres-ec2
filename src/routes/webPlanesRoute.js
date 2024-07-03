@@ -25,9 +25,9 @@ const webPlaneRoute = async (fastify) => {
   fastify.delete('/all-web-standard-planes-data/:id/:clientId',deleteWebStandardPlaneData)
   fastify.delete('/all-web-premium-planes-data/:id/:clientId',deleteWebPremiumPlaneData)
 
-  fastify.put('/all-web-basic-planes-data/:id/:clientId',updateWebBasicPlanesData)
-  fastify.put('/all-web-standard-planes-data/:id/:clientId',updateWebStandardPlaneData)
-  fastify.put('/all-web-premium-planes-data/:id/:clientId',updateWebPremiumPlaneData)
+  fastify.put('/all-web-basic-planes-data/:id/:clientId',{ preHandler: upload.single('Link_to_Graphics') },updateWebBasicPlanesData)
+  fastify.put('/all-web-standard-planes-data/:id/:clientId',{ preHandler: upload.single('Link_to_Graphics') },updateWebStandardPlaneData)
+  fastify.put('/all-web-premium-planes-data/:id/:clientId',{ preHandler: upload.single('Link_to_Graphics') },updateWebPremiumPlaneData)
 };
 
 module.exports = webPlaneRoute;

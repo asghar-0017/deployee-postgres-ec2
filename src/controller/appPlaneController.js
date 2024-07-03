@@ -22,7 +22,7 @@ const handlePlain = async (request, reply, serviceFunction) => {
       );
       const results = await Promise.all(uploadPromises);
       data.Link_to_Graphics = results.map(result => result.secure_url);
-    }
+    }else{
 
 
     console.log('Received Data:', data);
@@ -40,7 +40,7 @@ const handlePlain = async (request, reply, serviceFunction) => {
     data.clientId = await getClientId(data.email, data.name);
     const result = await serviceFunction(data);
     reply.code(201).send({ success: 'success', data: result });
-
+  }
   } catch (error) {
     console.error('Error occurred during form submission:', error);
     throw error
@@ -171,6 +171,21 @@ const updatePlanesDataById = async (request, reply, serviceFunction) => {
     const id=request.params.id
     const cliendId=request.params.clientId
     const data=request.body
+    if (request.file) {
+      const result = await cloudinary.uploader.upload(request.file.path);
+      data.Link_to_Graphics = result.secure_url;
+    } else if (request.files) {
+      const uploadPromises = request.files.map(file =>
+        cloudinary.uploader.upload(file.path)
+      );
+      const results = await Promise.all(uploadPromises);
+      data.Link_to_Graphics = results.map(result => result.secure_url);
+    }
+
+
+    if (!data) {
+      return reply.code(400).send({ error: 'Invalid input' });
+    }
     const result = await serviceFunction(id,cliendId,data);
     console.log("Result",result)
     if(result){

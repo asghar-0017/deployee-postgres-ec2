@@ -31,10 +31,10 @@ const logoPlaneRoute = async (fastify) => {
   fastify.delete('/all-logo-premium-planes-data/:id/:clientId',deleteLogoPremiumPlaneData)
   fastify.delete('/all-logo-business-planes-data/:id/:clientId',deleteLogoBusinessPlaneData)
 
-  fastify.put('/all-logo-basic-planes-data/:id/:clientId', updateLogoBasicPlanesData);
-  fastify.put('/all-logo-standard-planes-data/:id/:clientId', updateLogoStandardPlaneData);
-  fastify.put('/all-logo-premium-planes-data/:id/:clientId', updateLogoPremiumPlaneData);
-  fastify.put('/all-logo-business-planes-data/:id/:clientId', updateLogoBusinessPlaneData);
+  fastify.put('/all-logo-basic-planes-data/:id/:clientId', { preHandler: upload.single('Link_to_Graphics') }, updateLogoBasicPlanesData);
+  fastify.put('/all-logo-standard-planes-data/:id/:clientId', { preHandler: upload.single('Link_to_Graphics') }, updateLogoStandardPlaneData);
+  fastify.put('/all-logo-premium-planes-data/:id/:clientId', { preHandler: upload.single('Link_to_Graphics') }, updateLogoPremiumPlaneData);
+  fastify.put('/all-logo-business-planes-data/:id/:clientId', { preHandler: upload.single('Link_to_Graphics') }, updateLogoBusinessPlaneData);
   
 
 
