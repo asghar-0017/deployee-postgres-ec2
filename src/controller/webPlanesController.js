@@ -158,45 +158,35 @@ const deleteWebPremiumPlaneData = async (request, reply) => {
   await deletePlanesDataById(request, reply, deletepremiumWebPlanesDataByID);
 };
 
-
-
 const updatePlanesDataById = async (request, reply, serviceFunction) => {
   try {
-    const id=request.params.id
-    const cliendId=request.params.clientId
+    const id = request.params.id;
+    const clientId = request.params.clientId;
     const data = request.body;
+    console.log("Name",data.name)
 
-    
     if (request.file) {
       const result = await cloudinary.uploader.upload(request.file.path);
       data.Link_to_Graphics = result.secure_url;
     } else if (request.files) {
-      const uploadPromises = request.files.map(file =>
-        cloudinary.uploader.upload(file.path)
-      );
+      const uploadPromises = request.files.map(file => cloudinary.uploader.upload(file.path));
       const results = await Promise.all(uploadPromises);
       data.Link_to_Graphics = results.map(result => result.secure_url);
     }
 
-
-    if (!data) {
-      return reply.code(400).send({ error: 'Invalid input' });
+    if (!data || Object.keys(data).length === 0) {
+      return reply.code(400).send({ error: 'Invalid input: No data provided' });
     }
 
-    const result = await serviceFunction(id,cliendId,data);
-    console.log("Result",result)
-    if(result){
-    reply.code(201).send({
-      data: result
-     });
-    }else{
-      reply.send({
-        message:`${serviceFunction} Data Not Found`
-      })
+    const result = await serviceFunction(id, clientId, data);
+    if (result) {
+      reply.code(201).send({ data: result });
+    } else {
+      reply.send({ message: `${serviceFunction.name} Data Not Found` });
     }
   } catch (error) {
-    console.error('Error occurred in getDataPlanes Function', error);
-    throw error
+    console.error('Error occurred in updatePlanesDataById function:', error);
+    reply.code(500).send({ error: 'Internal Server Error' });
   }
 };
 

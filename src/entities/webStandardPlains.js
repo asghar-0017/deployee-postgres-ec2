@@ -1,4 +1,5 @@
 const { EntitySchema } = require("typeorm");
+const planStatus=require('./planStatus')
 
 module.exports = new EntitySchema({
   name: "WebstandardPlane",
@@ -47,6 +48,13 @@ module.exports = new EntitySchema({
         type:"varchar",
         default: "Web Standard Plane",
         },
+        status:{
+          type:"varchar",
+          default: "Pending",
+          enum:planStatus,
+          enumName: "Plan_Status_enum",
+          nullable: false,
+          },
       created_at: {
         type: "timestamp",
         default: () => "CURRENT_TIMESTAMP",

@@ -469,6 +469,7 @@ const updateAllPlansDataByID = async (req, reply) => {
 
     console.log('All Data before filtering:', allData);
 
+    
     const filteredData = Object.fromEntries(
       Object.entries(allData)
         .map(([key, value]) => {
@@ -494,6 +495,7 @@ const updateAllPlansDataByID = async (req, reply) => {
         })
         .filter(([key, value]) => value.length > 0)
     );
+
 
     console.log('Filtered data:', filteredData);
 

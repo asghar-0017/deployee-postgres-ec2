@@ -38,11 +38,12 @@ module.exports = new EntitySchema({
         type: "varchar",
         nullable: true,
       },
+
         plane:{
         type:"varchar",
         default: "App basic plane",
         },
-        status:{
+      status:{
         type:"varchar",
         default: "Pending",
         enum:planStatus,
