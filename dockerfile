@@ -20,5 +20,5 @@ RUN npm rebuild bcrypt --build-from-source
 # Bundle app source
 COPY . .
 
-EXPOSE 4000
+EXPOSE 8080  
 CMD ["node", "server.js"]
