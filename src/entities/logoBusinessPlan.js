@@ -1,9 +1,10 @@
 const { EntitySchema } = require("typeorm");
+const logoProductTypes = require("./logoProductService");
 const planStatus=require('./planStatus')
 
 module.exports = new EntitySchema({
-  name: "seoStandardPlane",
-  tableName: "seo-standard-plane",  // Fixed typo here
+  name: "logoBusinessPlan",
+  tableName: "logo_business_plan",
   columns: {
     id: {
       type: "int",
@@ -15,43 +16,52 @@ module.exports = new EntitySchema({
     },
     name: {
       type: "varchar",
-      nullable: false,
     },
     email: {
       type: "varchar",
-      nullable: false,
     },
     company: {
       type: "varchar",
+      length: 255,
       nullable: true,
     },
-    Website_of_the_client: {
+    reference_logos: {
       type: "varchar",
       nullable: true,
     },
-    Platform_of_the_website: {
+    reference_template: {
       type: "varchar",
       nullable: true,
     },
-    competitor_website_reference: {
+    reference_websites: {
       type: "varchar",
       nullable: true,
     },
-    current_SEO_Efforts: {
+    custom_product_design: {
       type: "varchar",
       nullable: true,
-    },
-    access_and_permissions: {
-      type: "varchar",
-      nullable: false,  // This should be nullable: false if it's required
     },
     description: {
       type: "varchar",
-      nullable: false,
+      nullable: true,
     },
-    plane:{
+    Link_to_Graphics: {
+      type: "varchar",
+      nullable: true,
+    },
+    drive_link_to_reference_images: {
+      type: "varchar",
+      nullable: true,
+    },
+    product_design: {
+      type: "enum",
+      enum: logoProductTypes,
+      enumName: "logo_products_enum", // Ensure this matches your PostgreSQL enum type name
+      nullable: true,
+    },
+    plan:{
       type:"varchar",
-      default: "SEO Standard plane",
+      default: "Logo Business plan",
       },
       status:{
         type:"varchar",

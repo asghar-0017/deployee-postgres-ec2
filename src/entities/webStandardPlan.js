@@ -2,8 +2,8 @@ const { EntitySchema } = require("typeorm");
 const planStatus=require('./planStatus')
 
 module.exports = new EntitySchema({
-  name: "appStandardPlane",
-  tableName: "app_standard_plane",
+  name: "WebstandardPlan",
+  tableName: "Web_standard_plan",
   columns: {
     id: {
         type: "int",
@@ -23,30 +23,32 @@ module.exports = new EntitySchema({
         type: "varchar",
         nullable: true,
       },
-      reference_App: {
+      reference_sites: {
         type: "varchar",
         nullable: true,
-      },
-      drive_links_to_icons:{
-        type:"varchar",
-        nullable:true
-      },
-      animation_Reference:{
-        type:'varchar',
-        nullable:true
-      },
-      description: {
-        type: "varchar",
       },
       Link_to_Graphics: {
         type: "varchar",
         nullable: true,
       },
-      plane:{
+      drive_link:{
         type:"varchar",
-        default: "App Standard plane",
+        nullable: true,
+      },
+      description: {
+        type: "varchar",
+      },
+      animation:{
+        type:"varchar",
+      },
+      domain:{
+        type:"varchar"
+      },
+      plan:{
+        type:"varchar",
+        default: "Web Standard Plan",
         },
-      status:{
+        status:{
           type:"varchar",
           default: "Pending",
           enum:planStatus,

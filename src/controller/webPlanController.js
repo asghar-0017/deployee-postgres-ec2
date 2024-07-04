@@ -1,4 +1,4 @@
-const { webBasicPlaneService, webStandardPlaneService, webPremiumPlaneService,
+const { webBasicPlanService, webStandardPlanService, webPremiumPlanService,
   getAllBasicWebPlanesData,getAllStandardWebPlanesData,getAllpremiumWebPlanesData,
   getWebBasicPlanesDataByID,getWebStandardPlanesDataByID,getWebpremiumPlanesDataByID,
   deleteBasicWebPlanesDataByID,deleteStandardWebPlanesDataByID,deletepremiumWebPlanesDataByID,
@@ -46,16 +46,16 @@ const handlePlain = async (request, reply, serviceFunction) => {
 };
 
 
-const webBasicPlane = async (request, reply) => {
-  await handlePlain(request, reply, webBasicPlaneService);
+const webBasicPlan = async (request, reply) => {
+  await handlePlain(request, reply, webBasicPlanService);
 };
 
-const webStandardPlane = async (request, reply) => {
-  await handlePlain(request, reply, webStandardPlaneService);
+const webStandardPlan = async (request, reply) => {
+  await handlePlain(request, reply, webStandardPlanService);
 };
 
-const webPremiumPlane = async (request, reply) => {
-  await handlePlain(request, reply, webPremiumPlaneService);
+const webPremiumPlan = async (request, reply) => {
+  await handlePlain(request, reply, webPremiumPlanService);
 };
 
 
@@ -63,7 +63,7 @@ const webPremiumPlane = async (request, reply) => {
 
 
 
-const getWebPlanesData = async (request, reply, serviceFunction) => {
+const getWebPlanData = async (request, reply, serviceFunction) => {
   try {
 
     const result = await serviceFunction();
@@ -77,21 +77,21 @@ const getWebPlanesData = async (request, reply, serviceFunction) => {
       })
     }
   } catch (error) {
-    console.error('Error occurred in getLogoPlanesData Function', error);
+    console.error('Error occurred in getLogoPlanData Function', error);
     throw error
   }
 };
 
 const allWebBasicPlanesData = async (request, reply) => {
-  await getWebPlanesData(request, reply, getAllBasicWebPlanesData);
+  await getWebPlanData(request, reply, getAllBasicWebPlanesData);
 };
 
 const allWebStandardPlaneData = async (request, reply) => {
-  await getWebPlanesData(request, reply, getAllStandardWebPlanesData);
+  await getWebPlanData(request, reply, getAllStandardWebPlanesData);
 };
 
 const allWebPremiumPlaneData = async (request, reply) => {
-  await getWebPlanesData(request, reply, getAllpremiumWebPlanesData);
+  await getWebPlanData(request, reply, getAllpremiumWebPlanesData);
 };
 
 
@@ -204,7 +204,7 @@ const updateWebPremiumPlaneData = async (request, reply) => {
 
 
 module.exports = {
-  webBasicPlane,webStandardPlane,webPremiumPlane,
+  webBasicPlan,webStandardPlan,webPremiumPlan,
   allWebBasicPlanesData,allWebStandardPlaneData,allWebPremiumPlaneData,
   WebBasicPlanesDataById,WebStandardPlaneDataById,WebPremiumPlaneDataById,
   deleteWebBasicPlanesData,deleteWebStandardPlaneData,deleteWebPremiumPlaneData,

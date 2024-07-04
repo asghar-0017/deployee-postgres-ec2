@@ -1,9 +1,9 @@
 const dataSource = require("../infrastructure/psql");
 const { logger } = require("../../logger");
 
-const appBasicPlaneRepository = dataSource.getRepository("app_basic_plane");
-const appStandardPlaneRepository = dataSource.getRepository("app_standard_plane");
-const appPremiumPlaneRepository = dataSource.getRepository("app_premium_plane");
+const appBasicPlaneRepository = dataSource.getRepository("app_basic_plan");
+const appStandardPlaneRepository = dataSource.getRepository("app_standard_plan");
+const appPremiumPlaneRepository = dataSource.getRepository("app_premium_plan");
 
 const saveData = async (repository, data, repoName) => {
   try {

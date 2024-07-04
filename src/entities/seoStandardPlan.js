@@ -2,8 +2,8 @@ const { EntitySchema } = require("typeorm");
 const planStatus=require('./planStatus')
 
 module.exports = new EntitySchema({
-  name: "seopremiumPlane",
-  tableName: "seo-premium-plane",  // Fixed typo here
+  name: "seoStandardPlan",
+  tableName: "seo-standard-plan",  // Fixed typo here
   columns: {
     id: {
       type: "int",
@@ -49,9 +49,9 @@ module.exports = new EntitySchema({
       type: "varchar",
       nullable: false,
     },
-    plane:{
+    plan:{
       type:"varchar",
-      default: "SEO Premium plane",
+      default: "SEO Standard plan",
       },
       status:{
         type:"varchar",

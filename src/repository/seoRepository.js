@@ -1,9 +1,9 @@
 const dataSource = require("../infrastructure/psql");
 const { logger } = require("../../logger");
 
-const seoBasicPlaneRepository = dataSource.getRepository("seo-basic-plane");
-const seoStandardPlaneRepository = dataSource.getRepository("seo-standard-plane");
-const seoPremiumPlaneRepository = dataSource.getRepository("seo-premium-plane");
+const seoBasicPlaneRepository = dataSource.getRepository("seo-basic-plan");
+const seoStandardPlaneRepository = dataSource.getRepository("seo-standard-plan");
+const seoPremiumPlaneRepository = dataSource.getRepository("seo-premium-plan");
 
 const saveData = async (repository, data, repoName) => {
   try {

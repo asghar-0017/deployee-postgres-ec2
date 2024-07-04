@@ -2,8 +2,8 @@ const { EntitySchema } = require("typeorm");
 const planStatus=require('./planStatus')
 
 module.exports = new EntitySchema({
-  name: "appbasicPlane",
-  tableName: "app_basic_plane",
+  name: "logoBasicPlan",
+  tableName: "logo_basic_plan",
   columns: {
     id: {
         type: "int",
@@ -23,33 +23,28 @@ module.exports = new EntitySchema({
         type: "varchar",
         nullable: true,
       },
-      reference_App: {
+      reference_logos: {
         type: "varchar",
         nullable: true,
-      },
-      drive_links_to_icons:{
-        type:"varchar",
-        nullable:true
-      },
-      description: {
-        type: "varchar",
       },
       Link_to_Graphics: {
         type: "varchar",
         nullable: true,
       },
-
-        plane:{
+      description: {
+        type: "varchar",
+      },
+      plan:{
         type:"varchar",
-        default: "App basic plane",
+        default: "Logo basic plan",
         },
-      status:{
-        type:"varchar",
-        default: "Pending",
-        enum:planStatus,
-        enumName: "Plan_Status_enum",
-        nullable: false,
-        },
+        status:{
+          type:"varchar",
+          default: "Pending",
+          enum:planStatus,
+          enumName: "Plan_Status_enum",
+          nullable: false,
+          },
       created_at: {
         type: "timestamp",
         default: () => "CURRENT_TIMESTAMP",
@@ -60,8 +55,7 @@ module.exports = new EntitySchema({
         onUpdate: "CURRENT_TIMESTAMP",
       },
  
-  },
-  relations: {
+  }, relations: {
     client: {
       target: "Client",
       type: "many-to-one",

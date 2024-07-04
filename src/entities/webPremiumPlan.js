@@ -2,8 +2,8 @@ const { EntitySchema } = require("typeorm");
 const planStatus=require('./planStatus')
 
 module.exports = new EntitySchema({
-  name: "WebstandardPlane",
-  tableName: "Web_standard_plane",
+  name: "webpremiumPlan",
+  tableName: "Web-premium_plan",
   columns: {
     id: {
         type: "int",
@@ -27,12 +27,12 @@ module.exports = new EntitySchema({
         type: "varchar",
         nullable: true,
       },
-      Link_to_Graphics: {
-        type: "varchar",
-        nullable: true,
-      },
       drive_link:{
         type:"varchar",
+        nullable: true,
+      },
+      Link_to_Graphics: {
+        type: "varchar",
         nullable: true,
       },
       description: {
@@ -44,9 +44,13 @@ module.exports = new EntitySchema({
       domain:{
         type:"varchar"
       },
-      plane:{
+      functionalities: {
+        type: "json",
+        nullable: true,
+      },
+      plan:{
         type:"varchar",
-        default: "Web Standard Plane",
+        default: "Web Premium plan",
         },
         status:{
           type:"varchar",

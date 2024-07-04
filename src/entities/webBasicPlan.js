@@ -1,10 +1,9 @@
 const { EntitySchema } = require("typeorm");
-const logoProductTypes = require("./logoProductService");
 const planStatus=require('./planStatus')
 
 module.exports = new EntitySchema({
-  name: "logoBusinessPlane",
-  tableName: "logo_business_plane",
+  name: "basicPlan",
+  tableName: "web_basic_plan",
   columns: {
     id: {
       type: "int",
@@ -13,6 +12,7 @@ module.exports = new EntitySchema({
     },
     clientId: {
       type: "varchar",
+
     },
     name: {
       type: "varchar",
@@ -22,26 +22,9 @@ module.exports = new EntitySchema({
     },
     company: {
       type: "varchar",
-      length: 255,
       nullable: true,
     },
-    reference_logos: {
-      type: "varchar",
-      nullable: true,
-    },
-    reference_template: {
-      type: "varchar",
-      nullable: true,
-    },
-    reference_websites: {
-      type: "varchar",
-      nullable: true,
-    },
-    custom_product_design: {
-      type: "varchar",
-      nullable: true,
-    },
-    description: {
+    reference_sites: {
       type: "varchar",
       nullable: true,
     },
@@ -49,27 +32,20 @@ module.exports = new EntitySchema({
       type: "varchar",
       nullable: true,
     },
-    drive_link_to_reference_images: {
+    description: {
       type: "varchar",
-      nullable: true,
     },
-    product_design: {
-      type: "enum",
-      enum: logoProductTypes,
-      enumName: "logo_products_enum", // Ensure this matches your PostgreSQL enum type name
-      nullable: true,
+    plan: {
+      type: "varchar",
+      default: "Web Basic Plan",
     },
-    plane:{
+    status:{
       type:"varchar",
-      default: "Logo Business plane",
+      default: "Pending",
+      enum:planStatus,
+      enumName: "Plan_Status_enum",
+      nullable: false,
       },
-      status:{
-        type:"varchar",
-        default: "Pending",
-        enum:planStatus,
-        enumName: "Plan_Status_enum",
-        nullable: false,
-        },
     created_at: {
       type: "timestamp",
       default: () => "CURRENT_TIMESTAMP",
@@ -79,7 +55,8 @@ module.exports = new EntitySchema({
       default: () => "CURRENT_TIMESTAMP",
       onUpdate: "CURRENT_TIMESTAMP",
     },
-  }, relations: {
+  },
+  relations: {
     client: {
       target: "Client",
       type: "many-to-one",

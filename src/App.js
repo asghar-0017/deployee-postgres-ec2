@@ -9,7 +9,7 @@ const {logger}=require('../logger')
 
 
 const contactRoute = require('./routes/contactRoutes');
-const webPlaneRoute = require('./routes/webPlanesRoute');
+const webPlanRoute = require('./routes/webPlanRoute');
 const digitalMarketingRoute = require('./routes/digitalMarketingRoute');
 const appPlaneRoute = require('./routes/appPlaneRoutes');
 const seoRoute = require('./routes/seoRoute');
@@ -59,7 +59,7 @@ fastify.get('/', async (req, res) => {
 });
 
 fastify.register(contactRoute);
-fastify.register(webPlaneRoute);
+fastify.register(webPlanRoute);
 fastify.register(digitalMarketingRoute);
 fastify.register(appPlaneRoute);
 fastify.register(seoRoute);

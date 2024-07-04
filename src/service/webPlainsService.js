@@ -1,5 +1,5 @@
 const nodemailer = require('nodemailer');
-const { webBasicPlaneRepo, webStandardPlaneRepo, webPremiumPlaneRepo,
+const { webBasicPlanRepo, webStandardPlanRepo, webPremiumPlanRepo,
   getBasicWebPlaneDataInRepo,getStandardWebPlaneDataInRepo,getPremiumWebPlaneDataInRepo,
   getBasicWebPlaneDataByIDInRepo,getStandardWebPlaneDataByIDInRepo,getPremiumWebPlaneDataInByIDRepo,
   deleteBasicWebPlaneDataInRepoByID,deleteStandardWebPlaneDataInRepoByID,deletePremiumWebPlaneDataInRepoById,
@@ -82,16 +82,16 @@ const processService = async (planeName, planData, repoFunction) => {
   }
 };
 
-const webBasicPlaneService = async (planData) => {
-  return await processService('WEB Basic Plane', planData, webBasicPlaneRepo);
+const webBasicPlanService = async (planData) => {
+  return await processService('WEB Basic Plan', planData, webBasicPlanRepo);
 };
 
-const webStandardPlaneService = async (planData) => {
-  return await processService('WEB Standard Plane', planData, webStandardPlaneRepo);
+const webStandardPlanService = async (planData) => {
+  return await processService('WEB Standard Plan', planData, webStandardPlanRepo);
 };
 
-const webPremiumPlaneService = async (planData) => {
-  return await processService('WEB Premium Plane', planData, webPremiumPlaneRepo);
+const webPremiumPlanService = async (planData) => {
+  return await processService('WEB Premium Plan', planData, webPremiumPlanRepo);
 };
 
 
@@ -164,7 +164,7 @@ const updatepremiumWebPlanesDataByID = (id,cliendId,data) => updatePlaneprocessS
 
 
 module.exports = {
-  webBasicPlaneService, webStandardPlaneService, webPremiumPlaneService,
+  webBasicPlanService, webStandardPlanService, webPremiumPlanService,
   getAllBasicWebPlanesData,getAllStandardWebPlanesData,getAllpremiumWebPlanesData,
   getWebBasicPlanesDataByID,getWebStandardPlanesDataByID,getWebpremiumPlanesDataByID,
   deleteBasicWebPlanesDataByID,deleteStandardWebPlanesDataByID,deletepremiumWebPlanesDataByID,

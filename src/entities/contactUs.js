@@ -8,7 +8,7 @@ module.exports = new EntitySchema({
     id: {
       type: "int",
       primary: true,
-      unique:true,
+      generated: true,
     },
     name: {
       type: "varchar",

@@ -2,8 +2,8 @@ const { EntitySchema } = require("typeorm");
 const planStatus=require('./planStatus')
 
 module.exports = new EntitySchema({
-  name: "logoPremiumPlane",
-  tableName: "logo_premium_plane",
+  name: "logoPremiumPlan",
+  tableName: "logo_premium_plan",
   columns: {
     id: {
       type: "int",
@@ -38,9 +38,9 @@ module.exports = new EntitySchema({
     description: {
       type: "varchar",
     },
-    plane:{
+    plan:{
       type:"varchar",
-      default: "Logo Premium plane",
+      default: "Logo Premium plan",
       },
       status:{
         type:"varchar",

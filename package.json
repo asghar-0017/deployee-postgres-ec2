@@ -100,6 +100,7 @@
     "joycon": "^3.1.1",
     "json-schema-ref-resolver": "^1.0.1",
     "json-schema-traverse": "^1.0.0",
+    "libphonenumber-js": "^1.11.4",
     "light-my-request": "^5.13.0",
     "logger": "^0.0.1",
     "lru-cache": "^10.2.2",

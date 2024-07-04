@@ -1,11 +1,11 @@
 const dataSource = require("../infrastructure/psql");
 const { logger } = require("../../logger");
 
-const logoBasicPlaneRepository = dataSource.getRepository("logo_basic_plane");
+const logoBasicPlaneRepository = dataSource.getRepository("logo_basic_plan");
 console.log("Logo Basic Plane Data",logoBasicPlaneRepository)
-const logoStandardPlaneRepository = dataSource.getRepository("logo_standard_plane");
-const logoPremiumPlaneRepository = dataSource.getRepository("logo_premium_plane");
-const logoBusinessPlaneRepository = dataSource.getRepository("logo_business_plane");
+const logoStandardPlaneRepository = dataSource.getRepository("logo_standard_plan");
+const logoPremiumPlaneRepository = dataSource.getRepository("logo_premium_plan");
+const logoBusinessPlaneRepository = dataSource.getRepository("logo_business_plan");
 
 const saveData = async (repository, data, repoName) => {
   try {
@@ -20,10 +20,10 @@ const saveData = async (repository, data, repoName) => {
   }
 };
 
-const logoBasicPlaneRepo = (data) => saveData(logoBasicPlaneRepository, data, "logoBasicPlaneRepo");
-const logoStandardPlaneRepo = (data) => saveData(logoStandardPlaneRepository, data, "logoStandardPlaneRepo");
-const logoPremiumPlaneRepo = (data) => saveData(logoPremiumPlaneRepository, data, "logoPremiumPlaneRepo");
-const logoBusinessPlaneRepo = (data) => saveData(logoBusinessPlaneRepository, data, "logoBusinessPlaneRepo");
+const logoBasicPlaneRepo = (data) => saveData(logoBasicPlaneRepository, data, "logoBasicPlanRepo");
+const logoStandardPlaneRepo = (data) => saveData(logoStandardPlaneRepository, data, "logoStandardPlanRepo");
+const logoPremiumPlaneRepo = (data) => saveData(logoPremiumPlaneRepository, data, "logoPremiumPlanRepo");
+const logoBusinessPlaneRepo = (data) => saveData(logoBusinessPlaneRepository, data, "logoBusinessPlanRepo");
 
 
 const getLogoPlanesRepo = async (repository, repoName) => {

@@ -1,9 +1,9 @@
 const dataSource = require("../infrastructure/psql");
 const { logger } = require("../../logger");
 
-const webBasicPlaneRepository = dataSource.getRepository("web_basic_plane");
-const webStandardPlaneRepository = dataSource.getRepository("Web_standard_plane");
-const webPremiumPlaneRepository = dataSource.getRepository("Web-premium_plane");
+const webBasicPlaneRepository = dataSource.getRepository("web_basic_plan");
+const webStandardPlaneRepository = dataSource.getRepository("Web_standard_plan");
+const webPremiumPlaneRepository = dataSource.getRepository("Web-premium_plan");
 
 const saveData = async (repository, data, repoName) => {
   try {
@@ -23,9 +23,9 @@ const saveData = async (repository, data, repoName) => {
   }
 };
 
-const webBasicPlaneRepo = (data) => saveData(webBasicPlaneRepository, data, "webBasicPlaneRepo");
-const webStandardPlaneRepo = (data) => saveData(webStandardPlaneRepository, data, "webStandardPlaneRepo");
-const webPremiumPlaneRepo = (data) => saveData(webPremiumPlaneRepository, data, "webPremiumPlaneRepo");
+const webBasicPlanRepo = (data) => saveData(webBasicPlaneRepository, data, "webBasicPlanRepo");
+const webStandardPlanRepo = (data) => saveData(webStandardPlaneRepository, data, "webStandardPlanRepo");
+const webPremiumPlanRepo = (data) => saveData(webPremiumPlaneRepository, data, "webPremiumPlanRepo");
 
 
 const getWebPlanesRepo = async (repository, repoName) => {
@@ -50,7 +50,7 @@ const getWebPlanesRepoByID = async (repository, repoName, clientId) => {
     const getData = await repository.find({ where: { clientId } });
     logger.info(`src > repository > getWebPlanesRepoByID > ${repoName}`, getData);
 
-    if (getData) {
+    if (getData.length > 0) {
       return getData;
     } else {
       return `Data not found with clientId ${clientId}`;
@@ -118,7 +118,7 @@ const updatePremiumWebPlaneDataInRepoById = (id, clientId,data) => UpdateAppPlan
 
 
 module.exports = {
-    webBasicPlaneRepo,webStandardPlaneRepo,webPremiumPlaneRepo,
+    webBasicPlanRepo,webStandardPlanRepo,webPremiumPlanRepo,
     getBasicWebPlaneDataInRepo,getStandardWebPlaneDataInRepo,getPremiumWebPlaneDataInRepo,
     getBasicWebPlaneDataByIDInRepo,getStandardWebPlaneDataByIDInRepo,getPremiumWebPlaneDataInByIDRepo,
     deleteBasicWebPlaneDataInRepoByID,deleteStandardWebPlaneDataInRepoByID,deletePremiumWebPlaneDataInRepoById,

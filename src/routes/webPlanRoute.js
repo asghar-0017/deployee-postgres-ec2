@@ -1,16 +1,16 @@
-const { webBasicPlane, webStandardPlane, webPremiumPlane,
+const { webBasicPlan, webStandardPlan, webPremiumPlan,
   allWebBasicPlanesData,allWebStandardPlaneData,allWebPremiumPlaneData,
   WebBasicPlanesDataById,WebStandardPlaneDataById,WebPremiumPlaneDataById,
   deleteWebBasicPlanesData,deleteWebStandardPlaneData,deleteWebPremiumPlaneData,
   updateWebBasicPlanesData,updateWebStandardPlaneData,updateWebPremiumPlaneData
- } = require('../controller/webPlanesController');
+ } = require('../controller/webPlanController');
 const upload = require('../utils/uploadConfig');
 
 const webPlaneRoute = async (fastify) => {
   
-  fastify.post('/web-basic-plane', { preHandler: upload.single('Link_to_Graphics') }, webBasicPlane);
-  fastify.post('/web-standard-plane', { preHandler: upload.single('Link_to_Graphics') }, webStandardPlane);
-  fastify.post('/web-premium-plane', { preHandler: upload.single('Link_to_Graphics') }, webPremiumPlane);
+  fastify.post('/web-basic-plane', { preHandler: upload.single('Link_to_Graphics') }, webBasicPlan  );
+  fastify.post('/web-standard-plane', { preHandler: upload.single('Link_to_Graphics') }, webStandardPlan);
+  fastify.post('/web-premium-plane', { preHandler: upload.single('Link_to_Graphics') }, webPremiumPlan);
 
 
   fastify.get('/all-web-basic-planes-data',allWebBasicPlanesData)
