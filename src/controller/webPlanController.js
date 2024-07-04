@@ -9,23 +9,27 @@ const { logger } = require('../../logger');
 
 const { getClientId,RandomId } = require("../service/clientService");
 const cloudinary = require('cloudinary').v2;
+const {ValidateWebBasicPlan,ValidateWebStandardPlan,ValidateWebPremiumPlan}=require('../scheema/webPlanesSchema')
 
 
-
-const handlePlain = async (request, reply, serviceFunction) => {
+const handlePlain = async (request, reply,schema, serviceFunction) => {
   try {
     const data = request.body;
 
+    const { error } = schema.validate(data);
+    console.log("Validate Error ", error);
+        if (error) {
+            return reply.code(400).send({ error: error.details[0].message });
+        }
     
-    if (request.file) {
-      const result = await cloudinary.uploader.upload(request.file.path);
-      data.Link_to_Graphics = result.secure_url;
-    } else if (request.files) {
+    if (request.files && request.files.length > 0) {
       const uploadPromises = request.files.map(file =>
         cloudinary.uploader.upload(file.path)
       );
       const results = await Promise.all(uploadPromises);
       data.Link_to_Graphics = results.map(result => result.secure_url);
+    } else {
+      data.Link_to_Graphics = []; // No files provided
     }
 
 
@@ -47,15 +51,15 @@ const handlePlain = async (request, reply, serviceFunction) => {
 
 
 const webBasicPlan = async (request, reply) => {
-  await handlePlain(request, reply, webBasicPlanService);
+  await handlePlain(request, reply,ValidateWebBasicPlan, webBasicPlanService);
 };
 
 const webStandardPlan = async (request, reply) => {
-  await handlePlain(request, reply, webStandardPlanService);
+  await handlePlain(request, reply, ValidateWebStandardPlan,webStandardPlanService);
 };
 
 const webPremiumPlan = async (request, reply) => {
-  await handlePlain(request, reply, webPremiumPlanService);
+  await handlePlain(request, reply,ValidateWebPremiumPlan, webPremiumPlanService);
 };
 
 
@@ -165,13 +169,15 @@ const updatePlanesDataById = async (request, reply, serviceFunction) => {
     const data = request.body;
     console.log("Name",data.name)
 
-    if (request.file) {
-      const result = await cloudinary.uploader.upload(request.file.path);
-      data.Link_to_Graphics = result.secure_url;
-    } else if (request.files) {
-      const uploadPromises = request.files.map(file => cloudinary.uploader.upload(file.path));
+    
+    if (request.files && request.files.length > 0) {
+      const uploadPromises = request.files.map(file =>
+        cloudinary.uploader.upload(file.path)
+      );
       const results = await Promise.all(uploadPromises);
       data.Link_to_Graphics = results.map(result => result.secure_url);
+    } else {
+      data.Link_to_Graphics = []; // No files provided
     }
 
     if (!data || Object.keys(data).length === 0) {

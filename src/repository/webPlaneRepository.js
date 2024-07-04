@@ -75,7 +75,7 @@ const DeleteAppPlanesRepoByID = async (repository, repoName, id, clientId) => {
     if (getData) {
       const delRec = await repository.delete({ id, clientId });
       logger.info(`Record deleted successfully in ${repoName}`, delRec);
-      return { success: true, message: `Record deleted successfully`, data: delRec };
+      return `Data Deleted Successfully With ${id}, clientId ${clientId}` 
     } else {
       return { success: false, message: `Data not found with id ${id} and clientId ${clientId}` };
     }

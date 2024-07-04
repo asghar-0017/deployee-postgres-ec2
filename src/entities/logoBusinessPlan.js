@@ -37,10 +37,6 @@ module.exports = new EntitySchema({
       type: "varchar",
       nullable: true,
     },
-    custom_product_design: {
-      type: "varchar",
-      nullable: true,
-    },
     description: {
       type: "varchar",
       nullable: true,

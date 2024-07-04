@@ -96,7 +96,7 @@
     "is-number": "^7.0.0",
     "isexe": "^2.0.0",
     "jackspeak": "^3.4.0",
-    "joi": "^17.13.1",
+    "joi": "^17.13.3",
     "joycon": "^3.1.1",
     "json-schema-ref-resolver": "^1.0.1",
     "json-schema-traverse": "^1.0.0",

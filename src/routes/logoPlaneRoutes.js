@@ -9,10 +9,10 @@ const { logoBasicPlane, logoStandardPlane, logoPremiumPlane, logoBusinessPlane,
 const upload = require('../utils/uploadConfig');
 
 const logoPlaneRoute = async (fastify) => {
-  fastify.post('/logo-basic-plane', { preHandler: upload.single('Link_to_Graphics') }, logoBasicPlane);
-  fastify.post('/logo-standard-plane',{ preHandler: upload.single('Link_to_Graphics') }, logoStandardPlane);
-  fastify.post('/logo-premium-plane', { preHandler: upload.single('Link_to_Graphics') }, logoPremiumPlane);
-  fastify.post('/logo-business-plane', { preHandler: upload.single('Link_to_Graphics') }, logoBusinessPlane);
+  fastify.post('/logo-basic-plane',  { preHandler: upload.array('Link_to_Graphics', 10) }, logoBasicPlane);
+  fastify.post('/logo-standard-plane', { preHandler: upload.array('Link_to_Graphics', 10) }, logoStandardPlane);
+  fastify.post('/logo-premium-plane', { preHandler: upload.array('Link_to_Graphics', 10) }, logoPremiumPlane);
+  fastify.post('/logo-business-plane',  { preHandler: upload.array('Link_to_Graphics', 10) }, logoBusinessPlane);
 
   
   fastify.get('/all-logo-basic-planes-data',allLogoBasicPlanesData)
@@ -31,10 +31,10 @@ const logoPlaneRoute = async (fastify) => {
   fastify.delete('/all-logo-premium-planes-data/:id/:clientId',deleteLogoPremiumPlaneData)
   fastify.delete('/all-logo-business-planes-data/:id/:clientId',deleteLogoBusinessPlaneData)
 
-  fastify.put('/all-logo-basic-planes-data/:id/:clientId', { preHandler: upload.single('Link_to_Graphics') }, updateLogoBasicPlanesData);
-  fastify.put('/all-logo-standard-planes-data/:id/:clientId', { preHandler: upload.single('Link_to_Graphics') }, updateLogoStandardPlaneData);
-  fastify.put('/all-logo-premium-planes-data/:id/:clientId', { preHandler: upload.single('Link_to_Graphics') }, updateLogoPremiumPlaneData);
-  fastify.put('/all-logo-business-planes-data/:id/:clientId', { preHandler: upload.single('Link_to_Graphics') }, updateLogoBusinessPlaneData);
+  fastify.put('/all-logo-basic-planes-data/:id/:clientId',  { preHandler: upload.array('Link_to_Graphics', 10) }, updateLogoBasicPlanesData);
+  fastify.put('/all-logo-standard-planes-data/:id/:clientId',  { preHandler: upload.array('Link_to_Graphics', 10) }, updateLogoStandardPlaneData);
+  fastify.put('/all-logo-premium-planes-data/:id/:clientId', { preHandler: upload.array('Link_to_Graphics', 10) }, updateLogoPremiumPlaneData);
+  fastify.put('/all-logo-business-planes-data/:id/:clientId', { preHandler: upload.array('Link_to_Graphics', 10) }, updateLogoBusinessPlaneData);
   
 
 

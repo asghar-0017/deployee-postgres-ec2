@@ -8,9 +8,9 @@ const upload = require('../utils/uploadConfig');
 
 const webPlaneRoute = async (fastify) => {
   
-  fastify.post('/web-basic-plane', { preHandler: upload.single('Link_to_Graphics') }, webBasicPlan  );
-  fastify.post('/web-standard-plane', { preHandler: upload.single('Link_to_Graphics') }, webStandardPlan);
-  fastify.post('/web-premium-plane', { preHandler: upload.single('Link_to_Graphics') }, webPremiumPlan);
+  fastify.post('/web-basic-plane', { preHandler: upload.array('Link_to_Graphics', 10) }, webBasicPlan  );
+  fastify.post('/web-standard-plane', { preHandler: upload.array('Link_to_Graphics', 10) }, webStandardPlan);
+  fastify.post('/web-premium-plane', { preHandler: upload.array('Link_to_Graphics', 10) }, webPremiumPlan);
 
 
   fastify.get('/all-web-basic-planes-data',allWebBasicPlanesData)
@@ -25,9 +25,9 @@ const webPlaneRoute = async (fastify) => {
   fastify.delete('/all-web-standard-planes-data/:id/:clientId',deleteWebStandardPlaneData)
   fastify.delete('/all-web-premium-planes-data/:id/:clientId',deleteWebPremiumPlaneData)
 
-  fastify.put('/all-web-basic-planes-data/:id/:clientId',{ preHandler: upload.single('Link_to_Graphics') },updateWebBasicPlanesData)
-  fastify.put('/all-web-standard-planes-data/:id/:clientId',{ preHandler: upload.single('Link_to_Graphics') },updateWebStandardPlaneData)
-  fastify.put('/all-web-premium-planes-data/:id/:clientId',{ preHandler: upload.single('Link_to_Graphics') },updateWebPremiumPlaneData)
+  fastify.put('/all-web-basic-planes-data/:id/:clientId',{ preHandler: upload.array('Link_to_Graphics', 10) },updateWebBasicPlanesData)
+  fastify.put('/all-web-standard-planes-data/:id/:clientId',{ preHandler: upload.array('Link_to_Graphics', 10) },updateWebStandardPlaneData)
+  fastify.put('/all-web-premium-planes-data/:id/:clientId',{ preHandler: upload.array('Link_to_Graphics', 10) },updateWebPremiumPlaneData)
 };
 
 module.exports = webPlaneRoute;

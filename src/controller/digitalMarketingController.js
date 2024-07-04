@@ -39,7 +39,7 @@ const allDigitalMarketingData = async (request, reply) => {
 
 const delDigitalMarketingById = async (request, reply) => {
   try {
-    const id=request.params.cliendId
+    const id=request.params.id
     const clientId = request.params.clientId
     console.log("Id ",id ,"clientId",clientId)
     const result = await deleteDigitalMarketingByIdInService(id, clientId);

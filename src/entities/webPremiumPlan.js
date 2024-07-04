@@ -40,9 +40,13 @@ module.exports = new EntitySchema({
       },
       animation:{
         type:"varchar",
+        nullable:true
+
       },
       domain:{
-        type:"varchar"
+        type:"varchar",
+        nullable:true
+
       },
       functionalities: {
         type: "json",

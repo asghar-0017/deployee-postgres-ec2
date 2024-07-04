@@ -21,6 +21,8 @@ module.exports = new EntitySchema({
     },
     company: {
       type: "varchar",
+      nullable:true
+
     },
     reference_logos: {
       type: "varchar",

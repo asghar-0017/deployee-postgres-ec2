@@ -57,7 +57,8 @@ const getDigitalMarketingByIdRepo = async (id,clientId) => {
     const data = await digitalMarketingRepository.findOne({ where: { id,clientId } });
     if(data){
         await digitalMarketingRepository.delete({ id,clientId })
-    return data 
+    return `Data Deleted Successfully With ${id}, clientId ${clientId}
+    ` 
     }else{
         return `client not found With Client id ${clientId}`
     }

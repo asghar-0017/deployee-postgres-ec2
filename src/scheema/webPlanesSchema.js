@@ -1,43 +1,60 @@
 const Joi = require('joi');
 
-const ValidateWebBasicPlains = Joi.object({
+const ValidateWebBasicPlan = Joi.object({
   name: Joi.string().required(),
-  email: Joi.string().email().required(),
+  email: Joi.string()
+  .email({ tlds: { allow: true } })  // Enable basic email validation
+  .required()
+  .messages({
+    'string.email': 'Please provide a valid email address',
+    'any.required': 'Email is required'
+  }),
   company: Joi.string().optional(),
   reference_sites: Joi.string().optional(),
   Link_to_Graphics:Joi.array().optional(),
   description:Joi.string().required()
 });
 
-const ValidateWebStandardPlains = Joi.object({
+const ValidateWebStandardPlan = Joi.object({
   name: Joi.string().required(),
-  email: Joi.string().email().required(),
-  company: Joi.string().optional(),
+  email: Joi.string()
+  .email({ tlds: { allow: true } })  // Enable basic email validation
+  .required()
+  .messages({
+    'string.email': 'Please provide a valid email address',
+    'any.required': 'Email is required'
+  }),
+  company: Joi.string().optional().allow(''),
   description: Joi.string().required(),
-  reference_sites: Joi.string().optional(),
-  Link_to_Graphics:Joi.array().optional(),
-  drive_link:Joi.string().optional(),
-  animation:Joi.string().optional(),
-  domain:Joi.string().optional()
+  reference_sites: Joi.string().optional().allow(''),
+  Link_to_Graphics:Joi.array().optional().allow(''),
+  drive_link:Joi.string().optional().allow(''),
+  animation:Joi.string().optional().allow(''),
+  domain:Joi.string().optional().allow('')
 });
 
-const ValidateWebPremiumPlains = Joi.object({
+const ValidateWebPremiumPlan = Joi.object({
   name: Joi.string().required(),
-  email: Joi.string().email().required(),
-  phone: Joi.string().optional(),
-  company: Joi.string().optional(),
+  email: Joi.string()
+  .email({ tlds: { allow: true } })  // Enable basic email validation
+  .required()
+  .messages({
+    'string.email': 'Please provide a valid email address',
+    'any.required': 'Email is required'
+  }),
+  company: Joi.string().optional().allow(''),
   description: Joi.string().required(),
-  reference_sites: Joi.string().optional(),
-  drive_link:Joi.string().optional(),
-  Link_to_Graphics:Joi.array().optional(),
-  domain:Joi.string().optional(),
-  animation:Joi.string().optional(),
-  functionalities: Joi.array().items(Joi.string()).optional() // Update to array
+  reference_sites: Joi.string().optional().allow(''),
+  drive_link:Joi.string().optional().allow(''),
+  Link_to_Graphics:Joi.array().optional().allow(''),
+  domain:Joi.string().optional().allow(''),
+  animation:Joi.string().optional().allow(''),
+  functionalities: Joi.array().items(Joi.string()).optional().allow('') // Update to array
   
 });
 
 module.exports = {
-  ValidateWebBasicPlains,
-  ValidateWebStandardPlains,
-  ValidateWebPremiumPlains
+  ValidateWebBasicPlan,
+  ValidateWebStandardPlan,
+  ValidateWebPremiumPlan
 };

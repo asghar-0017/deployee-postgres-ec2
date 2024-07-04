@@ -2,7 +2,8 @@ const {contactUsService,dataInService,contactDataInService,updateContactInServic
 
 } = require('../service/contactService');
 const { logger } = require('../../logger');
-// const { ValidateContact } = require('../scheema/contactUsSchema');
+const { ValidateContact } = require('../scheema/contactUsSchema');
+const {GenerateClientId}  = require('../utils/token');
 
 const contactUs = async (request, reply) => {
     try {
@@ -15,18 +16,19 @@ const contactUs = async (request, reply) => {
             return reply.code(400).send({ error: "Invalid input" });
         }
 
-        // const { error } = ValidateContact.validate(clientData);
-        // console.log("Validate Error ", error);
-        // if (error) {
-        //     return reply.code(400).send({ error: error.details[0].message });
-        // }
+    const { error } = ValidateContact.validate(clientData);
+    console.log("Validate Error ", error);
+        if (error) {
+            return reply.code(400).send({ error: error.details[0].message });
+        }
+        clientData.clientId=GenerateClientId();
 
         const data = await contactUsService(clientData);
         reply.code(200).send({ success: "success", data: data });
 
     } catch (error) {
         logger.error("Error occurred during contact form submission:", error);
-        reply.code(500).send({ error: "Internal Server Error" });
+        throw error
     }
 };
 

@@ -8,23 +8,27 @@ const { logger } = require('../../logger');
 const { getClientId,RandomId } = require("../service/clientService");
 const cloudinary = require('cloudinary').v2;
 
+const {ValidateAppBasicPlan,ValidateAppStandardPlan,ValidateAppPremiumPlan}=require('../scheema/appPlaneSchema')
 
-const handlePlain = async (request, reply, serviceFunction) => {
+const handlePlain = async (request, reply, schema, serviceFunction) => {
   try {
     const data = request.body;
-     
-    if (request.file) {
-      const result = await cloudinary.uploader.upload(request.file.path);
-      data.Link_to_Graphics = result.secure_url;
-    } else if (request.files) {
-      const uploadPromises = request.files.map(file =>
-        cloudinary.uploader.upload(file.path)
-      );
-      const results = await Promise.all(uploadPromises);
-      data.Link_to_Graphics = results.map(result => result.secure_url);
-    }else{
 
-
+    const { error } = schema.validate(data);
+    console.log("Validate Error ", error);
+        if (error) {
+            return reply.code(400).send({ error: error.details[0].message });
+        }
+    
+        if (request.files && request.files.length > 0) {
+          const uploadPromises = request.files.map(file =>
+            cloudinary.uploader.upload(file.path)
+          );
+          const results = await Promise.all(uploadPromises);
+          data.Link_to_Graphics = results.map(result => result.secure_url);
+        } else {
+          data.Link_to_Graphics = []; // No files provided
+        }
     console.log('Received Data:', data);
 
     if (typeof data.functionalities === 'string') {
@@ -34,31 +38,29 @@ const handlePlain = async (request, reply, serviceFunction) => {
     if (!data) {
       console.error('Data is undefined');
       return reply.code(400).send({ error: 'Invalid input' });
-
     }
-    data.id=RandomId()
+
+    data.id = RandomId();
     data.clientId = await getClientId(data.email, data.name);
     const result = await serviceFunction(data);
     reply.code(201).send({ success: 'success', data: result });
-  }
   } catch (error) {
     console.error('Error occurred during form submission:', error);
-    throw error
+    throw error;
   }
 };
 
 const appBasicPlane = async (request, reply) => {
-  await handlePlain(request, reply, appBasicPlaneService);
+  await handlePlain(request, reply, ValidateAppBasicPlan, appBasicPlaneService);
 };
 
 const appStandardPlane = async (request, reply) => {
-  await handlePlain(request, reply, appStandardPlaneService);
+  await handlePlain(request, reply, ValidateAppStandardPlan, appStandardPlaneService);
 };
 
 const appPremiumPlane = async (request, reply) => {
-  await handlePlain(request, reply, appPremiumPlaneService);
+  await handlePlain(request, reply, ValidateAppPremiumPlan, appPremiumPlaneService);
 };
-
 
 
 
@@ -171,17 +173,17 @@ const updatePlanesDataById = async (request, reply, serviceFunction) => {
     const id=request.params.id
     const cliendId=request.params.clientId
     const data=request.body
-    if (request.file) {
-      const result = await cloudinary.uploader.upload(request.file.path);
-      data.Link_to_Graphics = result.secure_url;
-    } else if (request.files) {
+
+    
+    if (request.files && request.files.length > 0) {
       const uploadPromises = request.files.map(file =>
         cloudinary.uploader.upload(file.path)
       );
       const results = await Promise.all(uploadPromises);
       data.Link_to_Graphics = results.map(result => result.secure_url);
+    } else {
+      data.Link_to_Graphics = []; // No files provided
     }
-
 
     if (!data) {
       return reply.code(400).send({ error: 'Invalid input' });
