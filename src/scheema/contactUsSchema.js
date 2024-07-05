@@ -13,8 +13,14 @@ const phoneExtension = (joi) => ({
       return { value, errors: helpers.error('phone.invalid') };
     }
 
-    // Custom formatting: +CountryCode XXXXXXXXX (one space after country code and the first character of the number)
-    const formattedNumber = phoneNumber.formatInternational().replace(/\s(\d)/, ' $1');
+    // Custom formatting to ensure space after country code and allow dashes
+    let formattedNumber = phoneNumber.formatInternational();
+    formattedNumber = formattedNumber.replace(/(\+\d{1,3})\s(\d)/, '$1 $2'); // Ensure single space after country code
+
+    // Validate and format to include dashes if provided in the input
+    if (value.includes('-')) {
+      formattedNumber = formattedNumber.replace(/\s/g, '-').replace(/--/g, '-'); // Replace spaces with dashes and handle double dashes
+    }
 
     return { value: formattedNumber };
   }
