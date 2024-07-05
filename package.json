@@ -33,7 +33,7 @@
     "avvio": "^8.3.2",
     "balanced-match": "^1.0.2",
     "base64-js": "^1.5.1",
-    "bcrypt": "^5.1.1",
+    "bcryptjs": "^2.4.3",
     "binary-extensions": "^2.3.0",
     "brace-expansion": "^2.0.1",
     "braces": "^3.0.3",

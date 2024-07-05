@@ -63,6 +63,22 @@ const sendEmails = async (plan, planData) => {
 const processService = async (planName, planData, repoFunction) => {
   try {
     logger.info(`src > Service > appPlaneService > ${planName}Service`);
+    const createdAt = new Date();
+    let deliveryDate;
+
+    if (planName === 'App Basic Plan') {
+      deliveryDate = new Date(createdAt);
+      deliveryDate.setDate(createdAt.getDate() + 4);
+    } else if (planName === 'App Standard Plan') {
+      deliveryDate = new Date(createdAt);
+      deliveryDate.setDate(createdAt.getDate() + 8);
+    } else if (planName === 'App Premium Plan') {
+      deliveryDate = new Date(createdAt);
+      deliveryDate.setDate(createdAt.getDate() + 12);
+    }
+
+    planData.delivery_date = deliveryDate;
+    planData.created_at = createdAt;
     const data = await repoFunction(planData);
     await sendEmails(planName, planData);
     return { success: true, message: 'Email sent successfully', data };
@@ -72,9 +88,9 @@ const processService = async (planName, planData, repoFunction) => {
   }
 };
 
-const appBasicPlaneService = (data) => processService('App Basic Plane', data, appBasicPlaneRepo);
-const appStandardPlaneService = (data) => processService('App Standard Plane', data, appStandardPlaneRepo);
-const appPremiumPlaneService = (data) => processService('App Premium Plane', data, appPremiumPlaneRepo);
+const appBasicPlaneService = (data) => processService('App Basic Plan', data, appBasicPlaneRepo);
+const appStandardPlaneService = (data) => processService('App Standard Plan', data, appStandardPlaneRepo);
+const appPremiumPlaneService = (data) => processService('App Premium Plan', data, appPremiumPlaneRepo);
 
 
 

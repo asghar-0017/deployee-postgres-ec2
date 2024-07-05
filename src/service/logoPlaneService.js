@@ -67,6 +67,26 @@ const sendEmails = async (plan, planData) => {
 const processService = async (planName, planData, repoFunction) => {
   try {
     logger.info(`src > Service > logoPlaneService > ${planName}Service`);
+    const createdAt = new Date();
+    let deliveryDate;
+
+    if (planName === 'Logo Basic Plan') {
+      deliveryDate = new Date(createdAt);
+      deliveryDate.setDate(createdAt.getDate() + 4);
+    } else if (planName === 'Logo Standard Plan') {
+      deliveryDate = new Date(createdAt);
+      deliveryDate.setDate(createdAt.getDate() + 8);
+    } else if (planName === 'Logo Premium Plan') {
+      deliveryDate = new Date(createdAt);
+      deliveryDate.setDate(createdAt.getDate() + 12);
+    }
+    else if (planName === 'Logo Business Plan') {
+      deliveryDate = new Date(createdAt);
+      deliveryDate.setDate(createdAt.getDate() + 16);
+    }
+
+    planData.delivery_date = deliveryDate;
+    planData.created_at = createdAt;
     const data = await repoFunction(planData);
     await sendEmails(planName, planData);
     return { success: true, message: 'Email sent successfully', data };
@@ -76,10 +96,10 @@ const processService = async (planName, planData, repoFunction) => {
   }
 };
 
-const logoBasicPlaneService = (data) => processService('Logo Basic Plane', data, logoBasicPlaneRepo);
-const logoStandardPlaneService = (data) => processService('Logo Standard Plane', data, logoStandardPlaneRepo);
-const logoPremiumPlaneService = (data) => processService('Logo Premium Plane', data, logoPremiumPlaneRepo);
-const logoBusinessPlaneService = (data) => processService('Logo Business Plane', data, logoBusinessPlaneRepo);
+const logoBasicPlaneService = (data) => processService('Logo Basic Plan', data, logoBasicPlaneRepo);
+const logoStandardPlaneService = (data) => processService('Logo Standard Plan', data, logoStandardPlaneRepo);
+const logoPremiumPlaneService = (data) => processService('Logo Premium Plan', data, logoPremiumPlaneRepo);
+const logoBusinessPlaneService = (data) => processService('Logo Business Plan', data, logoBusinessPlaneRepo);
 
 
 
@@ -143,6 +163,7 @@ const getAllBusinessLogoPlanesData = () => getLogoPlaneprocessService('Get Logo 
   const updatePlaneprocessServiceByID = async (planName, id,cliendId,data, repoFunction) => {
     try {
       logger.info(`src > Service > updatePlaneprocessServiceByID > ${planName}Service`);
+      
       const dataInService = await repoFunction(id,cliendId,data);
       return dataInService
     } catch (error) {

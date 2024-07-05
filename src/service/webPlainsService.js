@@ -68,6 +68,22 @@ const sendEmails = async (plan, planData) => {
 const processService = async (planeName, planData, repoFunction) => {
   try {
       logger.info(`seo > service > webService > ${planeName}Service`);
+      const createdAt = new Date();
+      let deliveryDate;
+  
+      if (planeName === 'WEB Basic Plan') {
+        deliveryDate = new Date(createdAt);
+        deliveryDate.setDate(createdAt.getDate() + 4);
+      } else if (planeName === 'WEB Standard Plan') {
+        deliveryDate = new Date(createdAt);
+        deliveryDate.setDate(createdAt.getDate() + 8);
+      } else if (planeName === 'WEB Premium Plan') {
+        deliveryDate = new Date(createdAt);
+        deliveryDate.setDate(createdAt.getDate() + 12);
+      }
+  
+      planData.delivery_date = deliveryDate;
+      planData.created_at = createdAt;
 
       const data = await repoFunction(planData);
       await sendEmails(planeName, planData);

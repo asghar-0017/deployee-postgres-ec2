@@ -9,6 +9,14 @@ const digitalMarketingService = async (clientData) => {
   try {
     logger.info('src > Service > DigitalMarketingService > digitalMarketingService');
 
+    const createdAt = new Date();
+    const deliveryDate = new Date(createdAt);
+    deliveryDate.setDate(createdAt.getDate() + 4);
+    
+    clientData.delivery_date = deliveryDate;
+    clientData.created_at = createdAt;
+
+
     const DigitalMarketingDataInService = await digitalMarketingRepo(clientData);
     console.log("Data in service", DigitalMarketingDataInService);
 

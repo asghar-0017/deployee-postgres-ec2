@@ -2,11 +2,11 @@ const { DataSource } = require("typeorm");
 const path = require("path");
 const dotenv = require("dotenv");
 dotenv.config();
-const { PinoLogger, logger } = require('../../logger');
+const { PinoLogger } = require('../../logger');
 
 const dataSource = new DataSource({
   type: "postgres",
-  host: process.env.DB_HOST || "127.0.0.1",
+  host: process.env.POSTGRES_HOST,
   port: process.env.DB_PORT || 5432,
   username: process.env.POSTGRES_USER || "postgres",
   password: process.env.POSTGRES_PASSWORD || "postgres",

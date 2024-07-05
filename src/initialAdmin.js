@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const dataSource = require('./infrastructure/psql');
 const AdminAuth = require('./entities/adminAuth'); // Adjust this import according to your entities structure
 

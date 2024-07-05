@@ -12,22 +12,26 @@ const phoneExtension = (joi) => ({
     if (!phoneNumber || !phoneNumber.isValid()) {
       return { value, errors: helpers.error('phone.invalid') };
     }
-    return { value: phoneNumber.formatInternational() };
+
+    // Custom formatting: +CountryCode XXXXXXXXX (one space after country code and the first character of the number)
+    const formattedNumber = phoneNumber.formatInternational().replace(/\s(\d)/, ' $1');
+
+    return { value: formattedNumber };
   }
 });
 
 const customJoi = Joi.extend(phoneExtension);
 
 const ValidateContact = customJoi.object({
-    name: customJoi.string().required(), // Allow empty string for name
-    email: Joi.string()
+  name: customJoi.string().required(), // Allow empty string for name
+  email: customJoi.string()
     .email({ tlds: { allow: true } })  // Enable basic email validation
     .required()
     .messages({
       'string.email': 'Please provide a valid email address',
       'any.required': 'Email is required'
     }),
-    company: customJoi.string().allow('').optional(),
+  company: customJoi.string().allow('').optional(),
   phone: customJoi.phone().required(),
   message: customJoi.string().required(),
   serviceType: customJoi.string().required()

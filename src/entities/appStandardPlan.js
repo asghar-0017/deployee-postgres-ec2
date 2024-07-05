@@ -48,7 +48,7 @@ module.exports = new EntitySchema({
         },
       status:{
           type:"varchar",
-          default: "Pending",
+          default: "Pending", 
           enum:planStatus,
           enumName: "Plan_Status_enum",
           nullable: false,
@@ -56,6 +56,10 @@ module.exports = new EntitySchema({
       created_at: {
         type: "timestamp",
         default: () => "CURRENT_TIMESTAMP",
+      },
+      delivery_date: {
+        type: "timestamp",
+        nullable: true,
       },
       updated_at: {
         type: "timestamp",

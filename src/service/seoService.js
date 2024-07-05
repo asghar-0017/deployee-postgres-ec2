@@ -64,6 +64,22 @@ const sendEmails = async (plan, planData) => {
 const processService = async (planeName, planData, repoFunction) => {
     try {
         logger.info(`seo > service > seoService > ${planeName}Service`);
+        const createdAt = new Date();
+    let deliveryDate;
+
+    if (planeName === 'SEO Basic Plan') {
+      deliveryDate = new Date(createdAt);
+      deliveryDate.setDate(createdAt.getDate() + 4);
+    } else if (planeName === 'SEO Standard Plan') {
+      deliveryDate = new Date(createdAt);
+      deliveryDate.setDate(createdAt.getDate() + 8);
+    } else if (planeName === 'SEO Premium Plan') {
+      deliveryDate = new Date(createdAt);
+      deliveryDate.setDate(createdAt.getDate() + 12);
+    }
+
+    planData.delivery_date = deliveryDate;
+    planData.created_at = createdAt;
         const data = await repoFunction(planData);
         await sendEmails(planeName, planData);
         return {
@@ -78,15 +94,15 @@ const processService = async (planeName, planData, repoFunction) => {
 };
 
 const seoBasicPlaneService = async (planData) => {
-    return await processService('SEO Basic Plane', planData, seoBasicPlaneRepo);
+    return await processService('SEO Basic Plan', planData, seoBasicPlaneRepo);
 };
 
 const seoStandardPlaneService = async (planData) => {
-    return await processService('SEO Standard Plane', planData, seoStandardPlaneRepo);
+    return await processService('SEO Standard Plan', planData, seoStandardPlaneRepo);
 };
 
 const seoPremiumPlaneService = async (planData) => {
-    return await processService('SEO Premium Plane', planData, seoPremiumPlaneRepo);
+    return await processService('SEO Premium Plan', planData, seoPremiumPlaneRepo);
 };
 
 
@@ -146,6 +162,7 @@ const getSeoPlaneprocessService = async (planName, repoFunction) => {
   const UpdatePlaneprocessServiceByID = async (planName, id,cliendId,data ,repoFunction) => {
     try {
       logger.info(`src > Service > UpdatePlaneprocessServiceByID > ${planName}Service`);
+      
       const dataInService = await repoFunction(id,cliendId,data);
       return dataInService
     } catch (error) {
