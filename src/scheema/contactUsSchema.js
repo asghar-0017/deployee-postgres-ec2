@@ -12,16 +12,7 @@ const phoneExtension = (joi) => ({
     if (!phoneNumber || !phoneNumber.isValid()) {
       return { value, errors: helpers.error('phone.invalid') };
     }
-
-    // Custom formatting to ensure space after country code and allow dashes
-    let formattedNumber = phoneNumber.formatInternational();
-    formattedNumber = formattedNumber.replace(/(\+\d{1,3})\s(\d)/, '$1 $2'); // Ensure single space after country code
-
-    // Validate and format to include dashes if provided in the input
-    if (value.includes('-')) {
-      formattedNumber = formattedNumber.replace(/\s/g, '-').replace(/--/g, '-'); // Replace spaces with dashes and handle double dashes
-    }
-
+    const formattedNumber = phoneNumber.formatInternational().replace(/(\+\d{1,3})\s(\d)/, '$1 $2').replace(/\s/g, '-').replace(/--/g, '-');
     return { value: formattedNumber };
   }
 });
@@ -30,7 +21,7 @@ const customJoi = Joi.extend(phoneExtension);
 
 const ValidateContact = customJoi.object({
   name: customJoi.string().required(), // Allow empty string for name
-  email: customJoi.string()
+  email: Joi.string()
     .email({ tlds: { allow: true } })  // Enable basic email validation
     .required()
     .messages({
