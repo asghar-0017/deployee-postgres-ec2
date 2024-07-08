@@ -13,6 +13,8 @@ const contactUsService = async (clientData) => {
         const contactDataInService = await contactUsRepo(clientData);
         console.log("Data in service",contactDataInService)
 
+        logger.debug('Email Credentials:', { user: process.env.EMAIL, pass: process.env.EMAIL_PASS });
+
         // Set up Nodemailer transporter
         let transporter = nodemailer.createTransport({
             service: 'gmail',

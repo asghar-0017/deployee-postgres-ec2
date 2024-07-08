@@ -49,7 +49,7 @@ const ValidateWebPremiumPlan = Joi.object({
   Link_to_Graphics:Joi.array().optional().allow(''),
   domain:Joi.string().optional().allow(''),
   animation:Joi.string().optional().allow(''),
-  functionalities: Joi.array().items(Joi.string()).optional().allow('') // Update to array
+  functionalities:(Joi.string()).optional().allow('') // Update to array
   
 });
 

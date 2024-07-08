@@ -31,7 +31,10 @@ const handlePlain = async (request, reply,schema, serviceFunction) => {
     } else {
       data.Link_to_Graphics = []; // No files provided
     }
-
+    
+    if (typeof data.functionalities === 'string') {
+      data.functionalities = JSON.parse(data.functionalities);
+    }
 
     if (!data) {
       return reply.code(400).send({ error: 'Invalid input' });

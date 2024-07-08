@@ -1,30 +1,26 @@
-# Use the official Node.js image as the base image
-FROM node:18.16.1
+# Use the official Node.js image.
+FROM node:18
 
-# Install required packages
-RUN apt-get update && apt-get install -y python3 build-essential curl
-
-# Set the working directory inside the container
+# Create and change to the app directory.
 WORKDIR /src/app
 
-# Copy package.json and package-lock.json to the working directory
+# Copy application dependency manifests to the container image.
 COPY package*.json ./
 
-# Install Node.js dependencies
+# Install dependencies.
 RUN npm install
 
-# Copy the rest of the application code to the working directory
+# Copy local code to the container image.
 COPY . .
 
-# Download and set execute permissions for wait-for-it.sh
-RUN curl -o wait-for-it.sh https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh && \
-    chmod +x wait-for-it.sh
+# Create the uploads directory
+RUN mkdir -p /src/app/uploads
 
-# Rebuild bcrypt with source
-RUN npm rebuild bcrypt --build-from-source
+# Make wait-for-it.sh executable
+RUN chmod +x wait-for-it.sh
 
 # Expose the port the app runs on
-EXPOSE 3000
+EXPOSE 4000
 
-# Command to run the application with wait-for-it.sh
-CMD ./wait-for-it.sh pgsql:5432 -- npm start
+# Run the web service on container startup.
+CMD ["sh", "-c", "./wait-for-it.sh pgsql:5432 -- ./wait-for-it.sh redis:6379 -- npm start"]

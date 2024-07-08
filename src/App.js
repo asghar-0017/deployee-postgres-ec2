@@ -5,8 +5,7 @@ const dataSource = require('./infrastructure/psql');
 const path = require('path');
 const fastifyStatic = require('@fastify/static');
 const fastifyMultipart = require('@fastify/multipart');
-const {logger}=require('../logger')
-
+const { logger } = require('../logger');
 
 const contactRoute = require('./routes/contactRoutes');
 const webPlanRoute = require('./routes/webPlanRoute');
@@ -16,6 +15,7 @@ const seoRoute = require('./routes/seoRoute');
 const logoPlaneRoute = require('./routes/logoPlaneRoutes');
 const allPlanesRoutes = require('./routes/allPlanesRoutes');
 const AdminAuthRoute = require('./routes/adminAuth');
+const paymentRoute = require('./routes/paymentRoute');
 
 fastify.register(require('@fastify/cors'), {
   origin: ['http://localhost:3000', 'https://www.softmarksolutions.com', 'http://localhost:5173', 'http://localhost:5174'],
@@ -30,7 +30,6 @@ cloudinary.config({
   api_key: '835292952964664',
   api_secret: 'ZrkM_rttEvHWGc2lpjyAQVINSgw'
 });
-
 
 fastify.register(fastifyMultipart, {
   limits: {
@@ -47,7 +46,6 @@ fastify.register(fastifyStatic, {
   root: path.join(__dirname, '../uploads'),
   prefix: '/uploads/', // This will serve files under http://yourhost/uploads/
 });
-
 
 fastify.get('/', async (req, res) => {
   const result = {
@@ -66,13 +64,14 @@ fastify.register(seoRoute);
 fastify.register(logoPlaneRoute);
 fastify.register(AdminAuthRoute);
 fastify.register(allPlanesRoutes);
+fastify.register(paymentRoute);
 
 const startServer = async () => {
   try {
     await dataSource.initialize();
     logger.info("Database connection has been established");
 
-    await fastify.listen(process.env.PORT || 4000);
+    await fastify.listen({ port: process.env.PORT || 4000, host: 'localhost' });
     logger.info(`Server is listening on ${process.env.PORT || 4000}`);
   } catch (error) {
     logger.error(error.message);
@@ -80,4 +79,4 @@ const startServer = async () => {
   }
 };
 
-module.exports = startServer;
+module.exports=startServer

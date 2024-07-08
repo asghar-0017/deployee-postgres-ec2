@@ -1,63 +1,63 @@
-version: '3.9'
+version: "3"
 
 services:
-  pgsql:
-    image: postgres:14.12
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: postgres
-    ports:
-      - "5432:5432"
-    volumes:
-      - db:/var/lib/postgresql/data
-    networks:
-      - backend
-
-  redis:
-    image: redis:7.2.5
-    ports:
-      - "6379:6379"
-    networks:
-      - backend
-
   nodejs-app:
-    image: softmarkbackend-nodejs-app
     build: .
-    command: sh -c "./wait-for-it.sh pgsql:5432 -- ./wait-for-it.sh redis:6379 -- npm start"
-    volumes:
-      - .:/src/app
-    ports:
-      - "3000:3000"
+    container_name: softmarkbackend-nodejs-app
     environment:
-      NODE_ENV: development
-      POSTGRES_HOST: pgsql
-      DB_PORT: 5432
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: postgres
-      REDIS_HOST: redis
-      REDIS_PORT: 6379
-      Email: fa21bscs0017@maju.edu.pk
-      Email_PASS: cxan vcqf dikr aqob
-      ADMIN_EMAIL: fa21bscs0017@maju.edu.pk
+      - POSTGRES_HOST=pgsql
+      - DB_PORT=5432
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - EMAIL=fa21bscs0017@maju.edu.pk
+      - EMAIL_PASS=eoeb amae fgaw adeu
+      - ADMIN_EMAIL=info@softmarksolutions.com
+    ports:
+      - "4000:4000"
     depends_on:
       - pgsql
       - redis
     networks:
-      - backend
+      - softmarkbackend_network
+
+  pgsql:
+    image: postgres:12.19
+    container_name: softmarkbackend-pgsql
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgsql-data:/var/lib/postgresql/data
+    networks:
+      - softmarkbackend_network
+
+  redis:
+    image: redis:7.2.5
+    container_name: softmarkbackend-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - softmarkbackend_network
 
   adminer:
     image: adminer
-    restart: always
+    container_name: softmarkbackend-adminer
+    environment:
+      ADMINER_DEFAULT_SERVER: pgsql
     ports:
-      - "8081:8080"
+      - "8080:8080"
     networks:
-      - backend
-
-volumes:
-  db:
+      - softmarkbackend_network
 
 networks:
-  backend:
+  softmarkbackend_network:
     driver: bridge
+
+volumes:
+  pgsql-data:

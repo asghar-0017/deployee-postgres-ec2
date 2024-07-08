@@ -404,15 +404,16 @@ const updateAllPlansDataByID = async (req, reply) => {
   console.log("clietId",clientId);
   console.log("id",id);
   console.log("clientData",clientData);
+
   if (req.files && req.files.length > 0) {
-    const uploadPromises = req.files.map(file =>
-      cloudinary.uploader.upload(file.path)
-    );
-    const results = await Promise.all(uploadPromises);
-    clientData.Link_to_Graphics = results.map(result => result.secure_url);
-  } else {
-    clientData.Link_to_Graphics = []; // No files provided
-  }
+          const uploadPromises = req.files.map(file =>
+            cloudinary.uploader.upload(file.path)
+          );
+          const results = await Promise.all(uploadPromises);
+          data.Link_to_Graphics = results.map(result => result.secure_url);
+        } else {
+          data.Link_to_Graphics = []; // No files provided
+        }
 
 
   try {

@@ -52,7 +52,7 @@ const ValidateAppPremiumPlan = Joi.object({
   drive_links_to_icons:Joi.string().optional().allow(''),
   Link_to_Graphics:Joi.string().optional().allow(''),
   animation_Reference:Joi.string().optional().allow(''),
-  functionalities:Joi.array().optional().allow(''),
+  functionalities:Joi.string().optional().allow(''),
 
 });
 

@@ -3,15 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js"
-  },
-  "nodemonConfig": {
-    "ignore": [
-      "db/pg_stat_tmp/*",
-      "public/*",
-      "logs/*",
-      "node_modules/*"
-    ]
+    "start": "nodemon index.js",
+    "build": "node index.js"
   },
   "keywords": [],
   "author": "",
@@ -175,6 +168,7 @@
     "strip-ansi": "^7.1.0",
     "strip-ansi-cjs": "^6.0.1",
     "strip-json-comments": "^3.1.1",
+    "stripe": "^16.2.0",
     "supports-color": "^7.2.0",
     "thenify": "^3.3.1",
     "thenify-all": "^1.6.0",
