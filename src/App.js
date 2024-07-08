@@ -16,6 +16,7 @@ const logoPlaneRoute = require('./routes/logoPlaneRoutes');
 const allPlanesRoutes = require('./routes/allPlanesRoutes');
 const AdminAuthRoute = require('./routes/adminAuth');
 const paymentRoute = require('./routes/paymentRoute');
+const wiseRoute=require('./routes/wiseRoute')
 
 fastify.register(require('@fastify/cors'), {
   origin: ['http://localhost:3000', 'https://www.softmarksolutions.com', 'http://localhost:5173', 'http://localhost:5174'],
@@ -65,6 +66,7 @@ fastify.register(logoPlaneRoute);
 fastify.register(AdminAuthRoute);
 fastify.register(allPlanesRoutes);
 fastify.register(paymentRoute);
+fastify.register(wiseRoute);
 
 const startServer = async () => {
   try {
