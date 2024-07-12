@@ -2,6 +2,7 @@ const adminService = require('../service/adminAuthService');
 const { generateResetCode } = require('../utils/token');
 const { sendResetEmail } = require('../service/resetEmailService');
 
+
 const adminAuth = {
   login: async (request, reply) => {
     try {
@@ -38,7 +39,7 @@ const adminAuth = {
   forgotPassword: async (request, reply) => {
     try {
       const { email } = request.body;
-      if(email === "rajaasgharali009@gmail.com"){
+      if(email === "info@softmarksolutions.com"){
         const code = generateResetCode();
         await adminService.saveResetCode(code);
         await sendResetEmail(email, code);

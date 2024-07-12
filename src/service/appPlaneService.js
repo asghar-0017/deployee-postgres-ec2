@@ -2,7 +2,7 @@ const nodemailer = require('nodemailer');
 const { appBasicPlaneRepo, appStandardPlaneRepo, appPremiumPlaneRepo } = require('../repository/appPlanesRepository');
 const { logger } = require('../../logger');
 const dotenv = require("dotenv");
-const { consumeQueue } = require('../service/RabbitMQService');
+// const { consumeQueue } = require('../service/RabbitMQService');
 
 dotenv.config();
 
@@ -28,7 +28,7 @@ const sendEmails = async (plan, planData) => {
 
   let adminMailOptions = {
     from: process.env.EMAIL,
-    to: process.env.EMAIL,
+    to: process.env.ADMIN_EMAIL,
     subject: `New ${plan} Form Submission from ${planData.name} Client Id ${planData.clientId}`,
     text: `
       Name: ${planData.name}
@@ -90,23 +90,23 @@ const appBasicPlaneService = (data) => processService('App-Basic-Plan', data, ap
 const appStandardPlaneService = (data) => processService('App-Standard-Plan', data, appStandardPlaneRepo);
 const appPremiumPlaneService = (data) => processService('App-Premium-Plan', data, appPremiumPlaneRepo);
 
-const startConsumers = () => {
+// const startConsumers = () => {
 
-  consumeQueue('App-basic-plan-queue', async (data) => {
-    console.log('Consuming App-basic-plan-queue', data);
-    // await appBasicPlaneRepo(data);
-  });
+//   consumeQueue('App-basic-plan-queue', async (data) => {
+//     console.log('Consuming App-basic-plan-queue', data);
+//     // await appBasicPlaneRepo(data);
+//   });
 
-  consumeQueue('App-standard-plan-queue', async (data) => {
-    console.log('Consuming App-standard-plan-queue', data);
-    // await appStandardPlaneRepo(data);
-  });
+//   consumeQueue('App-standard-plan-queue', async (data) => {
+//     console.log('Consuming App-standard-plan-queue', data);
+//     // await appStandardPlaneRepo(data);
+//   });
 
-  consumeQueue('App-premium-plan-queue', async (data) => {
-    console.log('Consuming App-premium-plan-queue', data);
-    // await appPremiumPlaneRepo(data);
-  });
-};
+//   consumeQueue('App-premium-plan-queue', async (data) => {
+//     console.log('Consuming App-premium-plan-queue', data);
+//     // await appPremiumPlaneRepo(data);
+//   });
+// };
 
 
 
