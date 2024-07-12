@@ -17,12 +17,12 @@ services:
     build: .
     container_name: softmarkbackend-nodejs-app
     environment:
-      - POSTGRES_HOST=52.1.68.22
+      - POSTGRES_HOST=18.212.82.62
       - DB_PORT=5433
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=postgres
-      - REDIS_HOST=52.1.68.22
+      - REDIS_HOST=18.212.82.62
       - REDIS_PORT=6379
       - EMAIL=fa21bscs0017@maju.edu.pk
       - "EMAIL_PASS=eoeb amae fgaw adeu"
