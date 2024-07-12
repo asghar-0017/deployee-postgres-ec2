@@ -183,7 +183,6 @@ module.exports = {
   getBasicAppPlanesDataByID,getStandardAppPlanesDataByID,getpremiumAppPlanesDataByID,
   deleteBasicAppPlanesDataByID,deleteStandardAppPlanesDataByID,deletepremiumAppPlanesDataByID,
   updateBasicAppPlanesDataByID,updateStandardAppPlanesDataByID,updatepremiumAppPlanesDataByID,
-  startConsumers,
 
 
 };
