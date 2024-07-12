@@ -1,37 +1,34 @@
 const nodemailer = require('nodemailer');
-const { appBasicPlaneRepo, appStandardPlaneRepo, appPremiumPlaneRepo
-  ,getBasicPlaneDataInRepo,getStandardPlaneDataInRepo,getPremiumPlaneDataInRepo ,
-  deleteBasicPlaneDataInRepoByID,deleteStandardPlaneDataInRepoByID,deletePremiumPlaneDataInRepoById,
-  getBasicPlaneDataByIDInRepo,getStandardPlaneDataByIDInRepo,getPremiumPlaneDataInByIDRepo,
-  updateBasicPlaneDataInRepoByID,updateStandardPlaneDataInRepoByID,updatePremiumPlaneDataInRepoById
-} = require('../repository/appPlanesRepository');
+const { appBasicPlaneRepo, appStandardPlaneRepo, appPremiumPlaneRepo } = require('../repository/appPlanesRepository');
 const { logger } = require('../../logger');
 const dotenv = require("dotenv");
+const { consumeQueue } = require('../service/RabbitMQService');
+
 dotenv.config();
 
 const createTransporter = () => nodemailer.createTransport({
   service: 'gmail',
   auth: {
-      user: process.env.EMAIL,
-      pass: process.env.EMAIL_PASS
+    user: process.env.EMAIL,
+    pass: process.env.EMAIL_PASS
   },
 });
 
 const sendEmail = async (transporter, mailOptions) => {
   try {
-      await transporter.sendMail(mailOptions);
+    await transporter.sendMail(mailOptions);
   } catch (error) {
-      logger.error('Error sending email', error);
-      throw error;
+    logger.error('Error sending email', error);
+    throw error;
   }
 };
 
 const sendEmails = async (plan, planData) => {
-  const transporter=createTransporter()
+  const transporter = createTransporter();
 
   let adminMailOptions = {
     from: process.env.EMAIL,
-    to: process.env.ADMIN_EMAIL,
+    to: process.env.EMAIL,
     subject: `New ${plan} Form Submission from ${planData.name} Client Id ${planData.clientId}`,
     text: `
       Name: ${planData.name}
@@ -43,8 +40,6 @@ const sendEmails = async (plan, planData) => {
       Description: ${planData.description}
       Functionalities: ${planData.functionalities}
       Link_to_Graphics: ${planData.Link_to_Graphics}
-
-      
     `,
   };
 
@@ -55,8 +50,8 @@ const sendEmails = async (plan, planData) => {
     html: `Thank you for your submission. <b> Your Order Id Number: ${planData.clientId} </b>. Our team will contact you soon.`,
   };
 
-  await sendEmail(transporter,clientMailOptions);
-  await sendEmail(transporter,adminMailOptions);
+  await sendEmail(transporter, clientMailOptions);
+  await sendEmail(transporter, adminMailOptions);
 };
 
 
@@ -66,31 +61,52 @@ const processService = async (planName, planData, repoFunction) => {
     const createdAt = new Date();
     let deliveryDate;
 
-    if (planName === 'App Basic Plan') {
+    if (planName === 'App-Basic-Plan') {
       deliveryDate = new Date(createdAt);
       deliveryDate.setDate(createdAt.getDate() + 4);
-    } else if (planName === 'App Standard Plan') {
+    } else if (planName === 'App-Standard-Plan') {
       deliveryDate = new Date(createdAt);
       deliveryDate.setDate(createdAt.getDate() + 8);
-    } else if (planName === 'App Premium Plan') {
+    } else if (planName === 'App-Premium-Plan') {
       deliveryDate = new Date(createdAt);
       deliveryDate.setDate(createdAt.getDate() + 12);
     }
 
     planData.delivery_date = deliveryDate;
     planData.created_at = createdAt;
-    const data = await repoFunction(planData);
+
+    await repoFunction(planData);
     await sendEmails(planName, planData);
-    return { success: true, message: 'Email sent successfully', data };
+
+
+    return { success: true, message: 'Email sent successfully', planData };
   } catch (error) {
     logger.error(`Error in ${planName}Service`, error);
     throw error;
   }
 };
 
-const appBasicPlaneService = (data) => processService('App Basic Plan', data, appBasicPlaneRepo);
-const appStandardPlaneService = (data) => processService('App Standard Plan', data, appStandardPlaneRepo);
-const appPremiumPlaneService = (data) => processService('App Premium Plan', data, appPremiumPlaneRepo);
+const appBasicPlaneService = (data) => processService('App-Basic-Plan', data, appBasicPlaneRepo);
+const appStandardPlaneService = (data) => processService('App-Standard-Plan', data, appStandardPlaneRepo);
+const appPremiumPlaneService = (data) => processService('App-Premium-Plan', data, appPremiumPlaneRepo);
+
+const startConsumers = () => {
+
+  consumeQueue('App-basic-plan-queue', async (data) => {
+    console.log('Consuming App-basic-plan-queue', data);
+    // await appBasicPlaneRepo(data);
+  });
+
+  consumeQueue('App-standard-plan-queue', async (data) => {
+    console.log('Consuming App-standard-plan-queue', data);
+    // await appStandardPlaneRepo(data);
+  });
+
+  consumeQueue('App-premium-plan-queue', async (data) => {
+    console.log('Consuming App-premium-plan-queue', data);
+    // await appPremiumPlaneRepo(data);
+  });
+};
 
 
 
@@ -166,5 +182,8 @@ module.exports = {
   getAllBasicAppPlanesData,getAllStandardAppPlanesData,getAllpremiumAppPlanesData,
   getBasicAppPlanesDataByID,getStandardAppPlanesDataByID,getpremiumAppPlanesDataByID,
   deleteBasicAppPlanesDataByID,deleteStandardAppPlanesDataByID,deletepremiumAppPlanesDataByID,
-  updateBasicAppPlanesDataByID,updateStandardAppPlanesDataByID,updatepremiumAppPlanesDataByID
+  updateBasicAppPlanesDataByID,updateStandardAppPlanesDataByID,updatepremiumAppPlanesDataByID,
+  startConsumers,
+
+
 };

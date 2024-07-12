@@ -1,34 +1,51 @@
-const { appBasicPlaneService, appStandardPlaneService, appPremiumPlaneService,
-  getAllBasicAppPlanesData,getAllStandardAppPlanesData ,getAllpremiumAppPlanesData,
-  deleteBasicAppPlanesDataByID,deleteStandardAppPlanesDataByID,deletepremiumAppPlanesDataByID,
-  getBasicAppPlanesDataByID,getStandardAppPlanesDataByID,getpremiumAppPlanesDataByID,
-  updateBasicAppPlanesDataByID,updateStandardAppPlanesDataByID,updatepremiumAppPlanesDataByID
+const { 
+  appBasicPlaneService, 
+  appStandardPlaneService, 
+  appPremiumPlaneService,
+  getAllBasicAppPlanesData, 
+  getAllStandardAppPlanesData, 
+  getAllpremiumAppPlanesData,
+  deleteBasicAppPlanesDataByID, 
+  deleteStandardAppPlanesDataByID, 
+  deletepremiumAppPlanesDataByID,
+  getBasicAppPlanesDataByID, 
+  getStandardAppPlanesDataByID, 
+  getpremiumAppPlanesDataByID,
+  updateBasicAppPlanesDataByID, 
+  updateStandardAppPlanesDataByID, 
+  updatepremiumAppPlanesDataByID
 } = require('../service/appPlaneService');
+
 const { logger } = require('../../logger');
-const { getClientId,RandomId } = require("../service/clientService");
+const { getClientId, RandomId } = require("../service/clientService");
 const cloudinary = require('cloudinary').v2;
+const { publishToQueue } = require('../service/RabbitMQService'); // Ensure correct import
+const { 
+  ValidateAppBasicPlan, 
+  ValidateAppStandardPlan, 
+  ValidateAppPremiumPlan 
+} = require('../scheema/appPlaneSchema');
 
-const {ValidateAppBasicPlan,ValidateAppStandardPlan,ValidateAppPremiumPlan}=require('../scheema/appPlaneSchema')
-
-const handlePlain = async (request, reply, schema, serviceFunction) => {
+const handlePlain = async (request, reply, schema, serviceFunction, FunctionName) => {
   try {
     const data = request.body;
 
     const { error } = schema.validate(data);
     console.log("Validate Error ", error);
-        if (error) {
-            return reply.code(400).send({ error: error.details[0].message });
-        }
-    
-        if (request.files && request.files.length > 0) {
-          const uploadPromises = request.files.map(file =>
-            cloudinary.uploader.upload(file.path)
-          );
-          const results = await Promise.all(uploadPromises);
-          data.Link_to_Graphics = results.map(result => result.secure_url);
-        } else {
-          data.Link_to_Graphics = []; // No files provided
-        }
+    if (error) {
+      return reply.code(400).send({ error: error.details[0].message });
+    }
+
+    if (request.files && request.files.length > 0) {
+      const uploadPromises = request.files.map(file =>
+        cloudinary.uploader.upload(file.path)
+      );
+      const results = await Promise.all(uploadPromises);
+      data.Link_to_Graphics = results.map(result => result.secure_url);
+    } else {
+      data.Link_to_Graphics = []; // No files provided
+    }
+
     console.log('Received Data:', data);
 
     if (typeof data.functionalities === 'string') {
@@ -42,7 +59,10 @@ const handlePlain = async (request, reply, schema, serviceFunction) => {
 
     data.id = RandomId();
     data.clientId = await getClientId(data.email, data.name);
+
     const result = await serviceFunction(data);
+    // await publishToQueue(queueName, data);
+
     reply.code(201).send({ success: 'success', data: result });
   } catch (error) {
     console.error('Error occurred during form submission:', error);
@@ -51,17 +71,19 @@ const handlePlain = async (request, reply, schema, serviceFunction) => {
 };
 
 const appBasicPlane = async (request, reply) => {
-  await handlePlain(request, reply, ValidateAppBasicPlan, appBasicPlaneService);
+  // const QueueName = 'App-basic-plan-queue'; // Define the queue name for basic plan
+  await handlePlain(request, reply, ValidateAppBasicPlan, appBasicPlaneService, 'App-Basic-Plan');
 };
 
 const appStandardPlane = async (request, reply) => {
-  await handlePlain(request, reply, ValidateAppStandardPlan, appStandardPlaneService);
+  // const QueueName = 'App-standard-plan-queue'; // Define the queue name for standard plan
+  await handlePlain(request, reply, ValidateAppStandardPlan, appStandardPlaneService, 'App-Standard-Plan');
 };
 
 const appPremiumPlane = async (request, reply) => {
-  await handlePlain(request, reply, ValidateAppPremiumPlan, appPremiumPlaneService);
+  // const QueueName = 'App-premium-plan-queue'; // Define the queue name for premium plan
+  await handlePlain(request, reply, ValidateAppPremiumPlan, appPremiumPlaneService, 'App-Premium-Plan');
 };
-
 
 
 const getPlanesData = async (request, reply, serviceFunction) => {

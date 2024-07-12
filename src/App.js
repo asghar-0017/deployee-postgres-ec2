@@ -73,12 +73,14 @@ const startServer = async () => {
     await dataSource.initialize();
     logger.info("Database connection has been established");
 
-    await fastify.listen({ port: process.env.PORT || 4000, host: 'localhost' });
-    logger.info(`Server is listening on ${process.env.PORT || 4000}`);
+    const PORT = process.env.PORT || 4000;
+    await fastify.listen({ port: PORT, host: '0.0.0.0' });
+    logger.info(`Server is listening on ${PORT}`);
   } catch (error) {
     logger.error(error.message);
     process.exit(1);
   }
 };
+
 
 module.exports=startServer
