@@ -6,7 +6,7 @@ const { PinoLogger } = require('../../logger');
 
 const dataSource = new DataSource({
   type: "postgres",
-  host: '52.71.145.45',
+  host: '172.31.48.1',
   port: process.env.DB_PORT || 5433,
   username: process.env.POSTGRES_USER || "postgres",
   password: process.env.POSTGRES_PASSWORD || "postgres",

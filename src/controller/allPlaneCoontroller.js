@@ -1,80 +1,159 @@
 const {
-    getAllBasicSeoPlanesData,
-    getAllStandardSeoPlanesData,
-    getAllpremiumSeoPlanesData,
-  } = require('../service/seoService');
-  
-  const {
-    getAllBasicWebPlanesData,
-    getAllStandardWebPlanesData,
-    getAllpremiumWebPlanesData,
-  } = require('../service/webPlainsService');
-
-  const {
-    getAllBasicAppPlanesData,
-    getAllStandardAppPlanesData,
-    getAllpremiumAppPlanesData
-  }=require('../service/appPlaneService')
-
-  const {
-    getAllBasicLogoPlanesData,
-    getAllStandardLogoPlanesData,
-    getAllpremiumLogoPlanesData,
-    getAllBusinessLogoPlanesData
-}=require('../service/logoPlaneService')
+  getAllBasicSeoPlanesData,
+  getAllStandardSeoPlanesData,
+  getAllpremiumSeoPlanesData,
+} = require('../service/seoService');
 
 const {
-    digitalMarketingdataInService
-}=require('../service/digitalMarketingService')
-  
-  const getAllPlanesData = async (req, reply) => {
-    try {
-      const seoData = {
-        basic: await getAllBasicSeoPlanesData(),
-        standard: await getAllStandardSeoPlanesData(),
-        premium: await     getAllpremiumSeoPlanesData(),
+  getAllBasicWebPlanesData,
+  getAllStandardWebPlanesData,
+  getAllpremiumWebPlanesData,
+} = require('../service/webPlainsService');
+
+const {
+  getAllBasicAppPlanesData,
+  getAllStandardAppPlanesData,
+  getAllpremiumAppPlanesData,
+} = require('../service/appPlaneService');
+
+const {
+  getAllBasicLogoPlanesData,
+  getAllStandardLogoPlanesData,
+  getAllpremiumLogoPlanesData,
+  getAllBusinessLogoPlanesData,
+} = require('../service/logoPlaneService');
+
+const {
+  digitalMarketingdataInService,
+} = require('../service/digitalMarketingService');
+
+const getAllPlanesData = async (req, reply) => {
+  try {
+    const seoData = {
+      basic: await getAllBasicSeoPlanesData(),
+      standard: await getAllStandardSeoPlanesData(),
+      premium: await getAllpremiumSeoPlanesData(),
+    };
+
+    const webData = {
+      basic: await getAllBasicWebPlanesData(),
+      standard: await getAllStandardWebPlanesData(),
+      premium: await getAllpremiumWebPlanesData(),
+    };
+
+    const appData = {
+      basic: await getAllBasicAppPlanesData(),
+      standard: await getAllStandardAppPlanesData(),
+      premium: await getAllpremiumAppPlanesData(),
+    };
+
+    const logo = {
+      basic: await getAllBasicLogoPlanesData(),
+      standard: await getAllStandardLogoPlanesData(),
+      premium: await getAllpremiumLogoPlanesData(),
+      business: await getAllBusinessLogoPlanesData(),
+    };
+
+    const digitalMarketingData = {
+      OnePlane: await digitalMarketingdataInService(),
+    };
+
+    // Function to calculate counts by status
+    const calculateCounts = (data) => {
+      const counts = {
+        pending: 0,
+        complete: 0,
+        progress: 0,
+        cancell: 0,
+      };
+
+      if (Array.isArray(data)) {
+        data.forEach((item) => {
+          if (item.status === 'Pending') counts.pending++;
+          else if (item.status === 'Complete') counts.complete++;
+          else if (item.status === 'Progress') counts.progress++;
+          else if (item.status === 'Cancelled') counts.cancell++;
+        });
       }
-  
-      const webData = {
-        basic: await getAllBasicWebPlanesData(),
-        standard: await getAllStandardWebPlanesData(),
-        premium: await getAllpremiumWebPlanesData(),
-      };
 
-      const appData = {
-        basic: await getAllBasicAppPlanesData(),
-        standard: await getAllStandardAppPlanesData(),
-        premium: await getAllpremiumAppPlanesData(),
-      };
-      const logo = {
-        basic: await getAllBasicLogoPlanesData(),
-        standard: await getAllStandardLogoPlanesData(),
-        premium: await getAllpremiumLogoPlanesData(),
-        business:await getAllBusinessLogoPlanesData(),
-      };
-      const digitalMarketingData = {
-        OnePlane: await digitalMarketingdataInService(),
-      };
-      
+      return counts;
+    };
 
-  
-      // Add other services as needed
-  
-      const allData = {
-        seo: seoData,
-        web: webData,
-        app: appData,
-        logo: logo,
-        DigitalMarketing : digitalMarketingData
-        // Add other categories similarly
-      };
-  
-      reply.code(200).send({ success: true, data: allData });
-    } catch (error) {
-      console.error('Error fetching all planes data:', error);
-      reply.code(500).send({ success: false, message: 'Failed to fetch all planes data' });
-    }
-  };
+    // Calculate counts for each category
+    const allCounts = {
+      pending: 0,
+      complete: 0,
+      progress: 0,
+      cancell: 0,
+    };
+
+    // Helper function to update overall counts
+    const updateOverallCounts = (counts) => {
+      allCounts.pending += counts.pending;
+      allCounts.complete += counts.complete;
+      allCounts.progress += counts.progress;
+      allCounts.cancell += counts.cancell;
+    };
+
+    // Calculate counts and update overall counts for each category
+    const seoCounts = {
+      basic: calculateCounts(seoData.basic.data),
+      standard: calculateCounts(seoData.standard.data),
+      premium: calculateCounts(seoData.premium.data),
+    };
+    updateOverallCounts(seoCounts.basic);
+    updateOverallCounts(seoCounts.standard);
+    updateOverallCounts(seoCounts.premium);
+
+    const webCounts = {
+      basic: calculateCounts(webData.basic.data),
+      standard: calculateCounts(webData.standard.data),
+      premium: calculateCounts(webData.premium.data),
+    };
+    updateOverallCounts(webCounts.basic);
+    updateOverallCounts(webCounts.standard);
+    updateOverallCounts(webCounts.premium);
+
+    const appCounts = {
+      basic: calculateCounts(appData.basic.data),
+      standard: calculateCounts(appData.standard.data),
+      premium: calculateCounts(appData.premium.data),
+    };
+    updateOverallCounts(appCounts.basic);
+    updateOverallCounts(appCounts.standard);
+    updateOverallCounts(appCounts.premium);
+
+    const logoCounts = {
+      basic: calculateCounts(logo.basic.data),
+      standard: calculateCounts(logo.standard.data),
+      premium: calculateCounts(logo.premium.data),
+      business: calculateCounts(logo.business.data),
+    };
+    updateOverallCounts(logoCounts.basic);
+    updateOverallCounts(logoCounts.standard);
+    updateOverallCounts(logoCounts.premium);
+    updateOverallCounts(logoCounts.business);
+
+    const digitalMarketingCounts = calculateCounts(digitalMarketingData.OnePlane.data);
+    updateOverallCounts(digitalMarketingCounts);
+
+    const allData = {
+      seo: seoData,
+      web: webData,
+      app: appData,
+      logo: logo,
+      digitalMarketing: digitalMarketingData,
+      counts: allCounts,
+    };
+
+    reply.code(200).send({ success: true, data: allData });
+  } catch (error) {
+    console.error('Error fetching all planes data:', error);
+    reply.code(500).send({ success: false, message: 'Failed to fetch all planes data' });
+  }
+};
+
+
 
 
   //getByID
@@ -410,9 +489,9 @@ const updateAllPlansDataByID = async (req, reply) => {
             cloudinary.uploader.upload(file.path)
           );
           const results = await Promise.all(uploadPromises);
-          data.Link_to_Graphics = results.map(result => result.secure_url);
+          clientData.Link_to_Graphics = results.map(result => result.secure_url);
         } else {
-          data.Link_to_Graphics = []; // No files provided
+          clientData.Link_to_Graphics = []; // No files provided
         }
 
 

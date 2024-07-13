@@ -1,7 +1,18 @@
 const nodemailer = require('nodemailer');
-const { appBasicPlaneRepo, appStandardPlaneRepo, appPremiumPlaneRepo } = require('../repository/appPlanesRepository');
+const { appBasicPlaneRepo, appStandardPlaneRepo, appPremiumPlaneRepo,
+  getBasicPlaneDataInRepo,getStandardPlaneDataInRepo,getPremiumPlaneDataInRepo,
+  deleteBasicPlaneDataInRepoByID,deleteStandardPlaneDataInRepoByID,deletePremiumPlaneDataInRepoById,
+  getBasicPlaneDataByIDInRepo,getStandardPlaneDataByIDInRepo,getPremiumPlaneDataInByIDRepo,
+  updateBasicPlaneDataInRepoByID,updateStandardPlaneDataInRepoByID,updatePremiumPlaneDataInRepoById
+
+
+
+
+
+ } = require('../repository/appPlanesRepository');
 const { logger } = require('../../logger');
 const dotenv = require("dotenv");
+
 // const { consumeQueue } = require('../service/RabbitMQService');
 
 dotenv.config();
