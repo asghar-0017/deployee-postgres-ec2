@@ -47,7 +47,7 @@ const getAllPlanesData = async (req, reply) => {
       premium: await getAllpremiumAppPlanesData(),
     };
 
-    const logo = {
+    const logoData = {
       basic: await getAllBasicLogoPlanesData(),
       standard: await getAllStandardLogoPlanesData(),
       premium: await getAllpremiumLogoPlanesData(),
@@ -55,95 +55,50 @@ const getAllPlanesData = async (req, reply) => {
     };
 
     const digitalMarketingData = {
-      OnePlane: await digitalMarketingdataInService(),
+      onePlane: await digitalMarketingdataInService(),
     };
 
-    // Function to calculate counts by status
-    const calculateCounts = (data) => {
-      const counts = {
-        pending: 0,
-        complete: 0,
-        progress: 0,
-        cancell: 0,
-      };
+    const ensureArray = (data) => Array.isArray(data) ? data : [];
 
-      if (Array.isArray(data)) {
-        data.forEach((item) => {
-          if (item.status === 'Pending') counts.pending++;
-          else if (item.status === 'Complete') counts.complete++;
-          else if (item.status === 'Progress') counts.progress++;
-          else if (item.status === 'Cancelled') counts.cancell++;
-        });
-      }
+    const allDataArrays = [
+      ...ensureArray(seoData.basic.data),
+      ...ensureArray(seoData.standard.data),
+      ...ensureArray(seoData.premium.data),
+      ...ensureArray(webData.basic.data),
+      ...ensureArray(webData.standard.data),
+      ...ensureArray(webData.premium.data),
+      ...ensureArray(appData.basic.data),
+      ...ensureArray(appData.standard.data),
+      ...ensureArray(appData.premium.data),
+      ...ensureArray(logoData.basic.data),
+      ...ensureArray(logoData.standard.data),
+      ...ensureArray(logoData.premium.data),
+      ...ensureArray(logoData.business.data),
+      ...ensureArray(digitalMarketingData.onePlane.data)
+    ];
 
-      return counts;
-    };
-
-    // Calculate counts for each category
-    const allCounts = {
-      pending: 0,
-      complete: 0,
-      progress: 0,
-      cancell: 0,
-    };
-
-    // Helper function to update overall counts
-    const updateOverallCounts = (counts) => {
-      allCounts.pending += counts.pending;
-      allCounts.complete += counts.complete;
-      allCounts.progress += counts.progress;
-      allCounts.cancell += counts.cancell;
-    };
-
-    // Calculate counts and update overall counts for each category
-    const seoCounts = {
-      basic: calculateCounts(seoData.basic.data),
-      standard: calculateCounts(seoData.standard.data),
-      premium: calculateCounts(seoData.premium.data),
-    };
-    updateOverallCounts(seoCounts.basic);
-    updateOverallCounts(seoCounts.standard);
-    updateOverallCounts(seoCounts.premium);
-
-    const webCounts = {
-      basic: calculateCounts(webData.basic.data),
-      standard: calculateCounts(webData.standard.data),
-      premium: calculateCounts(webData.premium.data),
-    };
-    updateOverallCounts(webCounts.basic);
-    updateOverallCounts(webCounts.standard);
-    updateOverallCounts(webCounts.premium);
-
-    const appCounts = {
-      basic: calculateCounts(appData.basic.data),
-      standard: calculateCounts(appData.standard.data),
-      premium: calculateCounts(appData.premium.data),
-    };
-    updateOverallCounts(appCounts.basic);
-    updateOverallCounts(appCounts.standard);
-    updateOverallCounts(appCounts.premium);
-
-    const logoCounts = {
-      basic: calculateCounts(logo.basic.data),
-      standard: calculateCounts(logo.standard.data),
-      premium: calculateCounts(logo.premium.data),
-      business: calculateCounts(logo.business.data),
-    };
-    updateOverallCounts(logoCounts.basic);
-    updateOverallCounts(logoCounts.standard);
-    updateOverallCounts(logoCounts.premium);
-    updateOverallCounts(logoCounts.business);
-
-    const digitalMarketingCounts = calculateCounts(digitalMarketingData.OnePlane.data);
-    updateOverallCounts(digitalMarketingCounts);
+    const counts = allDataArrays.reduce((acc, plane) => {
+      acc.total++;
+      if (plane.status === 'Pending') acc.pending++;
+      if (plane.status === 'Complete') acc.complete++;
+      if (plane.status === 'Progress') acc.progress++;
+      if (plane.status === 'Cancel') acc.cancel++;
+      return acc;
+    }, { pending: 0, complete: 0, progress: 0, cancel: 0, total: 0 });
 
     const allData = {
       seo: seoData,
       web: webData,
       app: appData,
-      logo: logo,
-      digitalMarketing: digitalMarketingData,
-      counts: allCounts,
+      logo: logoData,
+      DigitalMarketing: digitalMarketingData,
+      counts: {
+        pending: counts.pending,
+        complete: counts.complete,
+        progress: counts.progress,
+        cancel: counts.cancel,
+        total: counts.total
+      },
     };
 
     reply.code(200).send({ success: true, data: allData });
@@ -152,6 +107,8 @@ const getAllPlanesData = async (req, reply) => {
     reply.code(500).send({ success: false, message: 'Failed to fetch all planes data' });
   }
 };
+
+
 
 
 

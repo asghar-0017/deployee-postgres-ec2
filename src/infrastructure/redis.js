@@ -1,7 +1,7 @@
 const Redis = require('ioredis');
 
 const redis = new Redis({
-  host: '172.31.48.1',
+  host: '52.71.145.45',
   port: process.env.REDIS_PORT || 6379,
 });
 
