@@ -446,6 +446,9 @@ const updateAllPlansDataByID = async (req, reply) => {
   console.log("id",id);
   console.log("clientData",clientData);
 
+  if(!clientData.Link_to_Graphics){
+    return clientData;
+  }else{
   if (req.files && req.files.length > 0) {
           const uploadPromises = req.files.map(file =>
             cloudinary.uploader.upload(file.path)
@@ -453,13 +456,10 @@ const updateAllPlansDataByID = async (req, reply) => {
           const results = await Promise.all(uploadPromises);
           clientData.Link_to_Graphics = results.map(result => result.secure_url);
         } else {
-          if(!clientData.Link_to_Graphics){
-
-            return clientData // No files provided
-          }
+          clientData.Link_to_Graphics = []; // No files provided
         }
 
-
+      }
   try {
     const [
       webBasicData,
