@@ -442,20 +442,23 @@ const updateAllPlansDataByID = async (req, reply) => {
   const id = req.params.id;
   const clientData = req.body;
 
-  console.log("clietId",clientId);
-  console.log("id",id);
-  console.log("clientData",clientData);
+  console.log("clientId", clientId);
+  console.log("id", id);
+  console.log("clientData", clientData);
 
-  if (req.files && req.files.length > 0) {
-          const uploadPromises = req.files.map(file =>
-            cloudinary.uploader.upload(file.path)
-          );
-          const results = await Promise.all(uploadPromises);
-          clientData.Link_to_Graphics = results.map(result => result.secure_url);
-        } else {
-          clientData.Link_to_Graphics = []; // No files provided
-        }
+  // Determine if the request is for Digital Marketing
+  const isDigitalMarketing = clientData.plan === 'Digital Marketing';
 
+  // Handle file upload only if it's not Digital Marketing
+  if (!isDigitalMarketing && req.files && req.files.length > 0) {
+    const uploadPromises = req.files.map(file =>
+      cloudinary.uploader.upload(file.path)
+    );
+    const results = await Promise.all(uploadPromises);
+    clientData.Link_to_Graphics = results.map(result => result.secure_url);
+  } else if (!isDigitalMarketing) {
+    clientData.Link_to_Graphics = []; // No files provided
+  }
 
   try {
     const [
@@ -512,16 +515,15 @@ const updateAllPlansDataByID = async (req, reply) => {
       Logo_Premium_Plan: logoPremiumData?.data,
       Logo_Business_Plan: logoBusinessData?.data,
 
-      Seo_Standard_Plan: seoBasicData?.data,
-      Seo_Premium_Plan: seoStandardData?.data,
-      Seo_Business_Plan: seoPremiumData?.data,
+      Seo_Basic_Plan: seoBasicData?.data,
+      Seo_Standard_Plan: seoStandardData?.data,
+      Seo_Premium_Plan: seoPremiumData?.data,
 
       Digital_Marketing_Plan: digitalData?.data
     };
 
     console.log('All Data before filtering:', allData);
 
-    
     const filteredData = Object.fromEntries(
       Object.entries(allData)
         .map(([key, value]) => {
@@ -547,7 +549,6 @@ const updateAllPlansDataByID = async (req, reply) => {
         })
         .filter(([key, value]) => value.length > 0)
     );
-
 
     console.log('Filtered data:', filteredData);
 
