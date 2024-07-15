@@ -19,7 +19,8 @@ const AdminAuthRoute = require('./routes/adminAuth');
 // const wiseRoute=require('./routes/wiseRoute')
 
 fastify.register(require('@fastify/cors'), {
-  origin: ['http://localhost:3000', 'https://www.softmarksolutions.com', 'http://localhost:5173', 'http://localhost:5174','https://www.softmarksolutions.com/api'],
+  // origin: ['http://localhost:3000', 'https://www.softmarksolutions.com', 'http://localhost:5173', 'http://localhost:5174'],
+  origin: '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true,
 });
