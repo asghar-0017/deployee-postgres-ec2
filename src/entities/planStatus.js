@@ -1,7 +1,7 @@
 const planStatus = [
     "Progress",
     "Complete",
-    "Cancell",
+    "Cancel",
   ];
   
   module.exports = planStatus;

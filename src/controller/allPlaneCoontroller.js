@@ -54,27 +54,29 @@ const getAllPlanesData = async (req, reply) => {
       business: await getAllBusinessLogoPlanesData(),
     };
 
+    console.log('Calling digitalMarketingdataInService');
     const digitalMarketingData = {
       onePlane: await digitalMarketingdataInService(),
     };
+    console.log('Digital Marketing Data:', digitalMarketingData);
 
-    const ensureArray = (data) => Array.isArray(data) ? data : [];
+    const ensureArray = (data) => Array.isArray(data) ? data : data.data ? data.data : [];
 
     const allDataArrays = [
-      ...ensureArray(seoData.basic.data),
-      ...ensureArray(seoData.standard.data),
-      ...ensureArray(seoData.premium.data),
-      ...ensureArray(webData.basic.data),
-      ...ensureArray(webData.standard.data),
-      ...ensureArray(webData.premium.data),
-      ...ensureArray(appData.basic.data),
-      ...ensureArray(appData.standard.data),
-      ...ensureArray(appData.premium.data),
-      ...ensureArray(logoData.basic.data),
-      ...ensureArray(logoData.standard.data),
-      ...ensureArray(logoData.premium.data),
-      ...ensureArray(logoData.business.data),
-      ...ensureArray(digitalMarketingData.onePlane.data)
+      ...ensureArray(seoData.basic),
+      ...ensureArray(seoData.standard),
+      ...ensureArray(seoData.premium),
+      ...ensureArray(webData.basic),
+      ...ensureArray(webData.standard),
+      ...ensureArray(webData.premium),
+      ...ensureArray(appData.basic),
+      ...ensureArray(appData.standard),
+      ...ensureArray(appData.premium),
+      ...ensureArray(logoData.basic),
+      ...ensureArray(logoData.standard),
+      ...ensureArray(logoData.premium),
+      ...ensureArray(logoData.business),
+      ...ensureArray(digitalMarketingData.onePlane)
     ];
 
     const counts = allDataArrays.reduce((acc, plane) => {
@@ -107,6 +109,9 @@ const getAllPlanesData = async (req, reply) => {
     reply.code(500).send({ success: false, message: 'Failed to fetch all planes data' });
   }
 };
+
+
+
 
 
 
