@@ -19,7 +19,7 @@ const {
 const { logger } = require('../../logger');
 const { getClientId, RandomId } = require("../service/clientService");
 const cloudinary = require('cloudinary').v2;
-const { publishToQueue } = require('../service/RabbitMQService'); // Ensure correct import
+// const { publishToQueue } = require('../service/RabbitMQService'); // Ensure correct import
 const { 
   ValidateAppBasicPlan, 
   ValidateAppStandardPlan, 
