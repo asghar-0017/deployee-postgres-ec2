@@ -17,7 +17,7 @@ const adminAuth = {
         reply.code(401).send({ message: 'Failed to Login' });
       }
     } catch (error) {
-      reply.code(500).send({ message: 'Internal Server Error', error: error.message });
+      throw error
     }
   },
   
