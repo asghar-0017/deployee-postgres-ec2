@@ -37,7 +37,7 @@ const adminAuth = {
   forgotPassword: async (request, reply) => {
     try {
       const { email } = request.body;
-      if(email === "info@softmarksolutions.com"){
+      if(email === "admin@softmarksolutions.com"){
         const code = generateResetCode();
         await adminService.saveResetCode(code);
         await sendResetEmail(email, code);
