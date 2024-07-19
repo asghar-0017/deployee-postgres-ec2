@@ -27,7 +27,6 @@ const ValidateAppStandardPlan = Joi.object({
   }),
   company: Joi.string().optional().allow(''),
   description: Joi.string().required(),
-  description: Joi.string().required(),
   reference_App:Joi.string().optional().allow(''),
   drive_links_to_icons:Joi.string().optional().allow(''),
   Link_to_Graphics:Joi.string().optional().allow(''),
@@ -46,7 +45,6 @@ const ValidateAppPremiumPlan = Joi.object({
     'any.required': 'Email is required'
   }),
   company: Joi.string().optional().allow(''),
-  description: Joi.string().required(),
   description: Joi.string().required(),
   reference_App:Joi.string().optional().allow(''),
   drive_links_to_icons:Joi.string().optional().allow(''),

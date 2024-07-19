@@ -9,9 +9,9 @@ const ValidateWebBasicPlan = Joi.object({
     'string.email': 'Please provide a valid email address',
     'any.required': 'Email is required'
   }),
-  company: Joi.string().optional(),
-  reference_sites: Joi.string().optional(),
-  Link_to_Graphics:Joi.array().optional(),
+  company: Joi.string().optional().allow(''),
+  reference_sites: Joi.string().optional().allow(''),
+  Link_to_Graphics:Joi.array().optional().allow(''),
   description:Joi.string().required()
 });
 
