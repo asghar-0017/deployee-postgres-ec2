@@ -437,7 +437,6 @@ const {
 }=require('../service/digitalMarketingService')
 
 const cloudinary=require('cloudinary')
-
 const updateAllPlansDataByID = async (req, reply) => {
   const clientId = req.params.clientId;
   const id = req.params.id;
@@ -447,7 +446,94 @@ const updateAllPlansDataByID = async (req, reply) => {
   console.log("ID:", id);
   console.log("ClientData:", clientData);
 
-  // Handle file uploads if present
+  console.log("Plane",clientData.plan)
+
+  if(clientData.plan=="SEO Basic plan" || clientData.plan=="SEO Standard plan" || clientData.plan=="SEO Premium plan" || clientData.plan=="Digital Marketing"){
+    try {
+      const [
+        webBasicData,
+        webStandardData,
+        webPremiumData,
+        appBasicData,
+        appStandardData,
+        appPremiumData,
+        logoBasicData,
+        logoStandardData,
+        logoPremiumData,
+        logoBusinessData,
+        seoBasicData,
+        seoStandardData,
+        seoPremiumData,
+        digitalData
+      ] = await Promise.all([
+        updateBasicWebPlanesDataByID(id, clientId, clientData),
+        updateStandardWebPlanesDataByID(id, clientId, clientData),
+        updatepremiumWebPlanesDataByID(id, clientId, clientData),
+        updateBasicAppPlanesDataByID(id, clientId, clientData),
+        updateStandardAppPlanesDataByID(id, clientId, clientData),
+        updatepremiumAppPlanesDataByID(id, clientId, clientData),
+        updateBasicLogoPlanesDataByID(id, clientId, clientData),
+        updateStandardLogoPlanesDataByID(id, clientId, clientData),
+        updatepremiumLogoPlanesDataByID(id, clientId, clientData),
+        updateBusinessLogoPlanesDataByID(id, clientId, clientData),
+        updateBasicSeoPlanesDataByID(id, clientId, clientData),
+        updateStandardSeoPlanesDataByID(id, clientId, clientData),
+        updatepremiumSeoPlanesDataByID(id, clientId, clientData),
+        updateDigitalInService(id, clientId, clientData)
+      ]);
+  
+      const allData = {
+        Web_Basic_Plan: webBasicData?.data,
+        Web_Standard_Plan: webStandardData?.data,
+        Web_Premium_Plan: webPremiumData?.data,
+        App_Basic_Plan: appBasicData?.data,
+        App_Standard_Plan: appStandardData?.data,
+        App_Premium_Plan: appPremiumData?.data,
+        Logo_Basic_Plan: logoBasicData?.data,
+        Logo_Standard_Plan: logoStandardData?.data,
+        Logo_Premium_Plan: logoPremiumData?.data,
+        Logo_Business_Plan: logoBusinessData?.data,
+        Seo_Basic_Plan: seoBasicData?.data,
+        Seo_Standard_Plan: seoStandardData?.data,
+        Seo_Premium_Plan: seoPremiumData?.data,
+        Digital_Marketing_Plan: digitalData?.data
+      };
+  
+      console.log('All Data before filtering:', allData);
+  
+      const filteredData = Object.fromEntries(
+        Object.entries(allData)
+          .map(([key, value]) => {
+            if (value && value.data) {
+              return [
+                key,
+                value.data.filter(item => item.clientId === clientId)
+              ];
+            } else if (Array.isArray(value)) {
+              return [
+                key,
+                value.filter(item => item.clientId === clientId)
+              ];
+            } else {
+              return [
+                key,
+                value && value.clientId === clientId ? [value] : []
+              ];
+            }
+          })
+          .filter(([key, value]) => value.length > 0)
+      );
+  
+      console.log('Filtered data:', filteredData);
+  
+      reply.code(200).send({ success: true, data: filteredData });
+    } catch (error) {
+      console.error('Error updating all plans data by client ID:', error);
+      reply.code(500).send({ success: false, message: 'Failed to update all plans data by client ID' });
+    }
+  }else{
+
+  // Handle file uploads if present and relevant
   if (req.files && req.files.length > 0) {
     try {
       const uploadPromises = req.files.map(file => cloudinary.uploader.upload(file.path));
@@ -505,9 +591,9 @@ const updateAllPlansDataByID = async (req, reply) => {
       Logo_Standard_Plan: logoStandardData?.data,
       Logo_Premium_Plan: logoPremiumData?.data,
       Logo_Business_Plan: logoBusinessData?.data,
-      Seo_Standard_Plan: seoBasicData?.data,
-      Seo_Premium_Plan: seoStandardData?.data,
-      Seo_Business_Plan: seoPremiumData?.data,
+      Seo_Basic_Plan: seoBasicData?.data,
+      Seo_Standard_Plan: seoStandardData?.data,
+      Seo_Premium_Plan: seoPremiumData?.data,
       Digital_Marketing_Plan: digitalData?.data
     };
 
@@ -544,6 +630,7 @@ const updateAllPlansDataByID = async (req, reply) => {
     reply.code(500).send({ success: false, message: 'Failed to update all plans data by client ID' });
   }
 };
+}
 
   
   module.exports = {

@@ -42,7 +42,7 @@ module.exports = new EntitySchema({
       type: "varchar",
       nullable: false,
     },
-    plane: {
+    plan: {
       type: "varchar",
       default: "Digital Marketing",
     },
