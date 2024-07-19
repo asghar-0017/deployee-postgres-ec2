@@ -11,7 +11,7 @@ const initializeAdmin = async () => {
 
     if (!admin) {
       const hashedPassword = await bcrypt.hash('admin', 10);
-      const newAdmin = adminRepository.create({ userName: 'admin', password: hashedPassword,email:'rajaasgharali009@gmail.com' });
+      const newAdmin = adminRepository.create({ userName: 'admin', password: hashedPassword,email:'admin@softmarksolutions.com' });
       await adminRepository.save(newAdmin);
       console.log('Initial admin user created');
     } else {
