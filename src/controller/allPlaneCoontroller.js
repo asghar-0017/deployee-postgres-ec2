@@ -437,67 +437,60 @@ const {
 }=require('../service/digitalMarketingService')
 
 const cloudinary=require('cloudinary')
+
 const updateAllPlansDataByID = async (req, reply) => {
   const clientId = req.params.clientId;
   const id = req.params.id;
   const clientData = req.body;
 
-  console.log("clietId",clientId);
-  console.log("id",id);
-  console.log("clientData",clientData);
+  console.log("ClientId:", clientId);
+  console.log("ID:", id);
+  console.log("ClientData:", clientData);
 
-  if(!clientData.Link_to_Graphics){
-    return clientData;
-  }else{
+  // Handle file uploads if present
   if (req.files && req.files.length > 0) {
-          const uploadPromises = req.files.map(file =>
-            cloudinary.uploader.upload(file.path)
-          );
-          const results = await Promise.all(uploadPromises);
-          clientData.Link_to_Graphics = results.map(result => result.secure_url);
-        } else {
-          clientData.Link_to_Graphics = []; // No files provided
-        }
+    try {
+      const uploadPromises = req.files.map(file => cloudinary.uploader.upload(file.path));
+      const results = await Promise.all(uploadPromises);
+      clientData.Link_to_Graphics = results.map(result => result.secure_url);
+    } catch (uploadError) {
+      console.error('Error uploading files:', uploadError);
+      return reply.code(500).send({ success: false, message: 'File upload failed' });
+    }
+  } else {
+    clientData.Link_to_Graphics = clientData.Link_to_Graphics || [];
+  }
 
-      }
   try {
     const [
       webBasicData,
       webStandardData,
       webPremiumData,
-
       appBasicData,
       appStandardData,
       appPremiumData,
-
       logoBasicData,
       logoStandardData,
       logoPremiumData,
       logoBusinessData,
-
       seoBasicData,
       seoStandardData,
       seoPremiumData,
-
       digitalData
     ] = await Promise.all([
       updateBasicWebPlanesDataByID(id, clientId, clientData),
       updateStandardWebPlanesDataByID(id, clientId, clientData),
       updatepremiumWebPlanesDataByID(id, clientId, clientData),
-
       updateBasicAppPlanesDataByID(id, clientId, clientData),
       updateStandardAppPlanesDataByID(id, clientId, clientData),
       updatepremiumAppPlanesDataByID(id, clientId, clientData),
-
       updateBasicLogoPlanesDataByID(id, clientId, clientData),
       updateStandardLogoPlanesDataByID(id, clientId, clientData),
       updatepremiumLogoPlanesDataByID(id, clientId, clientData),
       updateBusinessLogoPlanesDataByID(id, clientId, clientData),
-
       updateBasicSeoPlanesDataByID(id, clientId, clientData),
       updateStandardSeoPlanesDataByID(id, clientId, clientData),
       updatepremiumSeoPlanesDataByID(id, clientId, clientData),
-
       updateDigitalInService(id, clientId, clientData)
     ]);
 
@@ -505,43 +498,35 @@ const updateAllPlansDataByID = async (req, reply) => {
       Web_Basic_Plan: webBasicData?.data,
       Web_Standard_Plan: webStandardData?.data,
       Web_Premium_Plan: webPremiumData?.data,
-
       App_Basic_Plan: appBasicData?.data,
       App_Standard_Plan: appStandardData?.data,
       App_Premium_Plan: appPremiumData?.data,
-
       Logo_Basic_Plan: logoBasicData?.data,
       Logo_Standard_Plan: logoStandardData?.data,
       Logo_Premium_Plan: logoPremiumData?.data,
       Logo_Business_Plan: logoBusinessData?.data,
-
       Seo_Standard_Plan: seoBasicData?.data,
       Seo_Premium_Plan: seoStandardData?.data,
       Seo_Business_Plan: seoPremiumData?.data,
-
       Digital_Marketing_Plan: digitalData?.data
     };
 
     console.log('All Data before filtering:', allData);
 
-    
     const filteredData = Object.fromEntries(
       Object.entries(allData)
         .map(([key, value]) => {
           if (value && value.data) {
-            // If it's an object with 'data' property (like SEO, Logo services)
             return [
               key,
               value.data.filter(item => item.clientId === clientId)
             ];
           } else if (Array.isArray(value)) {
-            // If it's an array (like Digital Marketing)
             return [
               key,
               value.filter(item => item.clientId === clientId)
             ];
           } else {
-            // If it's a single object (like Web and App services)
             return [
               key,
               value && value.clientId === clientId ? [value] : []
@@ -551,17 +536,14 @@ const updateAllPlansDataByID = async (req, reply) => {
         .filter(([key, value]) => value.length > 0)
     );
 
-
     console.log('Filtered data:', filteredData);
 
     reply.code(200).send({ success: true, data: filteredData });
   } catch (error) {
-    console.error('Error Updating all plans data by client ID:', error);
-    reply.code(500).send({ success: false, message: 'Failed to Update all plans data by client ID' });
+    console.error('Error updating all plans data by client ID:', error);
+    reply.code(500).send({ success: false, message: 'Failed to update all plans data by client ID' });
   }
 };
-
-
 
   
   module.exports = {

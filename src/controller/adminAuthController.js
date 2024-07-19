@@ -13,8 +13,6 @@ const adminAuth = {
 
         await adminService.storeAdminToken(token);
         reply.code(200).send({ message: 'Login Success', token, data });
-      } else {
-        reply.code(401).send({ message: 'Failed to Login' });
       }
     } catch (error) {
       throw error
