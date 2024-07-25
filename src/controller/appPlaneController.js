@@ -31,7 +31,6 @@ const handlePlain = async (request, reply, schema, serviceFunction, FunctionName
     const data = request.body;
 
     const { error } = schema.validate(data);
-    console.log("Validate Error ", error);
     if (error) {
       return reply.code(400).send({ error: error.details[0].message });
     }
@@ -45,9 +44,6 @@ const handlePlain = async (request, reply, schema, serviceFunction, FunctionName
     } else {
       data.Link_to_Graphics = []; // No files provided
     }
-
-    console.log('Received Data:', data);
-
     if (typeof data.functionalities === 'string') {
       data.functionalities = JSON.parse(data.functionalities);
     }
@@ -126,7 +122,6 @@ const deletePlanesDataById = async (request, reply, serviceFunction) => {
     const id=request.params.id
     const cliendId=request.params.clientId
     const result = await serviceFunction(id,cliendId);
-    console.log("Result",result)
     if(result){
     reply.code(201).send({
       data: result
@@ -161,7 +156,6 @@ const getPlanesDataById = async (request, reply, serviceFunction) => {
   try {
     const clientId=request.params.clientId
     const result = await serviceFunction(clientId);
-    console.log("Result",result)
     if(result){
     reply.code(201).send({
        success: 'success', data: result });

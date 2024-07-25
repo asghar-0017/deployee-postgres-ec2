@@ -69,7 +69,6 @@ const adminAuth = {
   resetPassword: async (request, reply) => {
     try {
       const { newPassword } = request.body;
-  
         await adminService.updatePassword(newPassword);
         reply.code(200).send({ message: 'Password reset successfully.' });
  
@@ -89,6 +88,12 @@ const adminAuth = {
       if (!isValidToken) {
         return reply.code(401).send({ message: 'Invalid token' });
       }
+      
+      const storedToken = await redis.get(`admin:${token}`);
+      if (storedToken !== token) {
+        return reply.code(401).send({ message: 'Token mismatch' });
+      }
+
     } catch (error) {
       reply.code(500).send({ message: 'Internal Server Error', error: error.message });
     }

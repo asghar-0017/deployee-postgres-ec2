@@ -12,7 +12,7 @@ const digitalMarketing = async (request, reply) => {
       logger.error("ClientData is undefined");
       return reply.code(400).send({ error: "Invalid input" });
     }
-    clientData.id = RandomId(); // Generate a unique ID
+    clientData.id = RandomId(); 
     clientData.clientId = await getClientId(clientData.email, clientData.name);
 
     const data = await digitalMarketingService(clientData);
@@ -41,7 +41,6 @@ const delDigitalMarketingById = async (request, reply) => {
   try {
     const id=request.params.id
     const clientId = request.params.clientId
-    console.log("Id ",id ,"clientId",clientId)
     const result = await deleteDigitalMarketingByIdInService(id, clientId);
     if (result) {
       reply.code(200).send({ status: "success", message: result });
@@ -58,9 +57,6 @@ const updateDigitalMarketingById = async (request, reply) => {
     const id = request.params.id;
     const clientId = request.params.clientId;
     const clientData = request.body;
-
-    console.log("Id", id);
-    console.log("clientId", clientId);
 
     const data = await updateDigitalInService(id, clientId, clientData);
 

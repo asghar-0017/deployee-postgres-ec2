@@ -23,7 +23,6 @@ const appStandardPlaneRepo = (data) => saveData(appStandardPlaneRepository, data
 const appPremiumPlaneRepo = (data) => saveData(appPremiumPlaneRepository, data, "appPremiumPlaneRepo");
 
 
-
 const getPlanesRepo = async (repository, repoName) => {
   try {
     const getData = repository.find();
@@ -109,11 +108,8 @@ const updatePremiumPlaneDataInRepoById = (id, clientId,data) => updateAppPlanesR
 
 module.exports = {
     appBasicPlaneRepo,appStandardPlaneRepo, appPremiumPlaneRepo,
-    
     getBasicPlaneDataInRepo,getStandardPlaneDataInRepo,getPremiumPlaneDataInRepo,
-
     getBasicPlaneDataByIDInRepo,getStandardPlaneDataByIDInRepo,getPremiumPlaneDataInByIDRepo,
-
     deleteBasicPlaneDataInRepoByID,deleteStandardPlaneDataInRepoByID,deletePremiumPlaneDataInRepoById,
     updateBasicPlaneDataInRepoByID,updateStandardPlaneDataInRepoByID,updatePremiumPlaneDataInRepoById
 

@@ -59,10 +59,7 @@ const updateDataInRepo=async(id,clientData)=>{
             return UpdatedData
 
           }
-
-          
         }
-
     }catch(error){
         throw error
     }

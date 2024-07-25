@@ -67,14 +67,10 @@ const webPremiumPlan = async (request, reply) => {
 
 
 
-
-
-
 const getWebPlanData = async (request, reply, serviceFunction) => {
   try {
 
     const result = await serviceFunction();
-    console.log("Result",result)
     if(result){
     reply.code(201).send({
        success: 'success', data: result });
@@ -100,7 +96,6 @@ const allWebStandardPlaneData = async (request, reply) => {
 const allWebPremiumPlaneData = async (request, reply) => {
   await getWebPlanData(request, reply, getAllpremiumWebPlanesData);
 };
-
 
 
 const getWebPlanesDataById = async (request, reply, serviceFunction) => {
@@ -137,7 +132,6 @@ const deletePlanesDataById = async (request, reply, serviceFunction) => {
     const id=request.params.id
     const cliendId=request.params.clientId
     const result = await serviceFunction(id,cliendId);
-    console.log("Result",result)
     if(result){
     reply.code(201).send({
       data: result
@@ -170,7 +164,6 @@ const updatePlanesDataById = async (request, reply, serviceFunction) => {
     const id = request.params.id;
     const clientId = request.params.clientId;
     const data = request.body;
-    console.log("Name",data.name)
 
     
     if (request.files && request.files.length > 0) {

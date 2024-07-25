@@ -31,8 +31,6 @@ const handlePlain = async (request, reply,schema, serviceFunction) => {
           data.Link_to_Graphics = []; // No files provided
         }
 
-    console.log('Received Data:', data);
-
     if (!data) {
       console.error('Data is undefined');
       return reply.code(400).send({ error: 'Invalid input' });
@@ -72,9 +70,7 @@ const logoBusinessPlane = async (request, reply) => {
 
 const getLogoPlanesData = async (request, reply, serviceFunction) => {
   try {
-
     const result = await serviceFunction();
-    console.log("Result",result)
     if(result){
     reply.code(201).send({
        success: 'success', data: result });
@@ -107,14 +103,10 @@ const allLogoBusinessPlaneData = async (request, reply) => {
 
 
 
-
-
 const getPlanesDataById = async (request, reply, serviceFunction) => {
   try {
     const clientId=request.params.clientId
-    console.log("Client Id",clientId)
     const result = await serviceFunction(clientId);
-    console.log("Result",result)
     if(result){
     reply.code(201).send({
        success: 'success', data: result });
@@ -151,9 +143,7 @@ const deletePlanesDataById = async (request, reply, serviceFunction) => {
   try {
     const id=request.params.id
     const cliendId=request.params.clientId
-    console.log("ClientID",cliendId)
     const result = await serviceFunction(id,cliendId);
-    console.log("Result",result)
     if(result){
     reply.code(201).send({
       data: result
@@ -205,9 +195,7 @@ const updatePlanesDataById = async (request, reply, serviceFunction) => {
     if (!data) {
       return reply.code(400).send({ error: 'Invalid input' });
     }
-
     const result = await serviceFunction(id, clientId, data);
-    console.log("Result", result);
 
     if (result) {
       reply.code(201).send({ data: result });

@@ -12,8 +12,6 @@ const { getClientId,RandomId } = require("../service/clientService");
 const handlePlain = async (request, reply, serviceFunction) => {
     try {
         const clientData = request.body;
-        console.log("Received Data in Controller", clientData);
-
         if (!clientData) {
             console.log("Client Data Not Found");
             return reply.code(400).send({ error: "Client Data Not Found" });
@@ -57,7 +55,6 @@ const getSeoPlanesData = async (request, reply, serviceFunction) => {
     try {
   
       const result = await serviceFunction();
-      console.log("Result",result)
       if(result){
       reply.code(201).send({
          success: 'success', data: result });
@@ -89,9 +86,7 @@ const getSeoPlanesData = async (request, reply, serviceFunction) => {
 const getPlanesDataById = async (request, reply, serviceFunction) => {
   try {
     const clientId=request.params.clientId
-    console.log("Cliend Id ",clientId)
     const result = await serviceFunction(clientId);
-    console.log("Result",result)
     if(result){
     reply.code(201).send({
        success: 'success', data: result });
@@ -125,7 +120,6 @@ const deletePlanesDataById = async (request, reply, serviceFunction) => {
     const id=request.params.id
     const cliendId=request.params.clientId
     const result = await serviceFunction(id,cliendId);
-    console.log("Result",result)
     if(result){
     reply.code(201).send({
       data: result
@@ -159,10 +153,6 @@ const updatePlanesDataById = async (request, reply, serviceFunction) => {
     const id=request.params.id
     const cliendId=request.params.clientId
     const data=request.body
-    console.log("id",id)
-    console.log("cliendId",cliendId)
-    console.log("data",data)
-
     const result = await serviceFunction(id,cliendId,data);
     console.log("Result",result)
     if(result){

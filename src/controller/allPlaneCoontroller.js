@@ -53,13 +53,9 @@ const getAllPlanesData = async (req, reply) => {
       premium: await getAllpremiumLogoPlanesData(),
       business: await getAllBusinessLogoPlanesData(),
     };
-
-    console.log('Calling digitalMarketingdataInService');
     const digitalMarketingData = {
       onePlane: await digitalMarketingdataInService(),
     };
-    console.log('Digital Marketing Data:', digitalMarketingData);
-
     const ensureArray = (data) => Array.isArray(data) ? data : data.data ? data.data : [];
 
     const allDataArrays = [
@@ -111,13 +107,6 @@ const getAllPlanesData = async (req, reply) => {
 };
 
 
-
-
-
-
-
-
-
   //getByID
   const {
     getWebBasicPlanesDataByID,
@@ -151,9 +140,7 @@ const getAllPlanesData = async (req, reply) => {
 
   const getAllPlanesDataByID = async (req, reply) => {
     const clientId = req.params.clientId;
-    try {
-      console.log(`Fetching data for client ID: ${clientId}`);
-  
+    try {  
       const [
         webBasicData,
         webStandardData,
@@ -186,23 +173,6 @@ const getAllPlanesData = async (req, reply) => {
         getLogoBusinessPlanesDataByID(clientId),
       ]);
   
-      console.log('Fetched data:', {
-        webBasicData,
-        webStandardData,
-        webPremiumData,
-        appBasicData,
-        appStandardData,
-        appPremiumData,
-        seoBasicData,
-        seoStandardData,
-        seoPremiumData,
-        digitalMarketingData,
-        logoBasicData,
-        logoStandardData,
-        logoPremiumData,
-        logoBusinessData,
-      });
-  
       const allData = {
         Web_Basic: webBasicData,
         Web_Standard: webStandardData,
@@ -218,28 +188,22 @@ const getAllPlanesData = async (req, reply) => {
         Logo_Standard: logoStandardData,
         Logo_Premium: logoPremiumData,
         Logo_Business: logoBusinessData,
-      };
-  
-      console.log('All data before filtering:', allData);
-  
+      };  
     
       const filteredData = Object.fromEntries(
         Object.entries(allData)
           .map(([key, value]) => {
             if (value && value.data) {
-              // If it's an object with 'data' property (like SEO, Logo services)
               return [
                 key,
                 value.data.filter(item => item.clientId === clientId)
               ];
             } else if (Array.isArray(value)) {
-              // If it's an array (like Digital Marketing)
               return [
                 key,
                 value.filter(item => item.clientId === clientId)
               ];
             } else {
-              // If it's a single object (like Web and App services)
               return [
                 key,
                 value && value.clientId === clientId ? [value] : []
@@ -249,9 +213,6 @@ const getAllPlanesData = async (req, reply) => {
           .filter(([key, value]) => value.length > 0)
       );
   
-  
-    console.log('Filtered data:', filteredData);
-
     reply.code(200).send({ success: true, data: filteredData });
     } catch (error) {
       console.error('Error fetching all planes data by client ID:', error);
@@ -259,9 +220,6 @@ const getAllPlanesData = async (req, reply) => {
     }
   };
   
-
-
-
   
     const {
       deleteBasicWebPlanesDataByID,
@@ -369,19 +327,16 @@ const getAllPlanesData = async (req, reply) => {
         Object.entries(allData)
           .map(([key, value]) => {
             if (value && value.data) {
-              // If it's an object with 'data' property (like SEO, Logo services)
               return [
                 key,
                 value.data.filter(item => item.clientId === clientId)
               ];
             } else if (Array.isArray(value)) {
-              // If it's an array (like Digital Marketing)
               return [
                 key,
                 value.filter(item => item.clientId === clientId)
               ];
             } else {
-              // If it's a single object (like Web and App services)
               return [
                 key,
                 value && value.clientId === clientId ? [value] : []
@@ -391,9 +346,6 @@ const getAllPlanesData = async (req, reply) => {
           .filter(([key, value]) => value.length > 0)
       );
   
-  
-    console.log('Filtered data:', filteredData);
-
     reply.code(200).send({ success: true, data: filteredData });
     } catch (error) {
       console.error('Error deleting all plans data by client ID:', error);
@@ -401,7 +353,6 @@ const getAllPlanesData = async (req, reply) => {
     }
   };
 
-  //update Data 
 
   
   const {
@@ -441,12 +392,6 @@ const updateAllPlansDataByID = async (req, reply) => {
   const clientId = req.params.clientId;
   const id = req.params.id;
   const clientData = req.body;
-
-  console.log("ClientId:", clientId);
-  console.log("ID:", id);
-  console.log("ClientData:", clientData);
-
-  console.log("Plane",clientData.plan)
 
   if(clientData.plan=="SEO Basic plan" || clientData.plan=="SEO Standard plan" || clientData.plan=="SEO Premium plan" || clientData.plan=="Digital Marketing"){
     try {
@@ -498,9 +443,7 @@ const updateAllPlansDataByID = async (req, reply) => {
         Seo_Premium_Plan: seoPremiumData?.data,
         Digital_Marketing_Plan: digitalData?.data
       };
-  
-      console.log('All Data before filtering:', allData);
-  
+    
       const filteredData = Object.fromEntries(
         Object.entries(allData)
           .map(([key, value]) => {
@@ -524,7 +467,6 @@ const updateAllPlansDataByID = async (req, reply) => {
           .filter(([key, value]) => value.length > 0)
       );
   
-      console.log('Filtered data:', filteredData);
   
       reply.code(200).send({ success: true, data: filteredData });
     } catch (error) {
@@ -533,7 +475,6 @@ const updateAllPlansDataByID = async (req, reply) => {
     }
   }else{
 
-  // Handle file uploads if present and relevant
   if (req.files && req.files.length > 0) {
     try {
       const uploadPromises = req.files.map(file => cloudinary.uploader.upload(file.path));
@@ -597,8 +538,6 @@ const updateAllPlansDataByID = async (req, reply) => {
       Digital_Marketing_Plan: digitalData?.data
     };
 
-    console.log('All Data before filtering:', allData);
-
     const filteredData = Object.fromEntries(
       Object.entries(allData)
         .map(([key, value]) => {
@@ -621,8 +560,6 @@ const updateAllPlansDataByID = async (req, reply) => {
         })
         .filter(([key, value]) => value.length > 0)
     );
-
-    console.log('Filtered data:', filteredData);
 
     reply.code(200).send({ success: true, data: filteredData });
   } catch (error) {

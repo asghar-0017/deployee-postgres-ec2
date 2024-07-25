@@ -9,15 +9,12 @@ const contactUs = async (request, reply) => {
     try {
         logger.info("src > controller > contactController > getDataFromUser");
         const clientData = request.body;
-        console.log("Client in Controller", clientData);
-
         if (!clientData) {
             logger.error("ClientData is undefined");
             return reply.code(400).send({ error: "Invalid input" });
         }
 
     const { error } = ValidateContact.validate(clientData);
-    console.log("Validate Error ", error);
         if (error) {
             return reply.code(400).send({ error: error.details[0].message });
         }

@@ -6,11 +6,11 @@ const { PinoLogger } = require('../../logger');
 
 const dataSource = new DataSource({
   type: "postgres",
-  host: 'softmark-prod.cxso044omijf.us-east-1.rds.amazonaws.com',
-  port: process.env.DB_PORT || 5432,
-  username: process.env.POSTGRES_USER || "postgres",
+  host: process.env.POSTGRES_HOST,
+  port: process.env.DB_PORT,
+  username: process.env.POSTGRES_USER,
   password: "SoftMark#2024$",
-  database: process.env.POSTGRES_DB || "softmark_prod",
+  database: process.env.POSTGRES_DB,
   synchronize: true,
   logging: true,
   logger: new PinoLogger(),
