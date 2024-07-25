@@ -2,6 +2,10 @@ const bcrypt = require('bcryptjs');
 const redis = require('../infrastructure/redis');
 const authRepository = require('../repository/authRepository');
 const { logger } = require('../../logger');
+const jwt = require('jsonwebtoken');
+
+const secretKey = process.env.SCERET_KEY; // Replace with your secret key
+
 
 const adminService = {
   login: async (adminData) => {
@@ -12,8 +16,9 @@ const adminService = {
       if (admin) {
         const match = await bcrypt.compare(password, admin.password);
         if (match) {
+          const token = jwt.sign({ userName: admin.userName }, secretKey, { expiresIn: '1h' });
           logger.info('Admin Login Success');
-          return { userName: admin.userName,password:admin.password };
+          return { token };
         }
       }
 

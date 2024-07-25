@@ -95,6 +95,7 @@
     "joycon": "^3.1.1",
     "json-schema-ref-resolver": "^1.0.1",
     "json-schema-traverse": "^1.0.0",
+    "jsonwebtoken": "^9.0.2",
     "libphonenumber-js": "^1.11.4",
     "light-my-request": "^5.13.0",
     "logger": "^0.0.1",

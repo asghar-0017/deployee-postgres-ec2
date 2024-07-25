@@ -1,6 +1,8 @@
 const adminService = require('../service/adminAuthService');
 const { generateResetCode } = require('../utils/token');
 const { sendResetEmail } = require('../service/resetEmailService');
+const redis = require('../infrastructure/redis');
+
 
 
 const adminAuth = {
@@ -9,10 +11,8 @@ const adminAuth = {
       const adminData = request.body;
       const data = await adminService.login(adminData);
       if (data) {
-        const token = generateResetCode(data.userName);
-
-        await adminService.storeAdminToken(token);
-        reply.code(200).send({ message: 'Login Success', token, data });
+        await adminService.storeAdminToken(data.token);
+        reply.code(200).send({ message: 'Login Success', data });
       }
     } catch (error) {
       throw error
@@ -37,7 +37,7 @@ const adminAuth = {
   forgotPassword: async (request, reply) => {
     try {
       const { email } = request.body;
-      if(email === "admin@softmarksolutions.com"){
+      if(email === process.env.ADMIN_EMAIL){
         const code = generateResetCode();
         await adminService.saveResetCode(code);
         await sendResetEmail(email, code);
@@ -55,7 +55,9 @@ const adminAuth = {
       const { code } = request.body;
       const isCodeValid = await adminService.validateResetCode(code);
       if (isCodeValid) {
+        await redis.del(`${code}:resetCode`);
         reply.code(200).send({ message: 'Code verified successfully.' });
+
       } else {
         reply.code(400).send({ message: 'Invalid or expired code.' });
       }
