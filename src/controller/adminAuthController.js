@@ -3,6 +3,9 @@ const { generateResetCode } = require('../utils/token');
 const { sendResetEmail } = require('../service/resetEmailService');
 const redis = require('../infrastructure/redis');
 
+const jwt = require('jsonwebtoken');
+
+const secretKey = process.env.SCERET_KEY; // Replace with your secret key
 
 
 const adminAuth = {
@@ -10,6 +13,7 @@ const adminAuth = {
     try {
       const adminData = request.body;
       const data = await adminService.login(adminData);
+      console.log("token",data.token)
       if (data) {
         await adminService.storeAdminToken(data.token);
         reply.code(200).send({ message: 'Login Success', data });
@@ -88,16 +92,48 @@ const adminAuth = {
       if (!isValidToken) {
         return reply.code(401).send({ message: 'Invalid token' });
       }
+
+      const storedToken = await redis.get(`admin:${token}`);
+      if (storedToken !== token) {
+        return reply.code(401).send({ message: 'Token mismatch' });
+      }
+  
+
+    } catch (error) {
+      reply.code(500).send({ message: 'Internal Server Error', error: error.message });
+    }
+  },
+
+
+  verifyToken: async (request, reply) => {
+    try {
+      const authHeader = request.headers.authorization;
+      if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        return reply.code(401).send({ message: 'No token provided' });
+      }
+
+      const token = authHeader.split(' ')[1];
+      const decoded = jwt.verify(token, secretKey);
       
       const storedToken = await redis.get(`admin:${token}`);
       if (storedToken !== token) {
         return reply.code(401).send({ message: 'Token mismatch' });
       }
 
+      const user = await adminService.findUserById(decoded.userName);
+      if (!user) {
+        return reply.code(401).send({ message: 'Invalid token' });
+      }
+
+      return reply.code(200).send({ isValid: true });
     } catch (error) {
-      reply.code(500).send({ message: 'Internal Server Error', error: error.message });
+      if (error.name === 'JsonWebTokenError' || error.name === 'TokenExpiredError') {
+        return reply.code(401).send({ message: 'Invalid token' });
+      }
+      return reply.code(500).send({ message: 'Internal Server Error', error: error.message });
     }
   },
 };
+
 
 module.exports = {adminAuth} ;

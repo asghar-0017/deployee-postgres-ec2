@@ -98,7 +98,18 @@ const adminService = {
       logger.error('Error updating password', error);
       throw error;
     }
-  }
+  },
+
+  findUserById: async (userName) => {
+    try {
+      const user = await authRepository.findByUserName(userName);
+      return user;
+    } catch (error) {
+      logger.error('Error finding user by ID', error);
+      throw error;
+    }
+  },
 };
+
 
 module.exports = adminService;
