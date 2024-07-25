@@ -109,7 +109,7 @@ const adminAuth = {
     try {
       const authHeader = request.headers.authorization;
       if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        return reply.code(401).send({ message: 'No token provided' });
+        return reply.code(401).send({code:401, message: 'No token provided' });
       }
 
       const token = authHeader.split(' ')[1];
@@ -117,20 +117,20 @@ const adminAuth = {
       
       const storedToken = await redis.get(`admin:${token}`);
       if (storedToken !== token) {
-        return reply.code(401).send({ message: 'Token mismatch' });
+        return reply.code(401).send({code:401, message: 'Token mismatch' });
       }
 
       const user = await adminService.findUserById(decoded.userName);
       if (!user) {
-        return reply.code(401).send({ message: 'Invalid token' });
+        return reply.code(401).send({ code:401,message: 'Invalid token' });
       }
 
-      return reply.code(200).send({ isValid: true });
+      return reply.code(200).send({code:200, isValid: true });
     } catch (error) {
       if (error.name === 'JsonWebTokenError' || error.name === 'TokenExpiredError') {
-        return reply.code(401).send({ message: 'Invalid token' });
+        return reply.code(401).send({code:401, message: 'Invalid token' });
       }
-      return reply.code(500).send({ message: 'Internal Server Error', error: error.message });
+      return reply.code(500).send({code:401, message: 'Internal Server Error', error: error.message });
     }
   },
 };
