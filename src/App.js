@@ -23,7 +23,7 @@ fastify.register(require('@fastify/cors'), {
   origin: '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true,
-});
+})
 
 const cloudinary = require('cloudinary').v2;
 
@@ -31,7 +31,7 @@ cloudinary.config({
   cloud_name: 'dewkvhlje',
   api_key: '835292952964664',
   api_secret: 'ZrkM_rttEvHWGc2lpjyAQVINSgw'
-  
+
 });
 
 fastify.register(fastifyMultipart, {
