@@ -34,6 +34,10 @@ module.exports = new EntitySchema({
       type: "text",
       nullable: true,
     },
+    website:{
+      type: "text",
+      nullable: true,
+    },
     serviceType: {
       type: "enum",
       enum: contactServiceTypes,
