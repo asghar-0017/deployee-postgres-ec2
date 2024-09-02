@@ -4,7 +4,7 @@ const serviceTypes = [
   "Digital Marketing",
   "Search Engine Optimization",
   "Mobile App Development",
-  "custom Software Development",
+  "Custom Software Development",
   "Anime Art"
 ];
 
