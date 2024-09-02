@@ -20,7 +20,7 @@ const ValidateContact = Joi.object({
   phone: Joi.number().required(),
   message: Joi.string().required(),
   serviceType: Joi.string().required()
-});
+})
 
 module.exports = {
   ValidateContact
