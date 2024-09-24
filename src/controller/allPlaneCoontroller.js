@@ -27,6 +27,32 @@ const {
   digitalMarketingdataInService,
 } = require('../service/digitalMarketingService');
 
+
+
+const dataSource = require('../infrastructure/psql'); 
+const WebBasic = require('../entities/webBasicPlan'); 
+const WebStandard = require('../entities/webStandardPlan'); 
+const WebPremium = require('../entities/webPremiumPlan'); 
+
+const AppBasic = require('../entities/appBasicPlan');
+const AppStandard = require('../entities/appStandardPlan'); 
+const AppPremium = require('../entities/appPremiumPlan');
+
+const LogoBasic = require('../entities/logoBasicPlan'); 
+const LogoStandard = require('../entities/logoStandardPlan');
+const LogoPremium = require('../entities/logoPremiumPlan'); 
+const LogoBusiness = require('../entities/logoBusinessPlan');
+
+const SEOBasic = require('../entities/seoBasicPlan'); 
+const SEOStandard = require('../entities/seoStandardPlan'); 
+const SEOPremium = require('../entities/seoPremiumPlan'); 
+
+const DigitalMarketing = require('../entities/digitalMerketing')
+
+
+
+
+
 const getAllPlanesData = async (req, reply) => {
   try {
     const seoData = {
@@ -569,12 +595,42 @@ const updateAllPlansDataByID = async (req, reply) => {
 };
 }
 
+const deleteAllPlanesData = async (req, reply) => {
+  try {
+    await Promise.all([
+      dataSource.getRepository(WebBasic).clear(),
+      dataSource.getRepository(WebStandard).clear(),
+      dataSource.getRepository(WebPremium).clear(),
+      
+      dataSource.getRepository(AppBasic).clear(),
+      dataSource.getRepository(AppStandard).clear(),
+      dataSource.getRepository(AppPremium).clear(),
+      
+      dataSource.getRepository(LogoBasic).clear(),
+      dataSource.getRepository(LogoStandard).clear(),
+      dataSource.getRepository(LogoPremium).clear(),
+      dataSource.getRepository(LogoBusiness).clear(),
+      
+      dataSource.getRepository(SEOBasic).clear(),
+      dataSource.getRepository(SEOStandard).clear(),
+      dataSource.getRepository(SEOPremium).clear(),
+      
+      dataSource.getRepository(DigitalMarketing).clear(),
+    ]);
+
+    reply.code(200).send({ success: true, message: 'All plan data deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting all plans data:', error);
+    reply.code(500).send({ success: false, message: 'Failed to delete all plans data' });
+  }
+}
   
   module.exports = {
     getAllPlanesData,
     getAllPlanesDataByID,
     deleteAllPlansDataByID,
-    updateAllPlansDataByID
+    updateAllPlansDataByID,
+    deleteAllPlanesData
 
   };
   

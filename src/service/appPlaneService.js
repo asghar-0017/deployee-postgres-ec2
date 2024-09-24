@@ -39,7 +39,7 @@ const sendEmails = async (plan, planData) => {
 
   let adminMailOptions = {
     from: process.env.EMAIL,
-    to: process.env.ADMIN_EMAIL,
+    to: process.env.EMAIL,
     subject: `New ${plan} Form Submission from ${planData.name} Client Id ${planData.clientId}`,
     text: `
       Name: ${planData.name}
