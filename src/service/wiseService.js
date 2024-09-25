@@ -9,7 +9,7 @@ async function createRecipient(accountHolderName, currency, accountNumber) {
   const headers = {
     Authorization: `Bearer ${wiseApiToken}`,
     'Content-Type': 'application/json'
-  };
+  }
 
   const payload = {
     currency: currency,
