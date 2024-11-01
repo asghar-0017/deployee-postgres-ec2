@@ -16,14 +16,14 @@ const contactUsService = async (clientData) => {
         let transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
-                user: process.env.ADMIN_EMAIL,
+                user: process.env.EMAIL,
                 pass: process.env.EMAIL_PASS
             }
         });
 
         let adminMailOptions = {
-            from: `Softmark Solutions <${process.env.EMAIL}>`, 
-            to: `${process.env.EMAIL}`,
+            from: `Softmark Solutions <${process.env.SALES_EMAIL}>`, 
+            to: `${process.env.SALES_EMAIL}`,
             subject: `New Contact Form Submission from ${clientData.name}`,
             text: `
                 Name: ${clientData.name}
@@ -36,7 +36,7 @@ const contactUsService = async (clientData) => {
             `
         };
          const clientMailOptions = {
-            from: `Softmark Solutions <${process.env.EMAIL}>`, 
+            from: `Softmark Solutions <${process.env.SALES_EMAIL}>`, 
             to: clientData.email,
             subject: `Thanks ${clientData.name}`,
             text: 'Thank you for your submission. Our team will contact you soon.',

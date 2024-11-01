@@ -23,14 +23,14 @@ const digitalMarketingService = async (clientData) => {
     let transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: process.env.ADMIN_EMAIL,
+        user: process.env.EMAIL,
         pass: process.env.EMAIL_PASS
       }
     });
 
     let adminMailOptions = {
-      from: `Softmark Solutions <${process.env.EMAIL}>`, 
-      to: process.env.EMAIL,
+      from: `Softmark Solutions <${process.env.SALES_EMAIL}>`, 
+      to: process.env.SALES_EMAIL,
       subject: `New Digital Marketing Form Submission from ${clientData.name} Client Id ${clientData.clientId}`,
       text: `
         Name: ${clientData.name}
@@ -44,7 +44,7 @@ const digitalMarketingService = async (clientData) => {
     };
 
     let clientMailOptions = {
-      from: `Softmark Solutions <${process.env.EMAIL}>`, 
+      from: `Softmark Solutions <${process.env.SALES_EMAIL}>`, 
       to: clientData.email,
       subject: `Thanks ${clientData.name}`,
       html: `Thank you for your submission. <b> Your Order Id Number: ${clientData.clientId} </b>. Our team will contact you soon.`,

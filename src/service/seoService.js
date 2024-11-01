@@ -16,7 +16,7 @@ dotenv.config();
 const createTransporter = () => nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: process.env.ADMIN_EMAIL,
+        user: process.env.EMAIL,
         pass: process.env.EMAIL_PASS
     },
 });
@@ -34,8 +34,8 @@ const sendEmails = async (plan, planData) => {
     const transporter = createTransporter();
 
     const adminMailOptions = {
-      from: `Softmark Solutions <${process.env.EMAIL}>`, 
-      to: process.env.EMAIL,
+      from: `Softmark Solutions <${process.env.SALES_EMAIL}>`, 
+      to: process.env.SALES_EMAIL,
         subject: `New ${plan} Form Submission from ${planData.name} clientID ${planData.clientId}`,
         text: `
             Name: ${planData.name}
@@ -51,7 +51,7 @@ const sendEmails = async (plan, planData) => {
     };
 
     const clientMailOptions = {
-      from: `Softmark Solutions <${process.env.EMAIL}>`, 
+      from: `Softmark Solutions <${process.env.ESALES_EMAILMAIL}>`, 
       to: planData.email,
         subject: `Thanks ${planData.name}`,
         html: `Thank you for your submission. <b> Your Order Id Number: ${planData.clientId} </b>. Our team will contact you soon.`,

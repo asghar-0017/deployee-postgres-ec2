@@ -7,13 +7,13 @@ const sendProposalEmail = async (recipientEmail) => {
         const transporter = nodemailer.createTransport({
             service: "Gmail",
             auth: {
-                user: process.env.ADMIN_EMAIL,
+                user: process.env.EMAIL,
                 pass: process.env.Email_PASS,
             },
         });
 
         const mailOptions = {
-            from: `Softmark Solutions <${process.env.EMAIL}>`, 
+            from: `Softmark Solutions <${process.env.SALES_EMAIL}>`, 
             to: recipientEmail,
             subject: "Your Customized Proposal is Ready",
             html: `
