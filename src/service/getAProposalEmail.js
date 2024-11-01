@@ -8,7 +8,7 @@ const sendProposalEmail = async (recipientEmail) => {
             service: "Gmail",
             auth: {
                 user: process.env.EMAIL,
-                pass: process.env.Email_PASS,
+                pass: process.env.EMAIL_PASS,
             },
         });
 
