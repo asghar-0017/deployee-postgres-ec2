@@ -7,7 +7,7 @@ const sendProposalEmail = async (recipientEmail) => {
         const transporter = nodemailer.createTransport({
             service: "Gmail",
             auth: {
-                user: process.env.Email,
+                user: process.env.ADMIN_EMAIL,
                 pass: process.env.Email_PASS,
             },
         });

@@ -20,7 +20,7 @@ dotenv.config();
 const createTransporter = () => nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    from: `Softmark Solutions <${process.env.Email}>`, 
+    from: `Softmark Solutions <${process.env.ADMIN_EMAIL}>`, 
     pass: process.env.EMAIL_PASS
   },
 });
