@@ -1,9 +1,10 @@
-const {contactUsService,dataInService,contactDataInService,updateContactInService
+const {contactUsService,dataInService,contactDataInService,updateContactInService,GetProposalController
 
 } = require('../service/contactService');
 const { logger } = require('../../logger');
 const { ValidateContact } = require('../scheema/contactUsSchema');
 const {GenerateClientId}  = require('../utils/token');
+const sendProposalEmail = require('../service/getAProposalEmail')
 
 const contactUs = async (request, reply) => {
     try {
@@ -90,4 +91,19 @@ try{
 }
 }
 
-module.exports = {contactUs,allContactUsData,delContactUsById,updateContactUsById};
+const GetAProposal = async (req, reply) => {
+    try {
+      const { email } = req.body;
+      console.log("Email",email)
+      const data = await GetProposalController(email);
+      if (data) {
+        await sendProposalEmail(email);
+        reply.code(200).send({ message: "Email sent successfully" });
+      }
+    } catch (error) {
+      console.error("Error in GetAProposal:", error);
+      reply.code(500).send({ message: "Internal Server Error" });
+    }
+  };
+
+module.exports = {contactUs,allContactUsData,delContactUsById,GetAProposal,updateContactUsById};

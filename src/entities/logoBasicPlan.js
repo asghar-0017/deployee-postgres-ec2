@@ -1,6 +1,5 @@
 const { EntitySchema } = require("typeorm");
 const planStatus=require('./planStatus')
-
 module.exports = new EntitySchema({
   name: "logoBasicPlan",
   tableName: "logo_basic_plan",

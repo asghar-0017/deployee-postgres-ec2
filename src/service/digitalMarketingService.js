@@ -29,7 +29,7 @@ const digitalMarketingService = async (clientData) => {
     });
 
     let adminMailOptions = {
-      from: process.env.EMAIL,
+      from: `Softmark Solutions <${process.env.EMAIL}>`, 
       to: process.env.EMAIL,
       subject: `New Digital Marketing Form Submission from ${clientData.name} Client Id ${clientData.clientId}`,
       text: `
@@ -44,7 +44,7 @@ const digitalMarketingService = async (clientData) => {
     };
 
     let clientMailOptions = {
-      from: process.env.EMAIL,
+      from: `Softmark Solutions <${process.env.EMAIL}>`, 
       to: clientData.email,
       subject: `Thanks ${clientData.name}`,
       html: `Thank you for your submission. <b> Your Order Id Number: ${clientData.clientId} </b>. Our team will contact you soon.`,

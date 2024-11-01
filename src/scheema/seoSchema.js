@@ -3,7 +3,7 @@ const Joi = require('joi');
 const ValidateSEO = Joi.object({
     name: Joi.string().required(),
     email: Joi.string()
-    .email({ tlds: { allow: true } })  // Enable basic email validation
+    .email({ tlds: { allow: true } })  
     .required()
     .messages({
       'string.email': 'Please provide a valid email address',

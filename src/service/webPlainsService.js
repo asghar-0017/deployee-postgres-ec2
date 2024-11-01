@@ -33,7 +33,7 @@ const sendEmails = async (plan, planData) => {
 
 
   let adminMailOptions = {
-    from: process.env.EMAIL,
+    from: `Softmark Solutions <${process.env.EMAIL}>`, 
     to: process.env.EMAIL,
     subject: `New ${plan} Form Submission from ${planData.name} clientId ${planData.clientId}`,
     text: `
@@ -55,7 +55,7 @@ const sendEmails = async (plan, planData) => {
   };
 
   let clientMailOptions = {
-    from: process.env.EMAIL,
+    from: `Softmark Solutions <${process.env.EMAIL}>`, 
     to: planData.email,
     subject: `Thanks ${planData.name}`,
     html: `Thank you for your submission. <b> Your Order Id Number: ${planData.clientId} </b>. Our team will contact you soon.`,

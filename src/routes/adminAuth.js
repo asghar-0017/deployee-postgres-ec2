@@ -4,7 +4,7 @@ const AdminAuthRoute = async (fastify) => {
     fastify.post('/admin-auth', adminAuth.login);
     fastify.post('/forgot-password', adminAuth.forgotPassword);
     fastify.post('/verify-reset-code', adminAuth.verifyResetCode);
-    fastify.post('/reset-password', adminAuth.resetPassword);
+    fastify.put('/reset-password', adminAuth.resetPassword);
     fastify.post('/logout', { preHandler: adminAuth.authenticate }, adminAuth.logout);
     fastify.post('/verify-token', adminAuth.verifyToken); 
 

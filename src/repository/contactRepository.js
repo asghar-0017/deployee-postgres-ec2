@@ -3,6 +3,7 @@ const { logger } = require("../../logger");
 const { err } = require("pino-std-serializers");
 const { error } = require("ajv/dist/vocabularies/applicator/dependencies");
 const contactRepository = dataSource.getRepository("contactUs");
+const getAProposalRepo = dataSource.getRepository('get-A-Proposal')
 
 const contactUsRepo = async (ClientData) => {
     try {
@@ -65,4 +66,17 @@ const updateDataInRepo=async(id,clientData)=>{
     }
 
 }
-module.exports = {contactUsRepo,allContactUsDataInRepo,findContactByIdRepo,updateDataInRepo};
+
+const SaveDataInRepo = async (email) => {
+    try {
+      const data = getAProposalRepo.create({ email });
+      console.info("SaveDataInRepo:", data);
+      const result = await getAProposalRepo.save(data);
+      console.info("Saved GetAProposal Email:", result);
+      return result;
+    } catch (error) {
+      console.error("Error in SaveDataInRepo:", error);
+      throw error;
+    }
+  };
+module.exports = {contactUsRepo,allContactUsDataInRepo,findContactByIdRepo,updateDataInRepo,SaveDataInRepo};

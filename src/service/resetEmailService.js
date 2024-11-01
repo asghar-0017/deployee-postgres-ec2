@@ -12,7 +12,7 @@ const transporter = nodemailer.createTransport({
 
 const sendResetEmail = async (email, code) => {
     const mailOptions = {
-        from: process.env.EMAIL,
+        from: `Softmark Solutions <${process.env.Email}>`, 
         to: email,
         subject: 'Password Reset',
         text: `You requested a password reset. Your reset code is: ${code}`

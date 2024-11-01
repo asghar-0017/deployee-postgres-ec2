@@ -1,6 +1,5 @@
-// contactService.js
 const nodemailer = require('nodemailer');
-const {contactUsRepo,allContactUsDataInRepo,findContactByIdRepo,updateDataInRepo} = require('../repository/contactRepository');
+const {contactUsRepo,allContactUsDataInRepo,findContactByIdRepo,updateDataInRepo,SaveDataInRepo} = require('../repository/contactRepository');
 const { logger } = require('../../logger');
 const dotenv = require("dotenv");
 dotenv.config();
@@ -9,13 +8,11 @@ const contactUsService = async (clientData) => {
     try {
         logger.info('src > Service > contactService > getDataFromUser');
 
-        // Save data to repository
         const contactDataInService = await contactUsRepo(clientData);
         console.log("Data in service",contactDataInService)
 
         logger.debug('Email Credentials:', { user: process.env.EMAIL, pass: process.env.EMAIL_PASS });
 
-        // Set up Nodemailer transporter
         let transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
@@ -24,9 +21,8 @@ const contactUsService = async (clientData) => {
             }
         });
 
-        // Email options
         let adminMailOptions = {
-            from: process.env.EMAIL,
+            from: `Softmark Solutions <${process.env.EMAIL}>`, 
             to: `${process.env.EMAIL}`,
             subject: `New Contact Form Submission from ${clientData.name}`,
             text: `
@@ -40,13 +36,12 @@ const contactUsService = async (clientData) => {
             `
         };
          const clientMailOptions = {
-            from: process.env.EMAIL,
+            from: `Softmark Solutions <${process.env.EMAIL}>`, 
             to: clientData.email,
             subject: `Thanks ${clientData.name}`,
             text: 'Thank you for your submission. Our team will contact you soon.',
           };
 
-        // Send email
         await transporter.sendMail(adminMailOptions);
         await transporter.sendMail(clientMailOptions);
 
@@ -85,4 +80,13 @@ const updateContactInService=async(id,clientData)=>{
     }
 
 }
-module.exports = {contactUsService,dataInService,contactDataInService,updateContactInService}
+
+const GetProposalController=async(email)=>{
+    try{
+        const data = await SaveDataInRepo(email)
+        return data
+    }catch(error){
+        throw error
+    }
+}
+module.exports = {contactUsService,dataInService,contactDataInService,updateContactInService,GetProposalController}

@@ -34,8 +34,8 @@ const sendEmails = async (plan, planData) => {
     const transporter = createTransporter();
 
     const adminMailOptions = {
-        from: process.env.EMAIL,
-        to: process.env.EMAIL,
+      from: `Softmark Solutions <${process.env.EMAIL}>`, 
+      to: process.env.EMAIL,
         subject: `New ${plan} Form Submission from ${planData.name} clientID ${planData.clientId}`,
         text: `
             Name: ${planData.name}
@@ -51,8 +51,8 @@ const sendEmails = async (plan, planData) => {
     };
 
     const clientMailOptions = {
-        from: process.env.EMAIL,
-        to: planData.email,
+      from: `Softmark Solutions <${process.env.EMAIL}>`, 
+      to: planData.email,
         subject: `Thanks ${planData.name}`,
         html: `Thank you for your submission. <b> Your Order Id Number: ${planData.clientId} </b>. Our team will contact you soon.`,
     };
