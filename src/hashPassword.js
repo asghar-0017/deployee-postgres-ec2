@@ -6,4 +6,4 @@ async function setPassword(plainTextPassword) {
     console.log('Hashed Password:', hash);
 }
 
-setPassword('admin');
+setPassword('admin')
