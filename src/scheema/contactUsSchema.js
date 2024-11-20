@@ -12,9 +12,9 @@ const ValidateContact = Joi.object({
     }),
   company: Joi.string().allow('').optional(),
   website: Joi.string().allow('').optional(),
-  phone: Joi.number().required(),
-  message: Joi.string().required(),
-  serviceType: Joi.string().required()
+  phone: Joi.number().optional(),
+  message: Joi.string().optional(),
+  serviceType: Joi.string().optional()
 });
 
 module.exports = {

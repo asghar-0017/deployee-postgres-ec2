@@ -15,7 +15,7 @@ const sendProposalEmail = async (recipientEmail) => {
         const mailOptions = {
             from: `Softmark Solutions <${process.env.SALES_EMAIL}>`, 
             to: recipientEmail,
-            subject: "Your Customized Proposal is Ready",
+            subject: "Your Proposal is Ready",
             html: `
             <div style="font-family: Arial, sans-serif; padding: 20px; background-color: #f9f9f9; color: #333; border: 1px solid #ddd; border-radius: 8px; max-width: 600px; margin: auto;">
                 

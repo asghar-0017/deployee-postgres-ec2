@@ -23,7 +23,7 @@ module.exports = new EntitySchema({
     phone: {
       type: "varchar",
       length: 50,
-      nullable: false,
+      nullable: true,
     },
     company: {
       type: "varchar",
@@ -32,7 +32,7 @@ module.exports = new EntitySchema({
     },
     message: {
       type: "text",
-      nullable: true,
+      nullable: false,
     },
     website:{
       type: "text",
@@ -42,7 +42,7 @@ module.exports = new EntitySchema({
       type: "enum",
       enum: contactServiceTypes,
       enumName: "contact_services_enum",
-      nullable: false,
+      nullable: true,
     },
     created_at: {
       type: "timestamp",

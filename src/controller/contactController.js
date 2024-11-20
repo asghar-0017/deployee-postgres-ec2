@@ -10,6 +10,7 @@ const contactUs = async (request, reply) => {
     try {
         logger.info("src > controller > contactController > getDataFromUser");
         const clientData = request.body;
+        console.log("Data",clientData)
         if (!clientData) {
             logger.error("ClientData is undefined");
             return reply.code(400).send({ error: "Invalid input" });
@@ -20,7 +21,8 @@ const contactUs = async (request, reply) => {
             return reply.code(400).send({ error: error.details[0].message });
         }
         clientData.clientId=GenerateClientId();
-
+        console.log("CliendId",clientData.clientId)
+console.log("Calling the function")
         const data = await contactUsService(clientData);
         reply.code(200).send({ success: "success", data: data });
 
